@@ -40,7 +40,7 @@ class TransactionsCalendarBloc extends Bloc<TransactionsCalendarEvent, Transacti
   DateTime _observedDate;
   String _sliderCurrentTimeIntervalString = '';
 
-  List<Transaction> transactionsList = [];
+  List<AppTransaction> transactionsList = [];
   List<CalendarDay> calendarData = [];
   double expensesSummary = 0;
   double incomeSummary = 0;
@@ -52,9 +52,9 @@ class TransactionsCalendarBloc extends Bloc<TransactionsCalendarEvent, Transacti
 
   StreamSubscription calendarTransactionsSubscription;
 
-  StreamSubscription<Event> _onTransactionAddedSubscription;
-  StreamSubscription<Event> _onTransactionChangedSubscription;
-  StreamSubscription<Event> _onTransactionDeletedSubscription;
+  StreamSubscription<DatabaseEvent> _onTransactionAddedSubscription;
+  StreamSubscription<DatabaseEvent> _onTransactionChangedSubscription;
+  StreamSubscription<DatabaseEvent> _onTransactionDeletedSubscription;
   StreamSubscription<UserEntity> _onUserChangedSubscription;
 
   @override
@@ -200,9 +200,9 @@ class TransactionsCalendarBloc extends Bloc<TransactionsCalendarEvent, Transacti
     add(TransactionsCalendarFetchRequested(dateForFetch: _observedDate));
   }
 
-  _onTransactionAdded(Event event) async {
+  _onTransactionAdded(DatabaseEvent event) async {
     print('TransactionsBloc: snapshot ${event.snapshot}');
-    Transaction transaction = TransactionsHelper()
+    AppTransaction transaction = TransactionsHelper()
         .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value), key: event.snapshot.key);
 
     // TODO: refactor
@@ -220,9 +220,9 @@ class TransactionsCalendarBloc extends Bloc<TransactionsCalendarEvent, Transacti
     }
   }
 
-  _onTransactionChanged(Event event) async {
+  _onTransactionChanged(DatabaseEvent event) async {
     int oldTransactionIndex = transactionsList.indexWhere((transaction) => transaction.id == event.snapshot.key);
-    Transaction changedTransaction = TransactionsHelper()
+    AppTransaction changedTransaction = TransactionsHelper()
         .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value), key: event.snapshot.key);
     if (oldTransactionIndex != -1) {
       transactionsList[oldTransactionIndex] = changedTransaction;
@@ -236,7 +236,7 @@ class TransactionsCalendarBloc extends Bloc<TransactionsCalendarEvent, Transacti
     ));
   }
 
-  _onTransactionDeleted(Event event) async {
+  _onTransactionDeleted(DatabaseEvent event) async {
     int index = transactionsList.indexWhere((transaction) => transaction.id == event.snapshot.key);
     if (index != -1) {
       transactionsList.removeAt(index);
@@ -251,7 +251,7 @@ class TransactionsCalendarBloc extends Bloc<TransactionsCalendarEvent, Transacti
     ));
   }
 
-  List<CalendarDay> _convertTransactionsToCalendarData(List<Transaction> transactions, DateTime observedDateTime) {
+  List<CalendarDay> _convertTransactionsToCalendarData(List<AppTransaction> transactions, DateTime observedDateTime) {
     List<CalendarDay> days = [];
     incomeSummary = 0;
     expensesSummary = 0;
@@ -264,7 +264,7 @@ class TransactionsCalendarBloc extends Bloc<TransactionsCalendarEvent, Transacti
     }
 
     while (days.length != 42) {
-      List<Transaction> dayTransactions = [];
+      List<AppTransaction> dayTransactions = [];
       String displayedDate = observedDay.day == 1 ? '${observedDay.day}.${observedDay.month}' : '${observedDay.day}';
       double expensesAmount = 0;
       double incomeAmount = 0;

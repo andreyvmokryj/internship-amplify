@@ -45,7 +45,7 @@ class BudgetOverviewBloc extends Bloc<BudgetOverviewEvent, BudgetOverviewState> 
   DateTime _observedDate;
   String _sliderCurrentTimeIntervalString = '';
 
-  List<Transaction> transactions = [];
+  List<AppTransaction> transactions = [];
   List<MonthlyCategoryExpense> monthlyCategoryExpenses = [];
   List<CategoryBudget> budgets = [];
 
@@ -53,9 +53,9 @@ class BudgetOverviewBloc extends Bloc<BudgetOverviewEvent, BudgetOverviewState> 
 
   StreamSubscription budgetOverviewSubscription;
   StreamSubscription<UserEntity> _onUserChangedSubscription;
-  StreamSubscription<Event> _onTransactionAddedSubscription;
-  StreamSubscription<Event> _onTransactionChangedSubscription;
-  StreamSubscription<Event> _onTransactionDeletedSubscription;
+  StreamSubscription<DatabaseEvent> _onTransactionAddedSubscription;
+  StreamSubscription<DatabaseEvent> _onTransactionChangedSubscription;
+  StreamSubscription<DatabaseEvent> _onTransactionDeletedSubscription;
 
   @override
   Future<void> close() {
@@ -252,7 +252,7 @@ class BudgetOverviewBloc extends Bloc<BudgetOverviewEvent, BudgetOverviewState> 
         budgetUsage: summaryBudgetUsage);
   }
 
-  List<MonthlyCategoryExpense> _getMonthlyCategoriesExpenses(List<Transaction> transactions) {
+  List<MonthlyCategoryExpense> _getMonthlyCategoriesExpenses(List<AppTransaction> transactions) {
     List<MonthlyCategoryExpense> list = [];
     bool isOtherGroupAdded = false;
 
@@ -283,8 +283,8 @@ class BudgetOverviewBloc extends Bloc<BudgetOverviewEvent, BudgetOverviewState> 
     return list;
   }
 
-  _onTransactionAdded(Event event) async {
-    Transaction transaction = TransactionsHelper()
+  _onTransactionAdded(DatabaseEvent event) async {
+    AppTransaction transaction = TransactionsHelper()
         .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value), key: event.snapshot.key);
 
     // TODO: refactor
@@ -296,9 +296,9 @@ class BudgetOverviewBloc extends Bloc<BudgetOverviewEvent, BudgetOverviewState> 
     }
   }
 
-  _onTransactionChanged(Event event) async {
+  _onTransactionChanged(DatabaseEvent event) async {
     int oldTransactionIndex = transactions.indexWhere((transaction) => transaction.id == event.snapshot.key);
-    Transaction changedTransaction = TransactionsHelper()
+    AppTransaction changedTransaction = TransactionsHelper()
         .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value), key: event.snapshot.key);
     if (oldTransactionIndex != -1) {
       transactions[oldTransactionIndex] = changedTransaction;
@@ -306,7 +306,7 @@ class BudgetOverviewBloc extends Bloc<BudgetOverviewEvent, BudgetOverviewState> 
     add(BudgetOverviewDisplayRequested());
   }
 
-  _onTransactionDeleted(Event event) async {
+  _onTransactionDeleted(DatabaseEvent event) async {
     int index = transactions.indexWhere((transaction) => transaction.id == event.snapshot.key);
     if (index != -1) {
       transactions.removeAt(index);

@@ -10,7 +10,7 @@ part 'expense_transaction.g.dart';
 enum ExpenseCreationType { IMPORT, AI, MANUAL }
 
 @JsonSerializable(nullable: true)
-class ExpenseTransaction extends Transaction {
+class ExpenseTransaction extends AppTransaction {
   String id;
   TransactionType transactionType = TransactionType.Expense;
   String category;

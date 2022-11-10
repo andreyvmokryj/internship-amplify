@@ -35,7 +35,7 @@ class ExpensesMapFetchRequested extends ExpensesMapEvent {
 
 class ExpensesMapDisplayRequested extends ExpensesMapEvent {
   final String data;
-  final List<Transaction> transactions;
+  final List<AppTransaction> transactions;
 
   ExpensesMapDisplayRequested({this.transactions, @required this.data});
 

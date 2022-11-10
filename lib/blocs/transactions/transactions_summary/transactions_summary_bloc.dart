@@ -37,7 +37,7 @@ class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, Transaction
   DateTime _observedDate;
   String _sliderCurrentTimeIntervalString = '';
 
-  List<Transaction> transactions = [];
+  List<AppTransaction> transactions = [];
 
   @override
   Future<void> close() {
@@ -125,7 +125,7 @@ class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, Transaction
   }
 
   Stream<TransactionsSummaryState> _mapTransactionSummaryDisplayRequestedToState(
-      String data, List<Transaction> transactions) async* {
+      String data, List<AppTransaction> transactions) async* {
     SummaryDetails summary = _convertTransactionsToSummary(transactions);
 
     yield TransactionsSummaryLoaded(
@@ -142,7 +142,7 @@ class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, Transaction
     add(TransactionsSummaryFetchRequested(dateForFetch: _observedDate));
   }
 
-  SummaryDetails _convertTransactionsToSummary(List<Transaction> transactions) {
+  SummaryDetails _convertTransactionsToSummary(List<AppTransaction> transactions) {
     SummaryDetails summaryDetails = SummaryDetails(income: 0.0, expenses: 0.0, total: 0.0, accountsExpensesDetails: {});
 
     if (transactions.isEmpty) {

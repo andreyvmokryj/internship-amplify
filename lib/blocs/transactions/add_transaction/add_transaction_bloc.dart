@@ -36,7 +36,7 @@ class AddTransactionBloc extends Bloc<AddTransactionEvent, AddTransactionState> 
         accounts: TempTransactionsValues().accounts);
   }
 
-  Stream<AddTransactionState> _mapAddTransactionToState(Transaction transaction, bool isAddingCompleted) async* {
+  Stream<AddTransactionState> _mapAddTransactionToState(AppTransaction transaction, bool isAddingCompleted) async* {
     yield AddTransactionLoaded(
         incomeCategories: TempTransactionsValues().incomeCategories,
         expenseCategories: TempTransactionsValues().expenseCategories,

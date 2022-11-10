@@ -10,7 +10,7 @@ import 'package:radency_internship_project_2/utils/strings.dart';
 import 'package:radency_internship_project_2/utils/styles.dart';
 
 class TransactionWidget extends StatelessWidget {
-  final Transaction transaction;
+  final AppTransaction transaction;
 
   const TransactionWidget({Key key, this.transaction}) : super(key: key);
 

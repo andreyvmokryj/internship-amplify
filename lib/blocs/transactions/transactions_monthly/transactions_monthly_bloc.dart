@@ -28,7 +28,7 @@ class TransactionsMonthlyBloc extends Bloc<TransactionsMonthlyEvent, Transaction
   DateTime _observedDate;
   String _sliderCurrentTimeIntervalString = '';
 
-  List<Transaction> observedYearTransactions = [];
+  List<AppTransaction> observedYearTransactions = [];
   List<MonthDetails> yearSummary = [];
 
   StreamSubscription<UserEntity> _onUserChangedSubscription;
@@ -80,7 +80,7 @@ class TransactionsMonthlyBloc extends Bloc<TransactionsMonthlyEvent, Transaction
     });
   }
 
-  Stream<TransactionsMonthlyState> _mapTransactionMonthlyDisplayRequestedToState(List<Transaction> data) async* {
+  Stream<TransactionsMonthlyState> _mapTransactionMonthlyDisplayRequestedToState(List<AppTransaction> data) async* {
     yearSummary = _getSummaryFromTransactionsList(data);
 
     yield TransactionsMonthlyLoaded(
@@ -116,7 +116,7 @@ class TransactionsMonthlyBloc extends Bloc<TransactionsMonthlyEvent, Transaction
     add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate));
   }
 
-  List<MonthDetails> _getSummaryFromTransactionsList(List<Transaction> data) {
+  List<MonthDetails> _getSummaryFromTransactionsList(List<AppTransaction> data) {
     List<MonthDetails> list = [];
 
     if (data.isEmpty) return list;

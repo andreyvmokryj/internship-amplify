@@ -20,7 +20,7 @@ class TransactionsDailyLoading extends TransactionsDailyState {
 
 class TransactionsDailyLoaded extends TransactionsDailyState {
   final String sliderCurrentTimeIntervalString;
-  final Map<int, List<Transaction>> dailySortedTransactions;
+  final Map<int, List<AppTransaction>> dailySortedTransactions;
 
   TransactionsDailyLoaded({@required this.dailySortedTransactions, @required this.sliderCurrentTimeIntervalString});
 

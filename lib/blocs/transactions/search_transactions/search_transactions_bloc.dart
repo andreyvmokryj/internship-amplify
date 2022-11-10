@@ -31,7 +31,7 @@ class SearchTransactionsBloc extends Bloc<SearchTransactionsEvent, SearchTransac
     yield SearchTransactionsLoading();
     searchTransactionsSubscription = Future.delayed(Duration(seconds: 2)).asStream().listen((event) {
       // TODO: Implement fetch endpoint
-      List<Transaction> transactions = MockedExpensesItems().generateSearchData();
+      List<AppTransaction> transactions = MockedExpensesItems().generateSearchData();
       add(SearchTransactionsDisplayRequested(transactions: transactions));
     });
   }
@@ -41,7 +41,7 @@ class SearchTransactionsBloc extends Bloc<SearchTransactionsEvent, SearchTransac
     yield SearchTransactionsLoading();
     searchTransactionsSubscription = Future.delayed(Duration(seconds: 2)).asStream().listen((_event) {
       // TODO: Implement fetch endpoint
-      List<Transaction> transactions = MockedExpensesItems().searchDataByFilters(
+      List<AppTransaction> transactions = MockedExpensesItems().searchDataByFilters(
         searchAccounts: event.accounts,
         searchCategories: event.categories,
         minAmount: event.minAmount,

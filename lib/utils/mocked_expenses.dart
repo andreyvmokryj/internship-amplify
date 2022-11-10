@@ -92,7 +92,7 @@ class MockedExpensesItems {
     return expensesByCategories;
   }
 
-  List<Transaction> generateSearchData() {
+  List<AppTransaction> generateSearchData() {
     if(transactionList.isEmpty) {
       for (int j = 0; j < 5; j++) {
         var _today = DateTime.now();
@@ -134,10 +134,10 @@ class MockedExpensesItems {
     return transactionList;
   }
 
-  List<Transaction> searchDataByFilters({
+  List<AppTransaction> searchDataByFilters({
     List<String> searchAccounts, List<String> searchCategories, double minAmount, double maxAmount
   }) {
-    List<Transaction> list = List<Transaction>.of(transactionList);
+    List<AppTransaction> list = List<AppTransaction>.of(transactionList);
 
     transactionList.forEach((element) {
       if(
@@ -164,5 +164,5 @@ class MockedExpensesItems {
     return list;
   }
 
-  static List<Transaction> transactionList = [];
+  static List<AppTransaction> transactionList = [];
 }

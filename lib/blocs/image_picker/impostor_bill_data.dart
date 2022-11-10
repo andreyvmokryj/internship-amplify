@@ -2,7 +2,7 @@ import 'package:radency_internship_project_2/blocs/transactions/add_transaction/
 import 'package:radency_internship_project_2/models/transactions/expense_transaction.dart';
 import 'package:radency_internship_project_2/models/transactions/transaction.dart';
 
-List<Transaction> impostorTransactions = [
+List<AppTransaction> impostorTransactions = [
   ExpenseTransaction(
       date: DateTime.now(),
       accountOrigin: TempTransactionsValues().accounts[0],

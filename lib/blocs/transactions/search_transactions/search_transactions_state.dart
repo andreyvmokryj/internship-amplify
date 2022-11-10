@@ -10,7 +10,7 @@ class SearchTransactionsInitial extends SearchTransactionsState{}
 class SearchTransactionsLoading extends SearchTransactionsState{}
 
 class SearchTransactionsLoaded extends SearchTransactionsState{
-  final List<Transaction> transactions;
+  final List<AppTransaction> transactions;
 
   SearchTransactionsLoaded({this.transactions});
 

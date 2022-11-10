@@ -22,7 +22,7 @@ class SearchTransactionsByFilters extends SearchTransactionsEvent{
 }
 
 class SearchTransactionsDisplayRequested extends SearchTransactionsEvent{
-  final List<Transaction> transactions;
+  final List<AppTransaction> transactions;
 
   SearchTransactionsDisplayRequested({this.transactions});
 

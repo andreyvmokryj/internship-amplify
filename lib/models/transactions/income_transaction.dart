@@ -5,7 +5,7 @@ import 'package:radency_internship_project_2/models/transactions/transaction.dar
 part 'income_transaction.g.dart';
 
 @JsonSerializable(nullable: true)
-class IncomeTransaction extends Transaction {
+class IncomeTransaction extends AppTransaction {
   String id;
   TransactionType transactionType = TransactionType.Income;
   String category;

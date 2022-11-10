@@ -31,7 +31,7 @@ class TransactionsMonthlyFetchRequested extends TransactionsMonthlyEvent {
 
 class TransactionMonthlyDisplayRequested extends TransactionsMonthlyEvent {
   final String sliderCurrentTimeIntervalString;
-  final List<Transaction> yearTransactions;
+  final List<AppTransaction> yearTransactions;
 
   TransactionMonthlyDisplayRequested({this.yearTransactions, @required this.sliderCurrentTimeIntervalString});
 

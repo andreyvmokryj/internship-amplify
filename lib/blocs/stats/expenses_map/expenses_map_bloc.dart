@@ -132,7 +132,7 @@ class ExpensesMapBloc extends Bloc<ExpensesMapEvent, ExpensesMapState> {
     });
   }
 
-  Stream<ExpensesMapState> _mapTransactionDailyDisplayRequestedToState(List<Transaction> transactions) async* {
+  Stream<ExpensesMapState> _mapTransactionDailyDisplayRequestedToState(List<AppTransaction> transactions) async* {
     List<ClusterItem<ExpenseTransaction>> list = [];
 
     transactions.forEach((transaction) {

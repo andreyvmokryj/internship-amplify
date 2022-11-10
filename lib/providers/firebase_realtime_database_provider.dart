@@ -32,9 +32,9 @@ class FirebaseRealtimeDatabaseProvider {
 }
 
 class FirebaseStreamsGroup {
-  Stream<Event> onChildAdded;
-  Stream<Event> onChildDeleted;
-  Stream<Event> onChildChanged;
+  Stream<DatabaseEvent> onChildAdded;
+  Stream<DatabaseEvent> onChildDeleted;
+  Stream<DatabaseEvent> onChildChanged;
 
   FirebaseStreamsGroup({@required this.onChildAdded, @required this.onChildChanged, @required this.onChildDeleted});
 }

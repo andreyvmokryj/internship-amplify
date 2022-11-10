@@ -39,7 +39,7 @@ class ExpensesChartBloc extends Bloc<ExpensesChartEvent, ExpensesChartState> {
   DateTime _observedDate;
   String _sliderCurrentTimeIntervalString = '';
 
-  List<Transaction> transactions = [];
+  List<AppTransaction> transactions = [];
 
   StreamSubscription expensesChartTransactionsSubscription;
   StreamSubscription<UserEntity> _onUserChangedSubscription;
@@ -129,7 +129,7 @@ class ExpensesChartBloc extends Bloc<ExpensesChartEvent, ExpensesChartState> {
     });
   }
 
-  Stream<ExpensesChartState> _mapTransactionDailyDisplayRequestedToState(List<Transaction> data) async* {
+  Stream<ExpensesChartState> _mapTransactionDailyDisplayRequestedToState(List<AppTransaction> data) async* {
     yield ExpensesChartLoading(sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString);
 
     List<ChartCategoryDetails> allCategories = getChartCategoriesFromTransactions(data);
@@ -151,7 +151,7 @@ class ExpensesChartBloc extends Bloc<ExpensesChartEvent, ExpensesChartState> {
     add(ExpensesChartFetchRequested(dateForFetch: _observedDate));
   }
 
-  List<ChartCategoryDetails> getChartCategoriesFromTransactions(List<Transaction> transactions) {
+  List<ChartCategoryDetails> getChartCategoriesFromTransactions(List<AppTransaction> transactions) {
     List<ChartCategoryDetails> categories = [];
     bool isOtherGroupAdded = false;
     String otherGroupName = S.current.categoriesDefaultOther;

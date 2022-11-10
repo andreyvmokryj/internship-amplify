@@ -19,16 +19,16 @@ class ImportCsvBloc extends Bloc<ImportCsvEvent, ImportCsvState> {
       ImportCsvEvent event,
       ) async* {
     if(event is ImportCsvFile) {
-      List<Transaction> expensesData = await getDataFromCsv();
+      List<AppTransaction> expensesData = await getDataFromCsv();
       yield ImportCsvLoaded(expensesData: expensesData);
     }
   }
 
-  Future<List<Transaction>> getDataFromCsv() async{
+  Future<List<AppTransaction>> getDataFromCsv() async{
     FilePickerCross file = await importCsv();
     List<List<dynamic>> expensesData = CsvToListConverter().convert(file.toString());
    
-    List<Transaction> listOfTransactions = createListOfTransactions(expensesData);
+    List<AppTransaction> listOfTransactions = createListOfTransactions(expensesData);
 
     listOfTransactions.forEach((transaction) async {
       await transactionsRepository.add(transaction);
@@ -37,12 +37,12 @@ class ImportCsvBloc extends Bloc<ImportCsvEvent, ImportCsvState> {
     return listOfTransactions;
   }
 
-  List<Transaction> createListOfTransactions(expensesData) {
-    List<Transaction> listOfExpenses = [];
+  List<AppTransaction> createListOfTransactions(expensesData) {
+    List<AppTransaction> listOfExpenses = [];
     expensesData.removeAt(0); // first item is a header
 
     expensesData.forEach((element) {
-      Transaction transaction = TransactionsHelper().fromStringInList(element);
+      AppTransaction transaction = TransactionsHelper().fromStringInList(element);
       listOfExpenses.add(transaction);
     });
     

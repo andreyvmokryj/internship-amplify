@@ -37,13 +37,13 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
   DateTime _observedDate;
   String _sliderCurrentTimeIntervalString = '';
 
-  List<Transaction> dailyData = [];
+  List<AppTransaction> dailyData = [];
 
   StreamSubscription dailyTransactionsSubscription;
 
-  StreamSubscription<Event> _onTransactionAddedSubscription;
-  StreamSubscription<Event> _onTransactionChangedSubscription;
-  StreamSubscription<Event> _onTransactionDeletedSubscription;
+  StreamSubscription<DatabaseEvent> _onTransactionAddedSubscription;
+  StreamSubscription<DatabaseEvent> _onTransactionChangedSubscription;
+  StreamSubscription<DatabaseEvent> _onTransactionDeletedSubscription;
   StreamSubscription<UserEntity> _onUserChangedSubscription;
 
   @override
@@ -151,9 +151,9 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
     });
   }
 
-  Stream<TransactionsDailyState> _mapTransactionDailyDisplayRequestedToState(List<Transaction> data) async* {
+  Stream<TransactionsDailyState> _mapTransactionDailyDisplayRequestedToState(List<AppTransaction> data) async* {
     yield TransactionsDailyLoading(sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString);
-    Map<int, List<Transaction>> map = sortTransactionsByDays(dailyData);
+    Map<int, List<AppTransaction>> map = sortTransactionsByDays(dailyData);
     yield TransactionsDailyLoaded(
         dailySortedTransactions: map, sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString);
   }
@@ -172,9 +172,9 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
     add(TransactionsDailyFetchRequested(dateForFetch: _observedDate));
   }
 
-  _onTransactionAdded(Event event) async {
+  _onTransactionAdded(DatabaseEvent event) async {
     print('TransactionsBloc: snapshot ${event.snapshot}');
-    Transaction transaction = TransactionsHelper()
+    AppTransaction transaction = TransactionsHelper()
         .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value), key: event.snapshot.key);
 
     // TODO: split this into readable appearance..
@@ -188,9 +188,9 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
     }
   }
 
-  _onTransactionChanged(Event event) async {
+  _onTransactionChanged(DatabaseEvent event) async {
     int oldTransactionIndex = dailyData.indexWhere((transaction) => transaction.id == event.snapshot.key);
-    Transaction changedTransaction = TransactionsHelper()
+    AppTransaction changedTransaction = TransactionsHelper()
         .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value), key: event.snapshot.key);
     if (oldTransactionIndex != -1) {
       dailyData[oldTransactionIndex] = changedTransaction;
@@ -199,7 +199,7 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
         sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: dailyData));
   }
 
-  _onTransactionDeleted(Event event) async {
+  _onTransactionDeleted(DatabaseEvent event) async {
     int index = dailyData.indexWhere((transaction) => transaction.id == event.snapshot.key);
     if (index != -1) {
       dailyData.removeAt(index);
@@ -209,8 +209,8 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
         sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: dailyData));
   }
 
-  Map<int, List<Transaction>> sortTransactionsByDays(List<Transaction> list) {
-    SplayTreeMap<int, List<Transaction>> map = SplayTreeMap();
+  Map<int, List<AppTransaction>> sortTransactionsByDays(List<AppTransaction> list) {
+    SplayTreeMap<int, List<AppTransaction>> map = SplayTreeMap();
 
     list.forEach((element) {
       if (!map.containsKey(element.date.day)) {

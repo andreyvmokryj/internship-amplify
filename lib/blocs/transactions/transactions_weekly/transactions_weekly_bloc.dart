@@ -28,7 +28,7 @@ class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsW
   final int startOfWeek = 1;
   final int endOfWeek = 7;
 
-  List<Transaction> observedMonthTransactions = [];
+  List<AppTransaction> observedMonthTransactions = [];
 
   DateTime _observedDate;
   String _sliderCurrentTimeIntervalString = '';
@@ -87,7 +87,7 @@ class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsW
     });
   }
 
-  Stream<TransactionsWeeklyState> _mapTransactionWeeklyDisplayRequestedToState(List<Transaction> data) async* {
+  Stream<TransactionsWeeklyState> _mapTransactionWeeklyDisplayRequestedToState(List<AppTransaction> data) async* {
     List<WeekDetails> observedMonthSummaryByWeeks = _getSummaryFromTransactionsList(data);
 
     yield TransactionsWeeklyLoaded(
@@ -121,7 +121,7 @@ class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsW
     add(TransactionsWeeklyFetchRequested(dateForFetch: _observedDate));
   }
 
-  List<WeekDetails> _getSummaryFromTransactionsList(List<Transaction> data) {
+  List<WeekDetails> _getSummaryFromTransactionsList(List<AppTransaction> data) {
     List<WeekDetails> list = [];
 
     if (data.isEmpty) {

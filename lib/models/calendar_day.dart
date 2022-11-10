@@ -8,7 +8,7 @@ class CalendarDay {
   double incomeAmount;
   double expensesAmount;
   double transferAmount;
-  List<Transaction> transactions;
+  List<AppTransaction> transactions;
 
   CalendarDay({
     @required this.displayedDate,

@@ -10,7 +10,7 @@ abstract class AddTransactionEvent extends Equatable {
 class AddTransactionInitialize extends AddTransactionEvent {}
 
 class AddTransaction extends AddTransactionEvent {
-  final Transaction transaction;
+  final AppTransaction transaction;
   final bool isAddingCompleted;
 
   AddTransaction({@required this.transaction, @required this.isAddingCompleted});

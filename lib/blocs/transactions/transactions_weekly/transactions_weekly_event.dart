@@ -31,7 +31,7 @@ class TransactionsWeeklyFetchRequested extends TransactionsWeeklyEvent {
 
 class TransactionWeeklyDisplayRequested extends TransactionsWeeklyEvent {
   final String sliderCurrentTimeIntervalString;
-  final List<Transaction> transactions;
+  final List<AppTransaction> transactions;
 
   TransactionWeeklyDisplayRequested({this.transactions, @required this.sliderCurrentTimeIntervalString});
 

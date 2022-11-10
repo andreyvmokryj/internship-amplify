@@ -54,7 +54,7 @@ class DailyTransactionList extends StatelessWidget {
 class _StickyExpensesDaily extends StatelessWidget {
   const _StickyExpensesDaily({Key key, this.items}) : super(key: key);
 
-  final List<Transaction> items;
+  final List<AppTransaction> items;
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +98,7 @@ class DailyTransactionItem extends StatelessWidget {
     this.transaction,
   }) : super(key: key);
 
-  final Transaction transaction;
+  final AppTransaction transaction;
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +148,7 @@ class DailyTransactionItem extends StatelessWidget {
     });
   }
 
-  Color getAmountColor(Transaction transaction, BuildContext context) {
+  Color getAmountColor(AppTransaction transaction, BuildContext context) {
     Color color;
 
     switch (transaction.transactionType) {
@@ -166,7 +166,7 @@ class DailyTransactionItem extends StatelessWidget {
     return color;
   }
 
-  String getCategory(Transaction transaction) {
+  String getCategory(AppTransaction transaction) {
     String result = '';
 
     switch (transaction.transactionType) {

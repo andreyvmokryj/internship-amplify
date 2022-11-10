@@ -1,7 +1,7 @@
 
 // flutter packages pub run build_runner build --delete-conflicting-outputs
 
-abstract class Transaction {
+abstract class AppTransaction {
   String id;
   TransactionType transactionType;
   DateTime date;

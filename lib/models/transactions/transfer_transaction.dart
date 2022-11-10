@@ -5,7 +5,7 @@ import 'package:radency_internship_project_2/models/transactions/transaction.dar
 part 'transfer_transaction.g.dart';
 
 @JsonSerializable(nullable: true)
-class TransferTransaction extends Transaction {
+class TransferTransaction extends AppTransaction {
   String id;
   TransactionType transactionType = TransactionType.Transfer;
   String accountOrigin;

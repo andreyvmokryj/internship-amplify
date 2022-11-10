@@ -58,7 +58,7 @@ class _CalendarDayDialogState extends State<CalendarDayDialog> {
     );
   }
 
-  Widget _transactionsList(List<Transaction> transactions) {
+  Widget _transactionsList(List<AppTransaction> transactions) {
     if (transactions.isEmpty) {
       return SizedBox();
     } else {
@@ -73,7 +73,7 @@ class _CalendarDayDialogState extends State<CalendarDayDialog> {
     }
   }
 
-  Widget _transactionData(Transaction transaction) {
+  Widget _transactionData(AppTransaction transaction) {
     switch (transaction.transactionType) {
       case TransactionType.Income:
         return _transactionRow(

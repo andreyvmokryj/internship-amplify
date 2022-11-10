@@ -27,7 +27,7 @@ class CsvExportBloc extends Bloc<CsvExportEvent, CsvExportState> {
   }
 
   saveCSV() async {
-    List<Transaction> data = await transactionsRepository.getAllData();
+    List<AppTransaction> data = await transactionsRepository.getAllData();
     List<List<String>> list = [];
     data.forEach((transaction) {
       List<String> convertedTransaction = TransactionsHelper().toStringInList(transaction);

@@ -6,7 +6,7 @@ import 'package:radency_internship_project_2/models/transactions/transfer_transa
 import 'package:radency_internship_project_2/utils/strings.dart';
 
 class TransactionsHelper {
-  Map<String, dynamic> convertTransactionToJson({@required Transaction transaction}) {
+  Map<String, dynamic> convertTransactionToJson({@required AppTransaction transaction}) {
     Map<String, dynamic> transactionMap;
 
     switch (transaction.transactionType) {
@@ -24,8 +24,8 @@ class TransactionsHelper {
     return transactionMap;
   }
 
-  Transaction convertJsonToTransaction({@required Map<String, dynamic> json, @required String key}) {
-    Transaction transaction;
+  AppTransaction convertJsonToTransaction({@required Map<String, dynamic> json, @required String key}) {
+    AppTransaction transaction;
 
     TransactionType transactionType = enumFromString<TransactionType>(TransactionType.values, json[TYPE_KEY]);
 
@@ -44,7 +44,7 @@ class TransactionsHelper {
     return transaction;
   }
 
-  List<String> toStringInList(Transaction transaction) {
+  List<String> toStringInList(AppTransaction transaction) {
     checkValueType(value) {
       if(value == null || value == 'null') {
         return '';
@@ -78,7 +78,7 @@ class TransactionsHelper {
     return [transactionToString];
   }
   
-  Transaction fromStringInList(List transaction) {
+  AppTransaction fromStringInList(List transaction) {
     checkValue(value) {
       if(value == '') {
         return null;
@@ -108,7 +108,7 @@ class TransactionsHelper {
       'creationType': checkValue(transactionToList[14]),
     };
     print(transactionToMap['note'] == null);
-    Transaction transactionEntity = convertJsonToTransaction(json: transactionToMap, key: transactionToMap['id']);
+    AppTransaction transactionEntity = convertJsonToTransaction(json: transactionToMap, key: transactionToMap['id']);
     return transactionEntity;
   }
 }

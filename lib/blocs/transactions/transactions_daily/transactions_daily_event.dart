@@ -30,7 +30,7 @@ class TransactionsDailyFetchRequested extends TransactionsDailyEvent {
 
 class TransactionsDailyDisplayRequested extends TransactionsDailyEvent {
   final String sliderCurrentTimeIntervalString;
-  final List<Transaction> transactions;
+  final List<AppTransaction> transactions;
 
   TransactionsDailyDisplayRequested({@required this.transactions, @required this.sliderCurrentTimeIntervalString});
 

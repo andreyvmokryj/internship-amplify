@@ -30,7 +30,7 @@ class TransactionsSummaryFetchRequested extends TransactionsSummaryEvent {
 
 class TransactionSummaryDisplayRequested extends TransactionsSummaryEvent {
   final String sliderCurrentTimeIntervalString;
-  final List<Transaction> transactions;
+  final List<AppTransaction> transactions;
 
   TransactionSummaryDisplayRequested({@required this.transactions, @required this.sliderCurrentTimeIntervalString});
 

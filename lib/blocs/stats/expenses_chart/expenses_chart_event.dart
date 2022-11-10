@@ -30,7 +30,7 @@ class ExpensesChartFetchRequested extends ExpensesChartEvent {
 
 class ExpensesChartDisplayRequested extends ExpensesChartEvent {
   final String sliderCurrentTimeIntervalString;
-  final List<Transaction> transactions;
+  final List<AppTransaction> transactions;
 
   ExpensesChartDisplayRequested({@required this.transactions, @required this.sliderCurrentTimeIntervalString});
 
