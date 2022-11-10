@@ -16,12 +16,12 @@ class AccountsView extends StatelessWidget{
       body: BlocBuilder<AccountBloc, AccountState>(
         builder: (context, state) {
           return SettingsList(
-            backgroundColor: Colors.white,
+            // backgroundColor: Colors.white,
             sections: [
               SettingsSection(
                 tiles: state.accounts.map((e) =>
                   SettingsTile(
-                    title: e,
+                    title: Text(e),
                     trailing: Container(
                       width: 0,
                     ),

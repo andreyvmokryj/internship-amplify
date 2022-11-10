@@ -106,7 +106,6 @@ PODS:
   - FirebaseDatabase (10.1.0):
     - FirebaseCore (~> 10.0)
     - leveldb-library (~> 1.22)
-  - FirebaseFirestore (7.11.0)
   - FirebaseFunctions (10.1.0):
     - FirebaseAppCheckInterop (~> 10.0)
     - FirebaseAuthInterop (~> 10.0)
@@ -212,7 +211,6 @@ DEPENDENCIES:
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_database (from `.symlinks/plugins/firebase_database/ios`)
-  - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `7.11.0`)
   - Flutter (from `Flutter`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - geocoding (from `.symlinks/plugins/geocoding/ios`)
@@ -268,9 +266,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_database:
     :path: ".symlinks/plugins/firebase_database/ios"
-  FirebaseFirestore:
-    :git: https://github.com/invertase/firestore-ios-sdk-frameworks.git
-    :tag: 7.11.0
   Flutter:
     :path: Flutter
   flutter_secure_storage:
@@ -296,11 +291,6 @@ EXTERNAL SOURCES:
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
 
-CHECKOUT OPTIONS:
-  FirebaseFirestore:
-    :git: https://github.com/invertase/firestore-ios-sdk-frameworks.git
-    :tag: 7.11.0
-
 SPEC CHECKSUMS:
   cloud_functions: 9f82f5e54dad6845ead8b16ae18cb4087bebf7e1
   contacts_service: 849e1f84281804c8bfbec1b4c3eedcb23c5d3eca
@@ -320,7 +310,6 @@ SPEC CHECKSUMS:
   FirebaseCoreExtension: 69b966c399abc4ca6dc75006ab87160f81512725
   FirebaseCoreInternal: 96d75228e10fd369564da51bd898414eb0f54df5
   FirebaseDatabase: 2dad4f291390ace067f46f7988600d3b46764b4e
-  FirebaseFirestore: 5cac04b727522fc641f125d5b99546cab795df57
   FirebaseFunctions: be8b4bfb8876dd03eef5bfd49a59ff40af90ebe1
   FirebaseInstallations: 99d24bac0243cf8b0e96cf5426340d211f0bcc80
   FirebaseMessagingInterop: 26c3bf82c7697d8fbfb13216541423bc2c93e8fc
@@ -347,6 +336,6 @@ SPEC CHECKSUMS:
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
 
-PODFILE CHECKSUM: 4a1ab84867e19e7441b3d8759a78b70de1ae433e
+PODFILE CHECKSUM: d615a9d881efa233bb69048bab07cdee08fc2476
 
 COCOAPODS: 1.11.3

@@ -16,44 +16,44 @@ class AppSettingsList extends StatelessWidget {
     return BlocBuilder<SettingsBloc, SettingsState>(builder: (BuildContext context, state) {
       return Container(
           child: SettingsList(
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         sections: [
           SettingsSection(
-            titleTextStyle: TextStyle(color: Colors.grey),
+            // titleTextStyle: TextStyle(color: Colors.grey),
 
             tiles: [
               SettingsTile(
-                title: S.of(context).main_currency,
-                subtitle: state.currency,
+                title: Text(S.of(context).main_currency),
+                description: Text(state.currency),
                 leading: Icon(FontAwesome5Solid.money_bill),
                 onPressed: (BuildContext context) {
                   Navigator.pushNamed(context, Routes.currencySettingPage);
                 },
               ),
               SettingsTile(
-                title: S.of(context).language,
-                subtitle: state.language,
+                title: Text(S.of(context).language),
+                description: Text(state.language),
                 leading: Icon(FontAwesome5Solid.language),
                 onPressed: (BuildContext context) {
                   Navigator.pushNamed(context, Routes.languageSettingPage);
                 },
               ),
               SettingsTile(
-                title: S.of(context).style,
+                title: Text(S.of(context).style),
                 leading: Icon(FontAwesome5Solid.palette),
                 onPressed: (BuildContext context) {
                   Navigator.pushNamed(context, Routes.styleSettingPage);
                 },
               ),
               SettingsTile(
-                title: S.current.incomeCategoryTitle,
+                title: Text(S.current.incomeCategoryTitle),
                 leading: Icon(FontAwesome5Solid.money_bill),
                 onPressed: (BuildContext context) {
                   Navigator.pushNamed(context, Routes.incomeCategoriesPage);
                 },
               ),
               SettingsTile(
-                title: S.current.expensesCategoryTitle,
+                title: Text(S.current.expensesCategoryTitle),
                 leading: Icon(FontAwesome5Solid.money_bill_wave),
                 onPressed: (BuildContext context) {
                   Navigator.pushNamed(context, Routes.expensesCategoriesPage);
