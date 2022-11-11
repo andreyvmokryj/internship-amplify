@@ -51,10 +51,10 @@ dependencies:
   google_maps_cluster_manager: 1.0.0
   google_maps_flutter: 2.0.3
   hive: 2.0.4
-  http: 0.13.3
+  http: 0.13.5
   image_picker: 0.7.4
   intl: 0.17.0
-  json_annotation: 3.1.1
+  json_annotation: 4.7.0
   local_auth: 1.1.5
   modal_bottom_sheet: 2.1.2
   path_provider: 2.0.1
@@ -62,8 +62,13 @@ dependencies:
   settings_ui: 2.0.2
   share: 2.0.1
   shared_preferences: 2.0.5
-  uuid: 3.0.4
+  uuid: 3.0.6
   permission_handler: 8.0.0+2
+
+  # Amplify
+  amplify_flutter: ^0.6.10
+  amplify_datastore: ^0.6.10
+  # amplify_api: ^0.6.0 // UNCOMMENT this line after backend is deployed
 
 dev_dependencies:
   flutter_test:
