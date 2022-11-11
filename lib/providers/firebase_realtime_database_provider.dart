@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 
 class FirebaseRealtimeDatabaseProvider {
   FirebaseRealtimeDatabaseProvider({@required this.database}) {
-    databaseReference = database.reference();
+    databaseReference = database.ref();
     print("FirebaseRealtimeDatabaseProvider.FirebaseRealtimeDatabaseProvider: ${database.databaseURL}");
   }
 
