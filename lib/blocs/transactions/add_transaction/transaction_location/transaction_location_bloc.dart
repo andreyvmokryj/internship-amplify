@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
-import 'package:radency_internship_project_2/models/location.dart';
+import 'package:radency_internship_project_2/local_models/location.dart';
 import 'package:radency_internship_project_2/utils/geolocator_utils.dart';
 
 part 'transaction_location_event.dart';

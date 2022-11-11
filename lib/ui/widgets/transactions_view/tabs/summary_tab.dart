@@ -7,7 +7,7 @@ import 'package:radency_internship_project_2/blocs/export_csv/export_csv_bloc.da
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/blocs/transactions/transactions_summary/transactions_summary_bloc.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
-import 'package:radency_internship_project_2/models/transactions/summary_details.dart';
+import 'package:radency_internship_project_2/local_models/transactions/summary_details.dart';
 import 'package:radency_internship_project_2/ui/shared_components/centered_text_container.dart';
 import 'package:radency_internship_project_2/ui/shared_components/elevated_buttons/colored_elevated_button.dart';
 import 'package:radency_internship_project_2/ui/shared_components/empty_data_refresh_container.dart';

@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:radency_internship_project_2/local_models/user.dart';
 
-import '../../models/user.dart';
 import '../../providers/firebase_auth_service.dart';
 
 part 'user_profile_event.dart';

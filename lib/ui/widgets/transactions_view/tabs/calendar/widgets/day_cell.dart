@@ -2,7 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
-import 'package:radency_internship_project_2/models/calendar_day.dart';
+import 'package:radency_internship_project_2/local_models/calendar_day.dart';
 import 'package:radency_internship_project_2/ui/widgets/transactions_view/tabs/calendar/widgets/calendar_day_dialog.dart';
 import 'package:radency_internship_project_2/utils/strings.dart';
 import 'package:radency_internship_project_2/utils/text_styles.dart';

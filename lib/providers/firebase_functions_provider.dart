@@ -1,6 +1,6 @@
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:meta/meta.dart';
-import 'package:radency_internship_project_2/models/transactions/month_details.dart';
+import 'package:radency_internship_project_2/local_models/transactions/month_details.dart';
 
 const String FUNCTIONS_YEAR_KEY = 'year';
 const String FUNCTIONS_NAME_YEAR = 'getYearSummaryByMonths';

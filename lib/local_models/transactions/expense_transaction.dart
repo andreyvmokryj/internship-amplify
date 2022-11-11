@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
-import 'package:radency_internship_project_2/models/transactions/transaction.dart';
+import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
 
 part 'expense_transaction.g.dart';
 

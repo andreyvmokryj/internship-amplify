@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:radency_internship_project_2/models/location.dart';
+import 'package:radency_internship_project_2/local_models/location.dart';
 
 class GeolocatorUtils {
   Future<Position> determinePosition() async {

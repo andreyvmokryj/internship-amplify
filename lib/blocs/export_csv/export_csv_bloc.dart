@@ -6,8 +6,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
 import 'dart:core';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
-import 'package:radency_internship_project_2/models/transactions/transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/transactions_helper.dart';
+import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
+import 'package:radency_internship_project_2/local_models/transactions/transactions_helper.dart';
 
 part 'export_csv_event.dart';
 part 'export_csv_state.dart';

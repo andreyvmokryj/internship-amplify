@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:radency_internship_project_2/models/chart_models/chart_section.dart';
+import 'package:radency_internship_project_2/local_models/chart_models/chart_section.dart';
 import 'package:radency_internship_project_2/utils/text_styles.dart';
 
 class PieOutsideLabelChart extends StatelessWidget {

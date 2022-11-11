@@ -1,4 +1,4 @@
-import 'package:radency_internship_project_2/models/location.dart';
+import 'package:radency_internship_project_2/local_models/location.dart';
 
 enum ExpenseType { income, outcome, transfer }
 

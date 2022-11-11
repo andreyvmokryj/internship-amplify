@@ -3,8 +3,8 @@ import 'package:csv/csv.dart';
 import 'package:bloc/bloc.dart';
 import 'package:file_picker_cross/file_picker_cross.dart';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
-import 'package:radency_internship_project_2/models/transactions/transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/transactions_helper.dart';
+import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
+import 'package:radency_internship_project_2/local_models/transactions/transactions_helper.dart';
 
 part 'import_csv_event.dart';
 part 'import_csv_state.dart';

@@ -1,12 +1,12 @@
 import 'dart:math';
 
-import 'package:radency_internship_project_2/models/budget/monthly_category_expense.dart';
-import 'package:radency_internship_project_2/models/expense_item.dart';
-import 'package:radency_internship_project_2/models/transactions/expense_transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/income_transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/transfer_transaction.dart';
-import 'package:radency_internship_project_2/models/location.dart';
+import 'package:radency_internship_project_2/local_models/budget/monthly_category_expense.dart';
+import 'package:radency_internship_project_2/local_models/expense_item.dart';
+import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
+import 'package:radency_internship_project_2/local_models/transactions/income_transaction.dart';
+import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
+import 'package:radency_internship_project_2/local_models/transactions/transfer_transaction.dart';
+import 'package:radency_internship_project_2/local_models/location.dart';
 import 'package:radency_internship_project_2/blocs/transactions/add_transaction/temp_values.dart';
 
 class MockedExpensesItems {

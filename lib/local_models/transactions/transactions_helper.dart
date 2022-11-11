@@ -1,8 +1,8 @@
 import 'package:meta/meta.dart';
-import 'package:radency_internship_project_2/models/transactions/expense_transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/income_transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/transfer_transaction.dart';
+import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
+import 'package:radency_internship_project_2/local_models/transactions/income_transaction.dart';
+import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
+import 'package:radency_internship_project_2/local_models/transactions/transfer_transaction.dart';
 import 'package:radency_internship_project_2/utils/strings.dart';
 
 class TransactionsHelper {

@@ -1,8 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:meta/meta.dart';
-import 'package:radency_internship_project_2/models/transactions/transaction.dart' as mtr;
-import 'package:radency_internship_project_2/models/transactions/transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/transactions_helper.dart';
+import 'package:radency_internship_project_2/local_models/transactions/transaction.dart' as mtr;
+import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
+import 'package:radency_internship_project_2/local_models/transactions/transactions_helper.dart';
 import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
 import 'package:radency_internship_project_2/providers/firebase_realtime_database_provider.dart';
 import 'package:radency_internship_project_2/repositories/repository.dart';
