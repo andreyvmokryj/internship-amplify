@@ -4,14 +4,14 @@ import 'package:radency_internship_project_2/utils/styles.dart';
 
 class BaseSingleChoiceModal extends StatelessWidget{
   final String title;
-  final Widget subtitle;
+  final Widget? subtitle;
   final List<Widget> actions;
-  final List<ButtonStyleButton> contents;
+  final List<ButtonStyleButton?> contents;
 
   final int crossAxisCount;
   final int mainAxisCount;
 
-  const BaseSingleChoiceModal({Key key, this.title, this.subtitle, this.actions, this.contents, this.crossAxisCount = 3, this.mainAxisCount = 6}) : super(key: key);
+  const BaseSingleChoiceModal({Key? key, required this.title, this.subtitle, this.actions = const [], this.contents = const [], this.crossAxisCount = 3, this.mainAxisCount = 6}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

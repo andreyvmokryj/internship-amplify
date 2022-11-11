@@ -14,7 +14,7 @@ class EmailLoginSubmitted extends EmailLoginEvent {
   final String password;
   final bool pairWithBiometrics;
 
-  EmailLoginSubmitted({@required this.email, @required this.password, @required this.pairWithBiometrics});
+  EmailLoginSubmitted({required this.email, required this.password, required this.pairWithBiometrics});
 
   @override
   List<Object> get props => [email, password, pairWithBiometrics];

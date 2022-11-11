@@ -17,7 +17,7 @@ class CategorySliderLoading extends CategorySliderState {
 class CategorySliderLoaded extends CategorySliderState {
   final CategorySliderMode categorySliderMode;
 
-  CategorySliderLoaded({@required this.categorySliderMode});
+  CategorySliderLoaded({required this.categorySliderMode});
 
   @override
   List<Object> get props => [categorySliderMode];

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:meta/meta.dart';
 import 'package:radency_internship_project_2/local_models/user.dart';
 
 class SignUpFailure implements Exception {}
@@ -12,14 +11,14 @@ class LogInWithPhoneNumberFailure implements Exception {}
 class SignUpWithPhoneNumberFailure implements Exception {
   final String message;
 
-  SignUpWithPhoneNumberFailure({@required this.message});
+  SignUpWithPhoneNumberFailure({required this.message});
 }
 
 class LogOutFailure implements Exception {}
 
 class FirebaseAuthenticationService {
   FirebaseAuthenticationService({
-    firebase_auth.FirebaseAuth firebaseAuth,
+    firebase_auth.FirebaseAuth? firebaseAuth,
   }) : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance;
 
   final firebase_auth.FirebaseAuth _firebaseAuth;
@@ -39,56 +38,53 @@ class FirebaseAuthenticationService {
   }
 
   Future<void> signInWithPhoneCredential(
-      {@required AuthCredential authCredential, String email, String username}) async {
-    User firebaseUser;
+      {required AuthCredential authCredential, String? email, String? username}) async {
+    User? firebaseUser;
     await _firebaseAuth.signInWithCredential(authCredential).then((value) async {
       firebaseUser = value.user;
-      if (firebaseUser.email == null || firebaseUser.displayName == null) {
+      if (firebaseUser?.email == null || firebaseUser?.displayName == null) {
         // Logging out if user haven't completed registration flow
         await logOut();
         throw SignUpWithPhoneNumberFailure(message: 'This account is not yet registered!');
       }
     });
 
-    await _firebaseAuth.currentUser.reload();
+    await _firebaseAuth.currentUser?.reload();
   }
 
   Future<void> signInWithPhoneCredentialAndUpdateProfile(
-      {@required AuthCredential authCredential, String email, String username}) async {
-    User firebaseUser;
+      {required AuthCredential authCredential, String? email, String? username}) async {
+    User? firebaseUser;
     await _firebaseAuth.signInWithCredential(authCredential).then((value) {
       firebaseUser = value.user;
     });
 
-    if (firebaseUser.email != null || firebaseUser.displayName != null) {
+    if (firebaseUser?.email != null || firebaseUser?.displayName != null) {
       throw SignUpWithPhoneNumberFailure(message: 'This account is already registered!');
     }
 
-    await firebaseUser.updateEmail(email);
-    await firebaseUser.updateProfile(displayName: username);
-    await _firebaseAuth.currentUser.reload();
+    if (email != null) {
+      await firebaseUser?.updateEmail(email);
+    }
+    await firebaseUser?.updateDisplayName(username);
+    await _firebaseAuth.currentUser?.reload();
   }
 
   Future<void> startPhoneNumberAuthentication({
-    @required
+    required
         String phoneNumber,
-    @required
+    required
         codeAutoRetrievalTimeout(String verificationId),
-    @required
+    required
         verificationFailed(FirebaseAuthException error),
-    @required
-        codeSent(String verificationId, int forceResendingToken),
-    @required
+    required
+        codeSent(String verificationId, int? forceResendingToken),
+    required
         verificationCompleted(
       PhoneAuthCredential phoneAuthCredential,
     ),
-    int forceResendingToken,
+    int? forceResendingToken ,
   }) async {
-    assert(phoneNumber != null &&
-        codeAutoRetrievalTimeout != null &&
-        verificationFailed != null &&
-        codeSent != null &&
-        verificationCompleted != null);
     try {
       await _firebaseAuth.verifyPhoneNumber(
           codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
@@ -102,36 +98,36 @@ class FirebaseAuthenticationService {
     }
   }
 
-  Future<void> signInWithEmailAndPassword({@required String email, @required String password}) async {
+  Future<void> signInWithEmailAndPassword({required String email, required String password}) async {
     await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
   }
 
   Future<void> signUpWithEmailAndPassword(
-      {@required String email, @required String password, @required String username}) async {
+      {required String email, required String password, required String username}) async {
     await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
 
-    User firebaseUser;
+    User? firebaseUser;
     await _firebaseAuth
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) => firebaseUser = value.user);
 
-    await firebaseUser.updateProfile(displayName: username);
-    await _firebaseAuth.currentUser.reload();
+    await firebaseUser?.updateDisplayName(username);
+    await _firebaseAuth.currentUser?.reload();
 
     await sendEmailVerification();
   }
 
   Future<void> sendEmailVerification() async {
-    await _firebaseAuth.currentUser.sendEmailVerification();
+    await _firebaseAuth.currentUser?.sendEmailVerification();
   }
 
   Future<void> reloadUser() async {
-    await _firebaseAuth.currentUser.reload();
+    await _firebaseAuth.currentUser?.reload();
   }
 
   Future<String> getUserID() async {
-    firebase_auth.User user = _firebaseAuth.currentUser;
-    return user.uid;
+    firebase_auth.User? user = _firebaseAuth.currentUser;
+    return user?.uid ?? "";
   }
 
   Future<void> logOut() async {

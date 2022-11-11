@@ -19,7 +19,7 @@ class AddTransactionPage extends StatelessWidget {
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
       title: BlocBuilder<TransactionTypeBloc, TransactionTypeState>(
         builder: (context, state) {

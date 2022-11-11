@@ -24,7 +24,7 @@ class ForexBloc extends Bloc<ForexEvent, ForexState>{
     final dateTime = event.dateTime ?? state.dateTime;
     final forexMap = await ForexService().getExchangeRates(event.mainCurrencyCode, dateTime);
     yield ForexState(
-      forex: forexMap,
+      forex: forexMap as Map<String, double>,
       dateTime: dateTime,
     );
   }

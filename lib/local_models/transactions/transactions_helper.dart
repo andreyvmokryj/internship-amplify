@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/income_transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
@@ -6,7 +5,7 @@ import 'package:radency_internship_project_2/local_models/transactions/transfer_
 import 'package:radency_internship_project_2/utils/strings.dart';
 
 class TransactionsHelper {
-  Map<String, dynamic> convertTransactionToJson({@required AppTransaction transaction}) {
+  Map<String, dynamic> convertTransactionToJson({required AppTransaction transaction}) {
     Map<String, dynamic> transactionMap;
 
     switch (transaction.transactionType) {
@@ -24,10 +23,10 @@ class TransactionsHelper {
     return transactionMap;
   }
 
-  AppTransaction convertJsonToTransaction({@required Map<String, dynamic> json, @required String key}) {
+  AppTransaction convertJsonToTransaction({required Map<String, dynamic> json, required String key}) {
     AppTransaction transaction;
 
-    TransactionType transactionType = enumFromString<TransactionType>(TransactionType.values, json[TYPE_KEY]);
+    TransactionType transactionType = enumFromString<TransactionType>(TransactionType.values, json[TYPE_KEY])!;
 
     switch (transactionType) {
       case TransactionType.Income:

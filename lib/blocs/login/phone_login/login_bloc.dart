@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:meta/meta.dart';
 import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
 
 part 'login_event.dart';
@@ -10,13 +9,12 @@ part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc(this._authenticationService)
-      : assert(_authenticationService != null),
-        super(const LoginState());
+      : super(const LoginState());
 
   final FirebaseAuthenticationService _authenticationService;
 
-  String verificationId;
-  int forceCodeResend;
+  String? verificationId;
+  int? forceCodeResend;
 
   @override
   Stream<LoginState> mapEventToState(
@@ -38,7 +36,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Stream<LoginState> _mapLoginCredentialsSubmittedToState({
-    @required String phoneNumber,
+    required String phoneNumber,
   }) async* {
     yield state.onNumberProcessing();
 
@@ -52,7 +50,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           verificationFailed: (FirebaseAuthException exception) {
             add(LoginVerificationFailed(exception: exception));
           },
-          codeSent: (String verificationId, [int forceCodeResend]) {
+          codeSent: (String verificationId, [int? forceCodeResend]) {
             print('PhoneAuthBloc: codeSent');
             this.forceCodeResend = forceCodeResend;
             this.verificationId = verificationId;
@@ -65,11 +63,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  Stream<LoginState> _mapLoginOtpSubmittedToState({@required String oneTimePassword}) async* {
+  Stream<LoginState> _mapLoginOtpSubmittedToState({required String oneTimePassword}) async* {
     yield state.onOtpStartProcessing();
 
     final AuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
-      verificationId: verificationId,
+      verificationId: verificationId!,
       smsCode: oneTimePassword,
     );
 
@@ -80,9 +78,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     try {
       await _authenticationService.signInWithPhoneCredential(authCredential: authCredential);
     } on PlatformException catch (e) {
-      yield state.showError(e.message);
+      yield state.showError(e.message!);
     } catch (e) {
-      yield state.showError(e.message);
+      yield state.showError(e.toString());
     }
   }
 }

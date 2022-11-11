@@ -27,7 +27,7 @@ class ExpensesMapCurrentLocationPressed extends ExpensesMapEvent {
 class ExpensesMapFetchRequested extends ExpensesMapEvent {
   final DateTime dateForFetch;
 
-  ExpensesMapFetchRequested({@required this.dateForFetch});
+  ExpensesMapFetchRequested({required this.dateForFetch});
 
   @override
   List<Object> get props => [dateForFetch];
@@ -37,7 +37,7 @@ class ExpensesMapDisplayRequested extends ExpensesMapEvent {
   final String data;
   final List<AppTransaction> transactions;
 
-  ExpensesMapDisplayRequested({this.transactions, @required this.data});
+  ExpensesMapDisplayRequested({required this.transactions, required this.data});
 
   @override
   List<Object> get props => [data, transactions];
@@ -47,7 +47,7 @@ class ExpensesMapOnCameraMoved extends ExpensesMapEvent {
 
   final CameraPosition cameraPosition;
 
-  ExpensesMapOnCameraMoved({@required this.cameraPosition});
+  ExpensesMapOnCameraMoved({required this.cameraPosition});
 
   @override
   List<Object> get props => [cameraPosition];
@@ -62,7 +62,7 @@ class ExpensesMapMarkersUpdated extends ExpensesMapEvent {
 
   final Set<Marker> markers;
 
-  ExpensesMapMarkersUpdated({@required this.markers});
+  ExpensesMapMarkersUpdated({required this.markers});
 
   @override
   List<Object> get props => [markers];
@@ -71,7 +71,7 @@ class ExpensesMapMarkersUpdated extends ExpensesMapEvent {
 class ExpensesMapCreated extends ExpensesMapEvent {
   final GoogleMapController controller;
 
-  ExpensesMapCreated({@required this.controller});
+  ExpensesMapCreated({required this.controller});
 
   @override
   List<Object> get props => [controller];

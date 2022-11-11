@@ -60,10 +60,12 @@ class AddTransactionMenu extends StatelessWidget {
     ];
   }
 
-  Widget menuItem({@required Function onPressed, @required String title, TextStyle textStyle}) {
+  Widget menuItem({required Function onPressed, required String title, TextStyle? textStyle}) {
     return Material(
       child: GestureDetector(
-        onTap: onPressed,
+        onTap: (){
+          onPressed.call();
+        },
         child: ListTile(title: Text(title, style: textStyle ?? addTransactionMenuItemTextStyle())),
       ),
     );

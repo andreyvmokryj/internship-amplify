@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:meta/meta.dart';
 import 'package:radency_internship_project_2/local_models/location.dart';
 import 'package:radency_internship_project_2/utils/geolocator_utils.dart';
 
@@ -28,7 +27,7 @@ class TransactionLocationBloc extends Bloc<TransactionLocationEvent, Transaction
     } else if (event is TransactionLocationMenuOpened) yield TransactionLocationInitial();
   }
 
-  Stream<TransactionLocationState> _mapTransactionLocationCurrentSelectedToState({@required String languageCode}) async* {
+  Stream<TransactionLocationState> _mapTransactionLocationCurrentSelectedToState({required String languageCode}) async* {
     yield TransactionLocationCurrentLoading();
 
     try {
@@ -44,7 +43,7 @@ class TransactionLocationBloc extends Bloc<TransactionLocationEvent, Transaction
     }
   }
 
-  Stream<TransactionLocationState> _mapTransactionLocationFromMapSelectedToState({@required String languageCode, LatLng latLng}) async* {
+  Stream<TransactionLocationState> _mapTransactionLocationFromMapSelectedToState({required String languageCode, LatLng? latLng}) async* {
     yield TransactionLocationFromMapLoading();
 
     if (latLng != null) {

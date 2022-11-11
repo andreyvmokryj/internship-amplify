@@ -19,22 +19,22 @@ part 'transactions_summary_state.dart';
 
 class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, TransactionsSummaryState> {
   TransactionsSummaryBloc({
-    @required this.settingsBloc,
-    @required this.firebaseAuthenticationService,
-    @required this.transactionsRepository,
+    required this.settingsBloc,
+    required this.firebaseAuthenticationService,
+    required this.transactionsRepository,
   }) : super(TransactionsSummaryInitial());
 
   final TransactionsRepository transactionsRepository;
   final FirebaseAuthenticationService firebaseAuthenticationService;
   final SettingsBloc settingsBloc;
 
-  StreamSubscription settingsSubscription;
+  StreamSubscription? settingsSubscription;
   String locale = '';
 
-  StreamSubscription summaryTransactionsSubscription;
-  StreamSubscription<UserEntity> _onUserChangedSubscription;
+  StreamSubscription? summaryTransactionsSubscription;
+  StreamSubscription<UserEntity>? _onUserChangedSubscription;
 
-  DateTime _observedDate;
+  DateTime? _observedDate;
   String _sliderCurrentTimeIntervalString = '';
 
   List<AppTransaction> transactions = [];
@@ -43,7 +43,7 @@ class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, Transaction
   Future<void> close() {
     summaryTransactionsSubscription?.cancel();
     settingsSubscription?.cancel();
-    _onUserChangedSubscription.cancel();
+    _onUserChangedSubscription?.cancel();
 
     return super.close();
   }
@@ -65,13 +65,13 @@ class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, Transaction
     } else if (event is TransactionsSummaryLocaleChanged) {
       yield* _mapTransactionsSummaryLocaleChangedToState();
     } else if (event is TransactionsSummaryRefreshPressed) {
-      add(TransactionsSummaryFetchRequested(dateForFetch: _observedDate));
+      add(TransactionsSummaryFetchRequested(dateForFetch: _observedDate!));
     }
   }
 
   Stream<TransactionsSummaryState> _mapTransactionsSummaryInitializeToState() async* {
     _observedDate = DateTime.now();
-    add(TransactionsSummaryFetchRequested(dateForFetch: _observedDate));
+    add(TransactionsSummaryFetchRequested(dateForFetch: _observedDate!));
 
     if (settingsBloc.state is LoadedSettingsState) locale = settingsBloc.state.language;
     settingsBloc.stream.listen((newSettingsState) {
@@ -91,13 +91,13 @@ class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, Transaction
             sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: transactions));
       } else {
         _observedDate = DateTime.now();
-        add(TransactionsSummaryFetchRequested(dateForFetch: _observedDate));
+        add(TransactionsSummaryFetchRequested(dateForFetch: _observedDate!));
       }
     });
   }
 
   Stream<TransactionsSummaryState> _mapTransactionsSummaryLocaleChangedToState() async* {
-    _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate, locale: locale);
+    _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate!, locale: locale);
     if (state is TransactionsSummaryLoaded) {
       add(TransactionSummaryDisplayRequested(
           transactions: transactions, sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString));
@@ -107,10 +107,10 @@ class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, Transaction
   }
 
   Stream<TransactionsSummaryState> _mapTransactionsSummaryFetchRequestedToState(
-      {@required DateTime dateForFetch}) async* {
+      {required DateTime dateForFetch}) async* {
     summaryTransactionsSubscription?.cancel();
 
-    _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate);
+    _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate!);
     yield TransactionsSummaryLoading(sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString);
     summaryTransactionsSubscription = transactionsRepository
         .getTransactionsByTimePeriod(
@@ -133,13 +133,13 @@ class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, Transaction
   }
 
   Stream<TransactionsSummaryState> _mapTransactionsSummaryGetPreviousMonthPressedToState() async* {
-    _observedDate = DateTime(_observedDate.year, _observedDate.month - 1);
-    add(TransactionsSummaryFetchRequested(dateForFetch: _observedDate));
+    _observedDate = DateTime(_observedDate!.year, _observedDate!.month - 1);
+    add(TransactionsSummaryFetchRequested(dateForFetch: _observedDate!));
   }
 
   Stream<TransactionsSummaryState> _mapTransactionsSummaryGetNextMonthPressedToState() async* {
-    _observedDate = DateTime(_observedDate.year, _observedDate.month + 1);
-    add(TransactionsSummaryFetchRequested(dateForFetch: _observedDate));
+    _observedDate = DateTime(_observedDate!.year, _observedDate!.month + 1);
+    add(TransactionsSummaryFetchRequested(dateForFetch: _observedDate!));
   }
 
   SummaryDetails _convertTransactionsToSummary(List<AppTransaction> transactions) {
@@ -158,7 +158,7 @@ class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, Transaction
         }
 
         summaryDetails.accountsExpensesDetails[transaction.category] =
-            summaryDetails.accountsExpensesDetails[transaction.category] + transaction.amount;
+            summaryDetails.accountsExpensesDetails[transaction.category] ?? 0 + transaction.amount;
 
         summaryDetails.expenses += transaction.amount;
       }

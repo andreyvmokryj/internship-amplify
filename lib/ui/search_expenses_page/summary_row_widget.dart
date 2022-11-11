@@ -9,7 +9,7 @@ class SummaryRowWidget extends StatelessWidget{
   final double transfer;
   final String currency;
 
-  const SummaryRowWidget({Key key, this.income, this.outcome, this.transfer, this.currency}) : super(key: key);
+  const SummaryRowWidget({Key? key, required this.income, required this.outcome, required this.transfer, required this.currency}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class SummaryRowWidget extends StatelessWidget{
     );
   }
 
-  Widget _buildRowItem(BuildContext context, {String title, String currencySymbol, double amount, Color color}){
+  Widget _buildRowItem(BuildContext context, {required String title, required String currencySymbol, required double amount, Color? color}){
     return Column(
       children: [
         Text(title),

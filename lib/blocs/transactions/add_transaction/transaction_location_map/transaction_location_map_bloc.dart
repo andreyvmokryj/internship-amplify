@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:meta/meta.dart';
 import 'package:radency_internship_project_2/utils/geolocator_utils.dart';
 
 part 'transaction_location_map_event.dart';
@@ -45,7 +44,7 @@ class TransactionLocationMapBloc extends Bloc<TransactionLocationMapEvent, Trans
       Position position = await GeolocatorUtils().determinePosition();
       yield state.animateToPosition(latLng: LatLng(position.latitude, position.longitude));
     } catch (e) {
-      yield state.showMessage(e);
+      yield state.showMessage(e.toString());
     }
 
     yield state.setFocused();

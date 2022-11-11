@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/income_transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
@@ -17,7 +16,7 @@ part 'transactions_weekly_event.dart';
 part 'transactions_weekly_state.dart';
 
 class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsWeeklyState> {
-  TransactionsWeeklyBloc({@required this.transactionsRepository, @required this.firebaseAuthenticationService})
+  TransactionsWeeklyBloc({required this.transactionsRepository, required this.firebaseAuthenticationService})
       : super(TransactionsWeeklyInitial());
 
   final TransactionsRepository transactionsRepository;
@@ -30,11 +29,11 @@ class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsW
 
   List<AppTransaction> observedMonthTransactions = [];
 
-  DateTime _observedDate;
+  DateTime _observedDate = DateTime.now();
   String _sliderCurrentTimeIntervalString = '';
 
-  StreamSubscription _weeklyTransactionsSubscription;
-  StreamSubscription<UserEntity> _onUserChangedSubscription;
+  StreamSubscription? _weeklyTransactionsSubscription;
+  StreamSubscription<UserEntity>? _onUserChangedSubscription;
 
   @override
   Future<void> close() {
@@ -63,7 +62,7 @@ class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsW
   }
 
   Stream<TransactionsWeeklyState> _mapTransactionsWeeklyFetchRequestedToState({
-    @required DateTime dateForFetch,
+    required DateTime dateForFetch,
   }) async* {
     _weeklyTransactionsSubscription?.cancel();
 
@@ -164,7 +163,7 @@ class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsW
     return list;
   }
 
-  DateTime _getFirstDayOfCurrentRange({@required DateTime dateTime}) {
+  DateTime _getFirstDayOfCurrentRange({required DateTime dateTime}) {
     DateTime startOfFirstWeekForCurrentMonth = DateTime(dateTime.year, dateTime.month, 1);
     while (startOfFirstWeekForCurrentMonth.weekday != startOfWeek) {
       startOfFirstWeekForCurrentMonth = DateTime(startOfFirstWeekForCurrentMonth.year,
@@ -174,7 +173,7 @@ class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsW
     return startOfFirstWeekForCurrentMonth;
   }
 
-  DateTime _getLastDayOfCurrentRange({@required DateTime dateTime}) {
+  DateTime _getLastDayOfCurrentRange({required DateTime dateTime}) {
     DateTime endOfLastWeekForCurrentMonth = DateTime(dateTime.year, dateTime.month + 1, 0);
     while (endOfLastWeekForCurrentMonth.weekday != endOfWeek) {
       endOfLastWeekForCurrentMonth = DateTime(

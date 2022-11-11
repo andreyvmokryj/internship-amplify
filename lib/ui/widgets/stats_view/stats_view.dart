@@ -43,13 +43,10 @@ class _StatsViewState extends State<StatsView> {
               switch (state.statsPageMode) {
                 case StatsPageMode.chart:
                   return ChartView();
-                  break;
                 case StatsPageMode.budget:
                   return BudgetOverviewTab();
-                  break;
                 case StatsPageMode.map:
                   return ExpensesMapView();
-                  break;
               }
 
               return SizedBox();
@@ -69,7 +66,10 @@ class _StatsViewState extends State<StatsView> {
             children: _statsViewSliderButtons(),
             groupValue: state.statsPageMode,
             onValueChanged: (value) {
-              context.read<StatsBloc>().add(StatsPageModeChanged(statsPageMode: value));
+              if (value != null) {
+                context.read<StatsBloc>().add(
+                    StatsPageModeChanged(statsPageMode: value as StatsPageMode));
+              }
             },
             thumbColor: Theme.of(context).primaryColor,
             backgroundColor: Colors.black12,
@@ -108,16 +108,12 @@ class _StatsViewState extends State<StatsView> {
       switch (statsState.statsPageMode) {
         case StatsPageMode.chart:
           return StatsSlider();
-          break;
         case StatsPageMode.budget:
           return StatsSlider();
-          break;
         case StatsPageMode.map:
           return StatsSlider();
-          break;
         default:
           return Container();
-          break;
       }
     });
   }

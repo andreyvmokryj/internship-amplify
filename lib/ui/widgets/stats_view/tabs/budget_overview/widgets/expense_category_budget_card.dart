@@ -13,7 +13,7 @@ class ExpenseCategoryBudgetItem extends StatelessWidget {
   final double verticalPadding = 4;
   final double horizontalPadding = 16;
 
-  ExpenseCategoryBudgetItem({@required this.monthlyCategoryExpense});
+  ExpenseCategoryBudgetItem({required this.monthlyCategoryExpense});
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,7 @@ class ExpenseCategoryBudgetItem extends StatelessWidget {
               children: [
                 Text(
                   getCurrencySymbol(context.read<SettingsBloc>().state.currency),
-                  style: textStyleTransactionListCurrency(color: Theme.of(context).textTheme.bodyText1.color, size: 20),
+                  style: textStyleTransactionListCurrency(color: Theme.of(context).textTheme.bodyText1?.color, size: 20),
                 ),
                 Text(
                   '${monthlyCategoryExpense.budgetTotal.toStringAsFixed(2)}',

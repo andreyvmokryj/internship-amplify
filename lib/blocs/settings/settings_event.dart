@@ -9,13 +9,13 @@ class InitialSettingsEvent implements SettingsEvent {
 }
 
 class ChangeCurrency implements SettingsEvent {
-  ChangeCurrency({this.newCurrencyValue});
+  ChangeCurrency({required this.newCurrencyValue});
 
   String newCurrencyValue;
 }
 
 class ChangeLanguage implements SettingsEvent {
-  ChangeLanguage({this.newLanguageValue});
+  ChangeLanguage({required this.newLanguageValue});
 
   String newLanguageValue;
 }

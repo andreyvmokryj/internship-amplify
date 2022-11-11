@@ -19,19 +19,19 @@ class _ExpensesMapViewState extends State<ExpensesMapView> {
   Widget build(BuildContext context) {
     return BlocConsumer<ExpensesMapBloc, ExpensesMapState>(listener: (context, state) {
       if (state.shouldAnimateToPosition) {
-        _animateCamera(state.animateTargetPosition);
+        _animateCamera(state.animateTargetPosition!);
       }
 
       if (state.message != null) {
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(
-            SnackBar(content: Text(state.message)),
+            SnackBar(content: Text(state.message ?? "")),
           );
       }
     }, builder: (context, state) {
       if (state.isMapInitialized) {
-        print("_ExpensesMapViewState.build: ${state.markers.length}");
+        print("_ExpensesMapViewState.build: ${state.markers?.length}");
 
         return Expanded(
           child: Stack(
@@ -53,8 +53,8 @@ class _ExpensesMapViewState extends State<ExpensesMapView> {
                   context.read<ExpensesMapBloc>().add(ExpensesMapOnCameraMoveEnded());
                 },
                 zoomControlsEnabled: false,
-                initialCameraPosition: state.initialCameraPosition,
-                markers: state.markers,
+                initialCameraPosition: state.initialCameraPosition!,
+                markers: state.markers ?? {},
               ),
               Align(
                 alignment: Alignment.bottomRight,

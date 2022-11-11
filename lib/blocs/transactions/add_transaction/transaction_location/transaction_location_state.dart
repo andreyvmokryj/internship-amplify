@@ -20,10 +20,10 @@ class TransactionLocationFromMapLoading extends TransactionLocationState {
 }
 
 class TransactionLocationSelected extends TransactionLocationState {
-  final ExpenseLocation expenseLocation;
+  final ExpenseLocation? expenseLocation;
 
-  TransactionLocationSelected({@required this.expenseLocation});
+  TransactionLocationSelected({required this.expenseLocation});
 
   @override
-  List<Object> get props => [expenseLocation];
+  List<Object> get props => [expenseLocation ?? ""];
 }

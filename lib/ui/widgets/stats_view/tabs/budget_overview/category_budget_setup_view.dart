@@ -20,11 +20,11 @@ class _CategoryBudgetSetupViewState extends State<CategoryBudgetSetupView> {
 
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  double _budget;
+  double _budget = 0;
 
   @override
   Widget build(BuildContext context) {
-    final String category = ModalRoute.of(context).settings.arguments;
+    final String category = ModalRoute.of(context)!.settings.arguments as String;
 
     return Scaffold(
       appBar: AppBar(
@@ -46,9 +46,9 @@ class _CategoryBudgetSetupViewState extends State<CategoryBudgetSetupView> {
                         S.current.statsBudgetSetupSaveButton,
                       ),
                       onPressed: () {
-                        _formKey.currentState.save();
+                        _formKey.currentState?.save();
 
-                        if (_formKey.currentState.validate()) {
+                        if ((_formKey.currentState?.validate() ?? false)) {
                           context
                               .read<BudgetOverviewBloc>()
                               .add(BudgetOverviewCategoryBudgetSaved(categoryBudget: CategoryBudget(category: category, budgetValue: _budget)));
@@ -80,11 +80,11 @@ class _CategoryBudgetSetupViewState extends State<CategoryBudgetSetupView> {
           ],
           keyboardType: TextInputType.numberWithOptions(decimal: true),
           validator: (val) {
-            if (!RegExp(moneyAmountRegExp).hasMatch(val)) return S.current.statsBudgetSetupFieldValidatorIncorrect;
+            if (val == null || !RegExp(moneyAmountRegExp).hasMatch(val)) return S.current.statsBudgetSetupFieldValidatorIncorrect;
 
             return null;
           },
-          onSaved: (value) => _budget = double.tryParse(value),
+          onSaved: (value) => _budget = double.tryParse(value ?? "") ?? 0,
         ),
       );
     });

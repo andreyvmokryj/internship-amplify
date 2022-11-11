@@ -5,10 +5,10 @@ import 'package:radency_internship_project_2/utils/styles.dart';
 
 class SummaryContainer extends StatelessWidget {
   const SummaryContainer({
-    Key key,
-    @required this.income,
-    @required this.expenses,
-    @required this.currency,
+    Key? key,
+    required this.income,
+    required this.expenses,
+    required this.currency,
   }) : super(key: key);
 
   final double income;
@@ -42,7 +42,7 @@ class SummaryContainer extends StatelessWidget {
             title: S.current.total,
             currencySymbol: getCurrencySymbol(currency),
             amount: income - expenses,
-            color: Theme.of(context).textTheme.bodyText1.color,
+            color: Theme.of(context).textTheme.bodyText1?.color,
             context: context,
           )),
         ],
@@ -51,11 +51,11 @@ class SummaryContainer extends StatelessWidget {
   }
 
   Widget _totalSectionColumn({
-    @required BuildContext context,
-    @required String title,
-    @required String currencySymbol,
-    @required double amount,
-    @required Color color,
+    required BuildContext context,
+    required String title,
+    required String currencySymbol,
+    required double amount,
+    Color? color,
   }) {
     return Column(
       children: [

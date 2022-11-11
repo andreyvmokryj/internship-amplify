@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:radency_internship_project_2/local_models/user.dart';
 import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
 
@@ -12,9 +11,8 @@ part 'authentication_state.dart';
 
 class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
   AuthenticationBloc({
-    @required FirebaseAuthenticationService authenticationService,
-  })  : assert(authenticationService != null),
-        _authenticationService = authenticationService,
+    required FirebaseAuthenticationService authenticationService,
+  })  : _authenticationService = authenticationService,
         super(const AuthenticationState.unknown()) {
     _userAuthStateSubscription = _authenticationService.userFromAnyChanges.listen((userChanged) {
       /// Listens to changes of current firebase user (log in/log out/profile details modifying)
@@ -50,7 +48,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   UserEntity user = UserEntity.empty;
 
   final FirebaseAuthenticationService _authenticationService;
-  StreamSubscription<UserEntity> _userAuthStateSubscription;
+  StreamSubscription<UserEntity>? _userAuthStateSubscription;
 
   @override
   Future<void> close() {
@@ -72,7 +70,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   }
 
   AuthenticationState _mapAuthenticationUserChangedToState(
-    UserEntity userChanged,
+    UserEntity? userChanged,
   ) {
     if (userChanged == null || userChanged == UserEntity.empty) {
       user = UserEntity.empty;

@@ -12,7 +12,7 @@ class BudgetOverviewInitial extends BudgetOverviewState {
 class BudgetOverviewLoading extends BudgetOverviewState {
   final String sliderCurrentTimeIntervalString;
 
-  BudgetOverviewLoading({@required this.sliderCurrentTimeIntervalString});
+  BudgetOverviewLoading({required this.sliderCurrentTimeIntervalString});
 
   @override
   List<Object> get props => [sliderCurrentTimeIntervalString];
@@ -24,7 +24,7 @@ class BudgetOverviewLoaded extends BudgetOverviewState {
   final MonthlyCategoryExpense summary;
 
   BudgetOverviewLoaded(
-      {@required this.sliderCurrentTimeIntervalString, @required this.monthlyCategoryExpenses, @required this.summary});
+      {required this.sliderCurrentTimeIntervalString, required this.monthlyCategoryExpenses, required this.summary});
 
   @override
   List<Object> get props => [sliderCurrentTimeIntervalString, monthlyCategoryExpenses, summary];

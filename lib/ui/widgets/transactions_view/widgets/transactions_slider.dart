@@ -28,19 +28,14 @@ class _TransactionsTabSliderState extends State<TransactionsTabSlider> {
         switch (state.transactionsSliderMode) {
           case TransactionsSliderMode.daily:
             return Center(child: _dailySlider(context));
-            break;
           case TransactionsSliderMode.weekly:
             return Center(child: _weeklySlider(context));
-            break;
           case TransactionsSliderMode.monthly:
             return Center(child: _monthlySlider(context));
-            break;
           case TransactionsSliderMode.summary:
             return Center(child: _summarySlider(context));
-            break;
           case TransactionsSliderMode.calendar:
             return Center(child: _calendarSlider(context));
-            break;
         }
       }
 
@@ -50,11 +45,11 @@ class _TransactionsTabSliderState extends State<TransactionsTabSlider> {
 }
 
 Widget _dailySlider(BuildContext context) {
-  Function onDailyTransactionsBackPressed = () {
+  void Function() onDailyTransactionsBackPressed = () {
     return context.read<TransactionsDailyBloc>().add(TransactionsDailyGetPreviousMonthPressed());
   };
 
-  Function onDailyTransactionsForwardPressed = () {
+  void Function() onDailyTransactionsForwardPressed = () {
     return context.read<TransactionsDailyBloc>().add(TransactionsDailyGetNextMonthPressed());
   };
 
@@ -72,11 +67,11 @@ Widget _dailySlider(BuildContext context) {
 }
 
 Widget _calendarSlider(BuildContext context) {
-  Function onDailyTransactionsBackPressed = () {
+  void Function() onDailyTransactionsBackPressed = () {
     return context.read<TransactionsCalendarBloc>().add(TransactionsCalendarGetPreviousMonthPressed());
   };
 
-  Function onDailyTransactionsForwardPressed = () {
+  void Function() onDailyTransactionsForwardPressed = () {
     return context.read<TransactionsCalendarBloc>().add(TransactionsCalendarGetNextMonthPressed());
   };
 
@@ -94,11 +89,11 @@ Widget _calendarSlider(BuildContext context) {
 }
 
 Widget _weeklySlider(BuildContext context) {
-  Function onWeeklyTransactionsBackPressed = () {
+  void Function() onWeeklyTransactionsBackPressed = () {
     return context.read<TransactionsWeeklyBloc>().add(TransactionsWeeklyGetPreviousMonthPressed());
   };
 
-  Function onWeeklyTransactionsForwardPressed = () {
+  void Function() onWeeklyTransactionsForwardPressed = () {
     return context.read<TransactionsWeeklyBloc>().add(TransactionsWeeklyGetNextMonthPressed());
   };
 
@@ -116,11 +111,11 @@ Widget _weeklySlider(BuildContext context) {
 }
 
 Widget _monthlySlider(BuildContext context) {
-  Function onMonthlyTransactionsBackPressed = () {
+  void Function() onMonthlyTransactionsBackPressed = () {
     return context.read<TransactionsMonthlyBloc>().add(TransactionsMonthlyGetPreviousYearPressed());
   };
 
-  Function onMonthlyTransactionsForwardPressed = () {
+  void Function() onMonthlyTransactionsForwardPressed = () {
     return context.read<TransactionsMonthlyBloc>().add(TransactionsMonthlyGetNextYearPressed());
   };
 
@@ -142,11 +137,11 @@ Widget _monthlySlider(BuildContext context) {
 }
 
 Widget _summarySlider(BuildContext context) {
-  Function onSummaryTransactionsBackPressed = () {
+  void Function() onSummaryTransactionsBackPressed = () {
     return context.read<TransactionsSummaryBloc>().add(TransactionsSummaryGetPreviousMonthPressed());
   };
 
-  Function onSummaryTransactionsForwardPressed = () {
+  void Function() onSummaryTransactionsForwardPressed = () {
     return context.read<TransactionsSummaryBloc>().add(TransactionsSummaryGetNextMonthPressed());
   };
 

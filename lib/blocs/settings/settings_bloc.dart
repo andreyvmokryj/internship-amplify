@@ -8,8 +8,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final SettingsRepository settingsRepository;
 
   SettingsBloc(this.settingsRepository)
-      : assert(settingsRepository != null),
-        super(InitialSettingsState());
+      : super(InitialSettingsState());
 
   SettingsState changeCurrency(value) {
     return LoadedSettingsState(currency: value, language: state.language);

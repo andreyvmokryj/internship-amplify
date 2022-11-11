@@ -28,11 +28,11 @@ class _AddIncomeFormState extends State<AddIncomeForm> {
   static final GlobalKey<FormState> _amountValueFormKey = GlobalKey<FormState>();
   static final GlobalKey<FormState> _noteValueFormKey = GlobalKey<FormState>();
 
-  DateTime _selectedDateTime;
-  String _accountValue;
-  String _categoryValue;
-  double _amountValue;
-  String _noteValue;
+  late DateTime _selectedDateTime;
+  String? _accountValue;
+  String? _categoryValue;
+  double? _amountValue;
+  String? _noteValue;
 
   TextEditingController _dateFieldController = TextEditingController();
   TextEditingController _accountFieldController = TextEditingController();
@@ -111,7 +111,7 @@ class _AddIncomeFormState extends State<AddIncomeForm> {
           flex: _textFieldFlex,
           child: TextFormField(
             style: addTransactionFormInputTextStyle(),
-            decoration: addTransactionFormFieldDecoration(context, focused: _focusMap[AddTransactionFields.Date]),
+            decoration: addTransactionFormFieldDecoration(context, focused: _focusMap[AddTransactionFields.Date] ?? false),
             controller: _dateFieldController,
             readOnly: true,
             showCursor: false,
@@ -141,7 +141,7 @@ class _AddIncomeFormState extends State<AddIncomeForm> {
             key: _accountValueFormKey,
             child: TextFormField(
               style: addTransactionFormInputTextStyle(),
-              decoration: addTransactionFormFieldDecoration(context, focused: _focusMap[AddTransactionFields.Account]),
+              decoration: addTransactionFormFieldDecoration(context, focused: _focusMap[AddTransactionFields.Account] ?? false),
               controller: _accountFieldController,
               readOnly: true,
               showCursor: false,
@@ -149,14 +149,14 @@ class _AddIncomeFormState extends State<AddIncomeForm> {
                 setState(() {
                   focusOnField(_focusMap, AddTransactionFields.Account);
                 });
-                _accountFieldController.text = await showSingleChoiceModal(context: context, values: accounts, type: SingleChoiceModalType.Account, onAddCallback: null);
+                _accountFieldController.text = await showSingleChoiceModal(context: context, values: accounts, type: SingleChoiceModalType.Account, onAddCallback: null) ?? "";
                 setState(() {
-                  _accountValueFormKey.currentState.validate();
+                  _accountValueFormKey.currentState?.validate();
                 });
               },
               onSaved: (value) => _accountValue = value,
               validator: (val) {
-                if (val.isEmpty) {
+                if ((val ?? "").isEmpty) {
                   return S.current.addTransactionAccountFieldValidationEmpty;
                 }
 
@@ -183,7 +183,7 @@ class _AddIncomeFormState extends State<AddIncomeForm> {
             key: _categoryValueFormKey,
             child: TextFormField(
               style: addTransactionFormInputTextStyle(),
-              decoration: addTransactionFormFieldDecoration(context, focused: _focusMap[AddTransactionFields.Category]),
+              decoration: addTransactionFormFieldDecoration(context, focused: _focusMap[AddTransactionFields.Category] ?? false),
               controller: _categoryFieldController,
               readOnly: true,
               showCursor: false,
@@ -191,14 +191,14 @@ class _AddIncomeFormState extends State<AddIncomeForm> {
                 setState(() {
                   focusOnField(_focusMap, AddTransactionFields.Category);
                 });
-                _categoryFieldController.text = await showSingleChoiceModal(context: context, values: categories, type: SingleChoiceModalType.Category, onAddCallback: null);
+                _categoryFieldController.text = await showSingleChoiceModal(context: context, values: categories, type: SingleChoiceModalType.Category, onAddCallback: null) ?? "";
                 setState(() {
-                  _categoryValueFormKey.currentState.validate();
+                  _categoryValueFormKey.currentState?.validate();
                 });
               },
               onSaved: (value) => _categoryValue = value,
               validator: (val) {
-                if (val.isEmpty) {
+                if ((val ?? "").isEmpty) {
                   return S.current.addTransactionCategoryFieldValidationEmpty;
                 }
 
@@ -225,7 +225,7 @@ class _AddIncomeFormState extends State<AddIncomeForm> {
             key: _amountValueFormKey,
             child: TextFormField(
               style: addTransactionFormInputTextStyle(),
-              decoration: addTransactionFormFieldDecoration(context, prefixIcon: AmountCurrencyPrefix(), focused: _focusMap[AddTransactionFields.Amount]),
+              decoration: addTransactionFormFieldDecoration(context, prefixIcon: AmountCurrencyPrefix(), focused: _focusMap[AddTransactionFields.Amount] ?? false),
               readOnly: true,
               showCursor: true,
               controller: _amountFieldController,
@@ -233,7 +233,7 @@ class _AddIncomeFormState extends State<AddIncomeForm> {
                 FilteringTextInputFormatter.allow(RegExp(numberWithDecimalRegExp)),
               ],
               validator: (val) {
-                if (!RegExp(moneyAmountRegExp).hasMatch(val)) {
+                if (!RegExp(moneyAmountRegExp).hasMatch(val ?? "")) {
                   return S.current.addTransactionAmountFieldValidationEmpty;
                 }
 
@@ -245,10 +245,10 @@ class _AddIncomeFormState extends State<AddIncomeForm> {
                 });
                 await showSingleChoiceModal(context: context, type: SingleChoiceModalType.Amount, updateAmountCallback: updateAmountCallback);
                 setState(() {
-                  _amountValueFormKey.currentState.validate();
+                  _amountValueFormKey.currentState?.validate();
                 });
               },
-              onSaved: (value) => _amountValue = double.tryParse(value),
+              onSaved: (value) => _amountValue = double.tryParse(value ?? ""),
             ),
           ),
         )
@@ -308,11 +308,11 @@ class _AddIncomeFormState extends State<AddIncomeForm> {
               BlocProvider.of<AddTransactionBloc>(context).add(AddTransaction(
                   isAddingCompleted: true,
                   transaction: IncomeTransaction(
-                    note: _noteValue,
-                    accountOrigin: _accountValue,
+                    note: _noteValue ?? "",
+                    accountOrigin: _accountValue ?? "",
                     date: _selectedDateTime,
-                    category: _categoryValue,
-                    amount: _amountValue,
+                    category: _categoryValue ?? "",
+                    amount: _amountValue ?? 0,
                     currency: state.currency,
                   )));
             }
@@ -333,11 +333,11 @@ class _AddIncomeFormState extends State<AddIncomeForm> {
               BlocProvider.of<AddTransactionBloc>(context).add(AddTransaction(
                   isAddingCompleted: false,
                   transaction: IncomeTransaction(
-                    note: _noteValue,
-                    accountOrigin: _accountValue,
+                    note: _noteValue ?? "",
+                    accountOrigin: _accountValue ?? "",
                     date: _selectedDateTime,
-                    category: _categoryValue,
-                    amount: _amountValue,
+                    category: _categoryValue ?? "",
+                    amount: _amountValue ?? 0,
                     currency: state.currency,
                   )));
             }
@@ -345,7 +345,7 @@ class _AddIncomeFormState extends State<AddIncomeForm> {
     });
   }
 
-  Widget _fieldTitleWidget({@required String title}) {
+  Widget _fieldTitleWidget({required String title}) {
     return Text(
       title,
       style: addTransactionFormTitleTextStyle(context),
@@ -355,7 +355,7 @@ class _AddIncomeFormState extends State<AddIncomeForm> {
   }
 
   Future _selectNewDate() async {
-    DateTime result = await showDatePicker(
+    DateTime? result = await showDatePicker(
         context: context, initialDate: DateTime.now(), firstDate: DateTime(1960), lastDate: DateTime.now());
     if (result != null) {
       setState(() {
@@ -390,25 +390,25 @@ class _AddIncomeFormState extends State<AddIncomeForm> {
   }
 
   void _saveForms() {
-    _accountValueFormKey.currentState.save();
-    _categoryValueFormKey.currentState.save();
-    _amountValueFormKey.currentState.save();
-    _noteValueFormKey.currentState.save();
+    _accountValueFormKey.currentState?.save();
+    _categoryValueFormKey.currentState?.save();
+    _amountValueFormKey.currentState?.save();
+    _noteValueFormKey.currentState?.save();
   }
 
   bool _validateForms() {
     bool result = true;
 
-    if (!_accountValueFormKey.currentState.validate()) {
+    if (!(_accountValueFormKey.currentState?.validate() ?? false)) {
       result = false;
     }
-    if (!_categoryValueFormKey.currentState.validate()) {
+    if (!(_categoryValueFormKey.currentState?.validate() ?? false)) {
       result = false;
     }
-    if (!_amountValueFormKey.currentState.validate()) {
+    if (!(_amountValueFormKey.currentState?.validate() ?? false)) {
       result = false;
     }
-    if (!_noteValueFormKey.currentState.validate()) {
+    if (!(_noteValueFormKey.currentState?.validate() ?? false)) {
       result = false;
     }
 
@@ -417,7 +417,7 @@ class _AddIncomeFormState extends State<AddIncomeForm> {
 }
 
 String getUpdatedAmount(TextEditingController controller, var value) {
-  String amount = (controller.text ?? "").toString();
+  String amount = controller.text.toString();
 
   if (value == CalculatorButton.Back && amount.length > 0) {
     amount = amount.substring(0, amount.length - 1);
@@ -429,10 +429,10 @@ String getUpdatedAmount(TextEditingController controller, var value) {
   return amount;
 }
 
-String getContactInitials(Contact contact) {
-  String lastName = contact.familyName ?? "";
-  return contact.displayName.trim()[0] + (lastName != "" ? lastName[0] : "");
-}
+// String getContactInitials(Contact contact) {
+//   String lastName = contact.familyName ?? "";
+//   return contact.displayName.trim()[0] + (lastName != "" ? lastName[0] : "");
+// }
 
 void focusOnField(Map focusMap, AddTransactionFields field){
   AddTransactionFields.values.forEach((element) {

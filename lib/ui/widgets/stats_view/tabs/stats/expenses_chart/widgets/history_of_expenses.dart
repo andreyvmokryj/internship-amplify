@@ -6,7 +6,7 @@ import 'package:radency_internship_project_2/utils/strings.dart';
 import 'package:radency_internship_project_2/utils/text_styles.dart';
 
 class HistoryOfExpenses extends StatelessWidget {
-  HistoryOfExpenses({this.expensesData});
+  HistoryOfExpenses({required this.expensesData});
 
   final List<ChartCategoryDetails> expensesData;
 
@@ -38,7 +38,7 @@ class HistoryOfExpenses extends StatelessWidget {
 
     return Container(
         padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(border: Border.all(color: Colors.grey[100], width: 1)),
+        decoration: BoxDecoration(border: Border.all(color: Colors.grey[100]!, width: 1)),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

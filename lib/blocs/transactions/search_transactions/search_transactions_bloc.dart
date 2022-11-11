@@ -11,10 +11,10 @@ part 'search_transactions_state.dart';
 class SearchTransactionsBloc extends Bloc<SearchTransactionsEvent, SearchTransactionsState>{
   SearchTransactionsBloc() : super(SearchTransactionsInitial());
 
-  StreamSubscription searchTransactionsSubscription;
+  StreamSubscription? searchTransactionsSubscription;
 
   @override
-  Future<Function> close() {
+  Future<void> close() {
     searchTransactionsSubscription?.cancel();
     return super.close();
   }

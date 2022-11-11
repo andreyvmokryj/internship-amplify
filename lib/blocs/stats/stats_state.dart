@@ -11,7 +11,7 @@ class StatsState extends Equatable {
   List<Object> get props => [statsPageMode];
 
   StatsState copyWith({
-    StatsPageMode statsPageMode,
+    StatsPageMode? statsPageMode,
   }) {
     return StatsState(
       statsPageMode: statsPageMode ?? this.statsPageMode,

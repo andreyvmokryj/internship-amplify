@@ -18,7 +18,7 @@ textStyleTransactionListAmount({double size = 16, Color color = Colors.grey, Fon
 }
 
 textStyleTransactionListCurrency(
-    {double size = 16, Color color = Colors.grey, FontWeight fontWeight = FontWeight.w400}) {
+    {double size = 16, Color? color = Colors.grey, FontWeight fontWeight = FontWeight.w400}) {
   return TextStyle(fontSize: size, fontWeight: fontWeight, letterSpacing: -0.3, color: color);
 }
 
@@ -33,16 +33,16 @@ TextStyle chartExpenseAmountTextStyle(BuildContext context) {
     fontSize: 16,
     fontWeight: FontWeight.w600,
     letterSpacing: -0.3,
-    color: Theme.of(context).textTheme.bodyText1.color,
+    color: Theme.of(context).textTheme.bodyText1?.color,
   );
 }
 
-TextStyle expenseDescriptionTextStyle(BuildContext context, {Color optionalColor}) {
+TextStyle expenseDescriptionTextStyle(BuildContext context, {Color? optionalColor}) {
   return GoogleFonts.openSans(
     fontSize: 16,
     fontWeight: FontWeight.w400,
     letterSpacing: -0.3,
-    color: optionalColor ?? Theme.of(context).textTheme.bodyText1.color,
+    color: optionalColor ?? Theme.of(context).textTheme.bodyText1?.color,
   );
 }
 
@@ -51,7 +51,7 @@ TextStyle chartExpenseCurrencyTextStyle(BuildContext context) {
     fontSize: 16,
     fontWeight: FontWeight.w400,
     letterSpacing: -0.3,
-    color: Theme.of(context).textTheme.bodyText1.color,
+    color: Theme.of(context).textTheme.bodyText1?.color,
   );
 }
 
@@ -62,10 +62,10 @@ charts.TextStyleSpec chartLabelStyle(BuildContext context) {
       fontSize: 16,
       color: charts.Color.fromOther(
           color: charts.Color(
-        a: Theme.of(context).textTheme.bodyText1.color.alpha,
-        b: Theme.of(context).textTheme.bodyText1.color.blue,
-        r: Theme.of(context).textTheme.bodyText1.color.red,
-        g: Theme.of(context).textTheme.bodyText1.color.green,
+        a: Theme.of(context).textTheme.bodyText1!.color!.alpha,
+        b: Theme.of(context).textTheme.bodyText1!.color!.blue,
+        r: Theme.of(context).textTheme.bodyText1!.color!.red,
+        g: Theme.of(context).textTheme.bodyText1!.color!.green,
       )));
 }
 
@@ -113,7 +113,7 @@ TextStyle budgetItemLimitedIndicatorPercentageStyle = GoogleFonts.nunito(
   color: Colors.grey,
 ));
 
-TextStyle budgetItemLimitedExpenseAmountStyle({@required bool isOverBudget, @required BuildContext context}) {
+TextStyle budgetItemLimitedExpenseAmountStyle({required bool isOverBudget, required BuildContext context}) {
   return GoogleFonts.nunito(
       textStyle: TextStyle(
     fontSize: 20,

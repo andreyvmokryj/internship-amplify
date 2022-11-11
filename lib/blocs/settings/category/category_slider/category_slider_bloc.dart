@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 part 'category_slider_event.dart';
 
@@ -13,7 +12,7 @@ enum CategorySliderMode { income, expense, undefined }
 class CategorySliderBloc extends Bloc<CategorySliderEvent, CategorySliderState> {
   CategorySliderBloc() : super(CategorySliderInitial());
 
-  CategorySliderMode _currentTransactionsSliderMode;
+  CategorySliderMode _currentTransactionsSliderMode = CategorySliderMode.undefined;
 
   @override
   Stream<CategorySliderState> mapEventToState(
@@ -31,7 +30,7 @@ class CategorySliderBloc extends Bloc<CategorySliderEvent, CategorySliderState> 
     yield CategorySliderLoaded(categorySliderMode: _currentTransactionsSliderMode);
   }
 
-  Stream<CategorySliderState> _mapTransactionsSliderModeChangedToState({@required int tabIndex}) async* {
+  Stream<CategorySliderState> _mapTransactionsSliderModeChangedToState({required int tabIndex}) async* {
     switch (tabIndex) {
       case 0:
         _currentTransactionsSliderMode = CategorySliderMode.income;

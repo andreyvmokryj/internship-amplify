@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
 
 class CalendarDay {
@@ -11,12 +10,12 @@ class CalendarDay {
   List<AppTransaction> transactions;
 
   CalendarDay({
-    @required this.displayedDate,
-    @required this.dateTime,
-    @required this.isActive,
-    @required this.transactions,
-    this.transferAmount,
-    this.incomeAmount,
-    this.expensesAmount,
+    required this.displayedDate,
+    required this.dateTime,
+    required this.isActive,
+    required this.transactions,
+    this.transferAmount = 0,
+    this.incomeAmount = 0,
+    this.expensesAmount = 0,
   });
 }

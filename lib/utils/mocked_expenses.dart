@@ -14,7 +14,7 @@ class MockedExpensesItems {
   final List<String> expenseCategories = TempTransactionsValues().expenseCategories;
   final List<String> accounts = ['Cash', 'Bank accounts', 'Credit cards'];
 
-  Map<int, List<ExpenseItemEntity>> generateDailyData({double locationLatitude, double locationLongitude}) {
+  Map<int, List<ExpenseItemEntity>> generateDailyData({double? locationLatitude, double? locationLongitude}) {
     var map = Map<int, List<ExpenseItemEntity>>();
 
     var list = List<ExpenseItemEntity>.empty(growable: true);
@@ -86,7 +86,7 @@ class MockedExpensesItems {
 
     for(String category in expenseCategories) {
       double categorySum = (Random().nextDouble() * Random().nextInt(1000));
-      double roundedCategorySum = num.parse(categorySum.toInt().toStringAsFixed(2));
+      double roundedCategorySum = double.parse(categorySum.toInt().toStringAsFixed(2));
       expensesByCategories.add({category: roundedCategorySum});
     }
     return expensesByCategories;
@@ -135,22 +135,22 @@ class MockedExpensesItems {
   }
 
   List<AppTransaction> searchDataByFilters({
-    List<String> searchAccounts, List<String> searchCategories, double minAmount, double maxAmount
+    List<String>? searchAccounts, List<String>? searchCategories, double? minAmount, double? maxAmount
   }) {
     List<AppTransaction> list = List<AppTransaction>.of(transactionList);
 
     transactionList.forEach((element) {
       if(
       (searchAccounts ?? []).isNotEmpty &&
-        !(searchAccounts.contains(element.accountOrigin))
+        !(searchAccounts!.contains(element.accountOrigin))
       ){
         list.remove(element);
       }
 
       if(
       (searchCategories ?? []).isNotEmpty &&
-        !((element is ExpenseTransaction && searchCategories.contains(element.category)) ||
-           element is IncomeTransaction && searchCategories.contains(element.category))
+        !((element is ExpenseTransaction && searchCategories!.contains(element.category)) ||
+           element is IncomeTransaction && searchCategories!.contains(element.category))
       ){
         list.remove(element);
       }

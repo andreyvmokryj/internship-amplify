@@ -12,7 +12,7 @@ class CategorySliderInitialize extends CategorySliderEvent {
 class CategorySliderModeChanged extends CategorySliderEvent {
   final int index;
 
-  CategorySliderModeChanged({@required this.index});
+  CategorySliderModeChanged({required this.index});
 
   @override
   List<Object> get props => [index];

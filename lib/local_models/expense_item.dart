@@ -4,8 +4,7 @@ enum ExpenseType { income, outcome, transfer }
 
 class ExpenseItemEntity {
   const ExpenseItemEntity(this.id, this.type, this.amount, this.dateTime,
-      this.category, this.description, {this.expenseLocation})
-      : assert(id != null);
+      this.category, this.description, {this.expenseLocation});
 
   final int id;
   final String category;
@@ -13,12 +12,11 @@ class ExpenseItemEntity {
   final ExpenseType type;
   final double amount;
   final DateTime dateTime;
-  final ExpenseLocation expenseLocation;
+  final ExpenseLocation? expenseLocation;
 }
 
 class ExpenseWeeklyItemEntity {
-  const ExpenseWeeklyItemEntity(this.id, this.income, this.outcome, this.weekNumber)
-      : assert(id != null);
+  const ExpenseWeeklyItemEntity(this.id, this.income, this.outcome, this.weekNumber);
 
   final int id;
   final double income;
@@ -28,8 +26,7 @@ class ExpenseWeeklyItemEntity {
 
 
 class ExpenseMonthlyItemEntity {
-  const ExpenseMonthlyItemEntity(this.id, this.income, this.outcome, this.monthNumber)
-      : assert(id != null);
+  const ExpenseMonthlyItemEntity(this.id, this.income, this.outcome, this.monthNumber);
 
   final int id;
   final double income;
@@ -38,8 +35,7 @@ class ExpenseMonthlyItemEntity {
 }
 
 class ExpenseSummaryItemEntity {
-  const ExpenseSummaryItemEntity(this.id, this.income, this.outcomeCash, this.outcomeCreditCards)
-    : assert(id != null);
+  const ExpenseSummaryItemEntity(this.id, this.income, this.outcomeCash, this.outcomeCreditCards);
 
   final int id;
   final double income;

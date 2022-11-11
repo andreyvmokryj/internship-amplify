@@ -3,13 +3,11 @@ import 'dart:ui';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:meta/meta.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/blocs/settings/styles/styles_bloc.dart';
 import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
@@ -27,21 +25,21 @@ part 'expenses_map_state.dart';
 
 class ExpensesMapBloc extends Bloc<ExpensesMapEvent, ExpensesMapState> {
   ExpensesMapBloc({
-    @required this.settingsBloc,
-    @required this.transactionsRepository,
-    @required this.stylesBloc,
+    required this.settingsBloc,
+    required this.transactionsRepository,
+    required this.stylesBloc,
   }) : super(ExpensesMapState());
 
   final TransactionsRepository transactionsRepository;
   final SettingsBloc settingsBloc;
   final StylesBloc stylesBloc;
-  StreamSubscription settingsSubscription;
+  StreamSubscription? settingsSubscription;
   String locale = '';
 
-  DateTime _observedDate;
+  DateTime? _observedDate;
   String _sliderCurrentTimeIntervalString = '';
-  StreamSubscription expenseMapTimeIntervalSubscription;
-  ClusterManager<ExpenseTransaction> _manager;
+  StreamSubscription? expenseMapTimeIntervalSubscription;
+  ClusterManager<ExpenseTransaction>? _manager;
 
   @override
   Future<void> close() {
@@ -72,11 +70,11 @@ class ExpensesMapBloc extends Bloc<ExpensesMapEvent, ExpensesMapState> {
     } else if (event is ExpensesMapDisplayRequested) {
       yield* _mapTransactionDailyDisplayRequestedToState(event.transactions);
     } else if (event is ExpensesMapOnCameraMoved) {
-      _manager.onCameraMove(event.cameraPosition);
+      _manager?.onCameraMove(event.cameraPosition);
     } else if (event is ExpensesMapOnCameraMoveEnded) {
-      _manager.updateMap();
+      _manager?.updateMap();
     } else if (event is ExpensesMapCreated) {
-      _manager.setMapController(event.controller);
+      _manager?.setMapController(event.controller);
     } else if (event is ExpensesMapMarkersUpdated) {
       yield state.showMarkers(markers: event.markers);
     } else if (event is ExpensesMapLocaleChanged) {
@@ -109,19 +107,19 @@ class ExpensesMapBloc extends Bloc<ExpensesMapEvent, ExpensesMapState> {
       levels: [1, 4.25, 6.75, 8.25, 11.5, 14.5, 16.0, 16.5, 20.0],
     );
 
-    add(ExpensesMapFetchRequested(dateForFetch: _observedDate));
+    add(ExpensesMapFetchRequested(dateForFetch: _observedDate!));
   }
 
   Stream<ExpensesMapState> _mapExpensesMapLocaleChangedToState() async* {
-    _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate, locale: locale);
+    _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate!, locale: locale);
 
     yield state.setSliderTitle(sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString);
   }
 
-  Stream<ExpensesMapState> _mapTransactionsDailyFetchRequestedToState({@required DateTime dateForFetch}) async* {
+  Stream<ExpensesMapState> _mapTransactionsDailyFetchRequestedToState({required DateTime dateForFetch}) async* {
     expenseMapTimeIntervalSubscription?.cancel();
 
-    _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate);
+    _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate!);
     yield state.setSliderTitle(sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, clearMarkers: true);
     expenseMapTimeIntervalSubscription = transactionsRepository
         .getTransactionsByTimePeriod(
@@ -138,12 +136,12 @@ class ExpensesMapBloc extends Bloc<ExpensesMapEvent, ExpensesMapState> {
     transactions.forEach((transaction) {
       if (transaction is ExpenseTransaction) {
         if (transaction.locationLatitude != null && transaction.locationLongitude != null) {
-          list.add(ClusterItem(LatLng(transaction.locationLatitude, transaction.locationLongitude), item: transaction));
+          list.add(ClusterItem(LatLng(transaction.locationLatitude!, transaction.locationLongitude!), item: transaction));
         }
       }
     });
 
-    _manager.setItems(list);
+    _manager?.setItems(list);
   }
 
   Stream<ExpensesMapState> _mapExpensesMapCurrentLocationPressedToState() async* {
@@ -153,24 +151,24 @@ class ExpensesMapBloc extends Bloc<ExpensesMapEvent, ExpensesMapState> {
       Position position = await GeolocatorUtils().determinePosition();
       yield state.animateToPosition(latLng: LatLng(position.latitude, position.longitude));
     } catch (e) {
-      yield state.showMessage(e);
+      yield state.showMessage(e.toString());
     }
 
     yield state.setFocused();
   }
 
   Stream<ExpensesMapState> _mapExpensesMapRefreshPressedToState() async* {
-    add(ExpensesMapFetchRequested(dateForFetch: _observedDate));
+    add(ExpensesMapFetchRequested(dateForFetch: _observedDate!));
   }
 
   Stream<ExpensesMapState> _mapExpensesMapSliderBackPressedToState() async* {
-    _observedDate = DateTime(_observedDate.year, _observedDate.month - 1);
-    add(ExpensesMapFetchRequested(dateForFetch: _observedDate));
+    _observedDate = DateTime(_observedDate!.year, _observedDate!.month - 1);
+    add(ExpensesMapFetchRequested(dateForFetch: _observedDate!));
   }
 
   Stream<ExpensesMapState> _mapExpensesMapSliderForwardPressedToState() async* {
-    _observedDate = DateTime(_observedDate.year, _observedDate.month + 1);
-    add(ExpensesMapFetchRequested(dateForFetch: _observedDate));
+    _observedDate = DateTime(_observedDate!.year, _observedDate!.month + 1);
+    add(ExpensesMapFetchRequested(dateForFetch: _observedDate!));
   }
 
   Future<Marker> Function(Cluster<ExpenseTransaction>) get _markerBuilder => (cluster) async {
@@ -187,7 +185,7 @@ class ExpensesMapBloc extends Bloc<ExpensesMapEvent, ExpensesMapState> {
         );
       };
 
-  Future<BitmapDescriptor> _getMarkerBitmap(double width, {@required String currency, @required String value}) async {
+  Future<BitmapDescriptor> _getMarkerBitmap(double width, {required String currency, required String value}) async {
     double height = width * 0.78;
 
     final PictureRecorder pictureRecorder = PictureRecorder();
@@ -239,7 +237,7 @@ class ExpensesMapBloc extends Bloc<ExpensesMapEvent, ExpensesMapState> {
     final img = await pictureRecorder.endRecording().toImage(width.toInt(), height.toInt());
     final data = await img.toByteData(format: ImageByteFormat.png);
 
-    return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
+    return BitmapDescriptor.fromBytes(data!.buffer.asUint8List());
   }
 
   _updateMarkers(Set<Marker> markers) {

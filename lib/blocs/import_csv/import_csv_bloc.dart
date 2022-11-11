@@ -10,7 +10,7 @@ part 'import_csv_event.dart';
 part 'import_csv_state.dart';
 
 class ImportCsvBloc extends Bloc<ImportCsvEvent, ImportCsvState> {
-  ImportCsvBloc({this.transactionsRepository}) : super(ImportCsvInitial(expensesData: null));
+  ImportCsvBloc({required this.transactionsRepository}) : super(ImportCsvInitial(expensesData: null));
 
   final TransactionsRepository transactionsRepository;
 

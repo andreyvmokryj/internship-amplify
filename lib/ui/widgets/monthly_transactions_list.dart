@@ -9,7 +9,7 @@ import 'package:radency_internship_project_2/ui/widgets/common_transactions_list
 import 'package:radency_internship_project_2/utils/strings.dart';
 
 class MonthlyTransactionsList extends StatelessWidget {
-  const MonthlyTransactionsList({Key key}) : super(key: key);
+  const MonthlyTransactionsList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +44,8 @@ class MonthlyTransactionsList extends StatelessWidget {
 
 class MonthlyDetailsItem extends StatelessWidget {
   const MonthlyDetailsItem({
-    Key key,
-    this.itemEntity,
+    Key? key,
+    required this.itemEntity,
   }) : super(key: key);
 
   final MonthDetails itemEntity;

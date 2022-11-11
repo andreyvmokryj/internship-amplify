@@ -18,21 +18,21 @@ part 'transactions_monthly_state.dart';
 
 class TransactionsMonthlyBloc extends Bloc<TransactionsMonthlyEvent, TransactionsMonthlyState> {
   TransactionsMonthlyBloc({
-    @required this.transactionsRepository,
-    @required this.firebaseAuthenticationService,
+    required this.transactionsRepository,
+    required this.firebaseAuthenticationService,
   }) : super(TransactionsMonthlyInitial());
 
   final FirebaseAuthenticationService firebaseAuthenticationService;
   final TransactionsRepository transactionsRepository;
 
-  DateTime _observedDate;
+  DateTime? _observedDate;
   String _sliderCurrentTimeIntervalString = '';
 
   List<AppTransaction> observedYearTransactions = [];
   List<MonthDetails> yearSummary = [];
 
-  StreamSubscription<UserEntity> _onUserChangedSubscription;
-  StreamSubscription monthlyTransactionsSubscription;
+  StreamSubscription<UserEntity>? _onUserChangedSubscription;
+  StreamSubscription? monthlyTransactionsSubscription;
 
   @override
   Future<void> close() {
@@ -56,15 +56,15 @@ class TransactionsMonthlyBloc extends Bloc<TransactionsMonthlyEvent, Transaction
     } else if (event is TransactionMonthlyDisplayRequested) {
       yield* _mapTransactionMonthlyDisplayRequestedToState(event.yearTransactions);
     } else if (event is TransactionMonthlyRefreshPressed) {
-      add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate));
+      add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate!));
     }
   }
 
   Stream<TransactionsMonthlyState> _mapTransactionsMonthlyFetchRequestedToState(
-      {@required DateTime dateForFetch}) async* {
+      {required DateTime dateForFetch}) async* {
     monthlyTransactionsSubscription?.cancel();
 
-    _sliderCurrentTimeIntervalString = DateHelper().yearFromDateTimeString(_observedDate);
+    _sliderCurrentTimeIntervalString = DateHelper().yearFromDateTimeString(_observedDate!);
     yield TransactionsMonthlyLoading(sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString);
     monthlyTransactionsSubscription = transactionsRepository
         .getTransactionsByTimePeriod(
@@ -96,24 +96,24 @@ class TransactionsMonthlyBloc extends Bloc<TransactionsMonthlyEvent, Transaction
             yearTransactions: observedYearTransactions));
       } else {
         _observedDate = DateTime.now();
-        add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate));
+        add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate!));
       }
     });
 
     _observedDate = DateTime.now();
-    add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate));
+    add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate!));
   }
 
   Stream<TransactionsMonthlyState> _mapTransactionsMonthlyGetPreviousYearPressedToState() async* {
-    _observedDate = DateTime(_observedDate.year - 1);
-    add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate));
+    _observedDate = DateTime(_observedDate!.year - 1);
+    add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate!));
   }
 
   Stream<TransactionsMonthlyState> _mapTransactionsMonthlyGetNextYearPressedToState() async* {
     _observedDate = DateTime(
-      _observedDate.year + 1,
+      _observedDate!.year + 1,
     );
-    add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate));
+    add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate!));
   }
 
   List<MonthDetails> _getSummaryFromTransactionsList(List<AppTransaction> data) {

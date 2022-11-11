@@ -1,5 +1,3 @@
-import 'package:meta/meta.dart';
-
 class MonthlyCategoryExpense {
   String category;
   double expenseAmount;
@@ -7,5 +5,5 @@ class MonthlyCategoryExpense {
   double budgetLeft;
   double budgetUsage;
 
-  MonthlyCategoryExpense({@required this.category, @required this.expenseAmount, this.budgetTotal = 0, this.budgetLeft = 0, this.budgetUsage = 0});
+  MonthlyCategoryExpense({required this.category, required this.expenseAmount, this.budgetTotal = 0, this.budgetLeft = 0, this.budgetUsage = 0});
 }

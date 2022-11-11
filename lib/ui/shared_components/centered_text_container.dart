@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:radency_internship_project_2/utils/text_styles.dart';
 
 class CenteredTextContainer extends StatelessWidget {
-  const CenteredTextContainer({@required this.text, Key key}) : super(key: key);
+  const CenteredTextContainer({required this.text, Key? key}) : super(key: key);
 
   final String text;
   final double containerWidthRatio = 0.8;

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/blocs/transactions/add_transaction/temp_values.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
@@ -24,25 +23,25 @@ const double minimum_section_value = 10.0;
 
 class ExpensesChartBloc extends Bloc<ExpensesChartEvent, ExpensesChartState> {
   ExpensesChartBloc({
-    @required this.settingsBloc,
-    @required this.transactionsRepository,
-    @required this.firebaseAuthenticationService,
+    required this.settingsBloc,
+    required this.transactionsRepository,
+    required this.firebaseAuthenticationService,
   }) : super(ExpensesChartInitial());
 
   final TransactionsRepository transactionsRepository;
   final FirebaseAuthenticationService firebaseAuthenticationService;
 
   SettingsBloc settingsBloc;
-  StreamSubscription settingsSubscription;
+  StreamSubscription? settingsSubscription;
   String locale = '';
 
-  DateTime _observedDate;
+  DateTime? _observedDate;
   String _sliderCurrentTimeIntervalString = '';
 
   List<AppTransaction> transactions = [];
 
-  StreamSubscription expensesChartTransactionsSubscription;
-  StreamSubscription<UserEntity> _onUserChangedSubscription;
+  StreamSubscription? expensesChartTransactionsSubscription;
+  StreamSubscription<UserEntity>? _onUserChangedSubscription;
 
   @override
   Future<void> close() {
@@ -69,7 +68,7 @@ class ExpensesChartBloc extends Bloc<ExpensesChartEvent, ExpensesChartState> {
     } else if (event is ExpensesChartLocaleChanged) {
       yield* _mapExpensesChartLocaleChangedToState();
     } else if (event is ExpensesChartRefreshPressed) {
-      add(ExpensesChartFetchRequested(dateForFetch: _observedDate));
+      add(ExpensesChartFetchRequested(dateForFetch: _observedDate!));
     }
   }
 
@@ -93,15 +92,15 @@ class ExpensesChartBloc extends Bloc<ExpensesChartEvent, ExpensesChartState> {
             sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: transactions));
       } else {
         _observedDate = DateTime.now();
-        add(ExpensesChartFetchRequested(dateForFetch: _observedDate));
+        add(ExpensesChartFetchRequested(dateForFetch: _observedDate!));
       }
     });
 
-    add(ExpensesChartFetchRequested(dateForFetch: _observedDate));
+    add(ExpensesChartFetchRequested(dateForFetch: _observedDate!));
   }
 
   Stream<ExpensesChartState> _mapExpensesChartLocaleChangedToState() async* {
-    _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate, locale: locale);
+    _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate!, locale: locale);
 
     if (state is ExpensesChartLoaded) {
       add(ExpensesChartDisplayRequested(
@@ -111,10 +110,10 @@ class ExpensesChartBloc extends Bloc<ExpensesChartEvent, ExpensesChartState> {
     }
   }
 
-  Stream<ExpensesChartState> _mapExpensesChartFetchRequestedToState({@required DateTime dateForFetch}) async* {
+  Stream<ExpensesChartState> _mapExpensesChartFetchRequestedToState({required DateTime dateForFetch}) async* {
     expensesChartTransactionsSubscription?.cancel();
 
-    _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate);
+    _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate!);
     yield ExpensesChartLoading(sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString);
     expensesChartTransactionsSubscription = transactionsRepository
         .getTransactionsByTimePeriod(
@@ -142,13 +141,13 @@ class ExpensesChartBloc extends Bloc<ExpensesChartEvent, ExpensesChartState> {
   }
 
   Stream<ExpensesChartState> _mapExpensesChartGetPreviousMonthPressedToState() async* {
-    _observedDate = DateTime(_observedDate.year, _observedDate.month - 1);
-    add(ExpensesChartFetchRequested(dateForFetch: _observedDate));
+    _observedDate = DateTime(_observedDate!.year, _observedDate!.month - 1);
+    add(ExpensesChartFetchRequested(dateForFetch: _observedDate!));
   }
 
   Stream<ExpensesChartState> _mapExpensesChartGetNextMonthPressedToState() async* {
-    _observedDate = DateTime(_observedDate.year, _observedDate.month + 1);
-    add(ExpensesChartFetchRequested(dateForFetch: _observedDate));
+    _observedDate = DateTime(_observedDate!.year, _observedDate!.month + 1);
+    add(ExpensesChartFetchRequested(dateForFetch: _observedDate!));
   }
 
   List<ChartCategoryDetails> getChartCategoriesFromTransactions(List<AppTransaction> transactions) {
@@ -268,7 +267,7 @@ class ExpensesChartBloc extends Bloc<ExpensesChartEvent, ExpensesChartState> {
     return chartData;
   }
 
-  bool isCategoryFitInChart({@required int index, @required double percentage}) {
+  bool isCategoryFitInChart({required int index, required double percentage}) {
     if (index < Colours().chartColors.length && percentage > minimum_section_value) {
       return true;
     } else

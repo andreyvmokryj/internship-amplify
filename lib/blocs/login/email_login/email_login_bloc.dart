@@ -39,7 +39,7 @@ class EmailLoginBloc extends Bloc<EmailLoginEvent, EmailLoginState> {
   Stream<EmailLoginState> _mapEmailLoginInitializeToState() async* {
     bool areBiometricsEnrolled = await _biometricCredentialsService.checkIfAnyBiometricsEnrolled();
     bool areBiometricsPairedToCredentials = false;
-    String biometricsPairedEmail;
+    String? biometricsPairedEmail;
 
     if (areBiometricsEnrolled) {
       areBiometricsPairedToCredentials = await _biometricCredentialsService.getCredentialsPairingStatus();
@@ -66,9 +66,9 @@ class EmailLoginBloc extends Bloc<EmailLoginEvent, EmailLoginState> {
   }
 
   Stream<EmailLoginState> _mapEmailLoginSubmittedToState({
-    @required String email,
-    @required String password,
-    @required bool shouldPairWithBiometrics,
+    required String email,
+    required String password,
+    required bool shouldPairWithBiometrics,
   }) async* {
     yield state.setDetailsProcessing();
 
@@ -94,7 +94,7 @@ class EmailLoginBloc extends Bloc<EmailLoginEvent, EmailLoginState> {
         }
       } on FirebaseAuthException catch (exception) {
         // TODO: localize FB-related errors
-        yield state.showMessage(message: exception.message);
+        yield state.showMessage(message: exception.message ?? "");
       } catch (e) {
         yield state.showMessage(message: e.toString());
       }

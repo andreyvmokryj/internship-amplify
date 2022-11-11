@@ -32,30 +32,30 @@ class GeolocatorUtils {
   }
 
   Future<ExpenseLocation> convertCoordinatesToExpenseLocation(
-      {@required double latitude, @required double longitude, @required String languageCode}) async {
+      {required double latitude, required double longitude, required String languageCode}) async {
     String _newAddress = '';
 
     try {
       List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude, localeIdentifier: languageCode);
-      if (placemarks[0].locality != '') {
-        _newAddress += placemarks[0].locality;
+      if ((placemarks[0].locality ?? '').isNotEmpty) {
+        _newAddress += placemarks[0].locality!;
       } else {
-        if (placemarks[0].country != '') {
-          _newAddress += placemarks[0].country;
+        if ((placemarks[0].country ?? '').isNotEmpty) {
+          _newAddress += placemarks[0].country!;
         }
-        if (placemarks[0].administrativeArea != '') {
-          _newAddress += ", " + placemarks[0].administrativeArea;
+        if ((placemarks[0].administrativeArea ?? '').isNotEmpty) {
+          _newAddress += ", " + placemarks[0].administrativeArea!;
         }
       }
 
-      if (placemarks[0].thoroughfare != '' && placemarks[0].thoroughfare != 'Unnamed Road') {
-        _newAddress += ", " + placemarks[0].thoroughfare;
-        if (placemarks[0].subThoroughfare != '') {
-          _newAddress += ", " + placemarks[0].subThoroughfare;
+      if ((placemarks[0].thoroughfare ?? '').isNotEmpty && placemarks[0].thoroughfare != 'Unnamed Road') {
+        _newAddress += ", " + placemarks[0].thoroughfare!;
+        if ((placemarks[0].subThoroughfare ?? '').isNotEmpty) {
+          _newAddress += ", " + placemarks[0].subThoroughfare!;
         }
       } else {
-        if (placemarks[0].subLocality != '') {
-          _newAddress += ", " + placemarks[0].subLocality;
+        if ((placemarks[0].subLocality ?? '').isNotEmpty) {
+          _newAddress += ", " + placemarks[0].subLocality!;
         }
       }
     } catch (e) {

@@ -12,7 +12,7 @@ class TransactionLocationSelectView extends StatefulWidget {
 }
 
 class _TransactionLocationSelectViewState extends State<TransactionLocationSelectView> {
-  CameraPosition _cameraPosition;
+  CameraPosition? _cameraPosition;
   Completer<GoogleMapController> _controller = Completer();
 
   @override
@@ -35,14 +35,14 @@ class _TransactionLocationSelectViewState extends State<TransactionLocationSelec
   Widget body() {
     return BlocConsumer<TransactionLocationMapBloc, TransactionLocationMapState>(listener: (context, state) {
       if (state.shouldAnimateToPosition) {
-        _animateCamera(state.animateTargetPosition);
+        _animateCamera(state.animateTargetPosition!);
       }
 
       if (state.message != null) {
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(
-            SnackBar(content: Text(state.message)),
+            SnackBar(content: Text(state.message!)),
           );
       }
     }, builder: (context, state) {
@@ -58,7 +58,7 @@ class _TransactionLocationSelectViewState extends State<TransactionLocationSelec
                   _cameraPosition = cameraPosition;
                 },
                 zoomControlsEnabled: false,
-                initialCameraPosition: state.initialCameraPosition),
+                initialCameraPosition: state.initialCameraPosition!),
             Align(
               alignment: Alignment.center,
               child: new Icon(Icons.person_pin_circle, size: 50.0),
@@ -96,7 +96,7 @@ class _TransactionLocationSelectViewState extends State<TransactionLocationSelec
             FloatingActionButton.extended(
               label: Text(S.current.addTransactionLocationViewSelectButton),
               onPressed: () {
-                Navigator.of(context).pop(_cameraPosition.target);
+                Navigator.of(context).pop(_cameraPosition?.target);
               },
               icon: Icon(Icons.add_location),
             ),

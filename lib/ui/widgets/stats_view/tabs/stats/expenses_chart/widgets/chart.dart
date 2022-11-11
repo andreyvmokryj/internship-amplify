@@ -8,7 +8,7 @@ import 'package:radency_internship_project_2/utils/text_styles.dart';
 class PieOutsideLabelChart extends StatelessWidget {
   final List<ChartSection> expensesData;
 
-  PieOutsideLabelChart({this.expensesData});
+  PieOutsideLabelChart({required this.expensesData});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class PieOutsideLabelChart extends StatelessWidget {
         measureFn: (expense, _) => expense.percents,
         colorFn: (expense, _) {
           return Color.fromOther(
-              color: Color(r: expense.color.red, g: expense.color.green, b: expense.color.blue, a: 255));
+              color: Color(r: expense.color!.red, g: expense.color!.green, b: expense.color!.blue, a: 255));
         },
         id: "expense",
         labelAccessorFn: (expense, _) => '${expense.categoryName}\n${expense.percents.toStringAsFixed(2)}%',

@@ -33,8 +33,8 @@ class _FiltersViewState extends State<FiltersView> {
   final int _titleFlex = 3;
   final int _textFieldFlex = 7;
 
-  double _minAmountValue;
-  double _maxAmountValue;
+  double? _minAmountValue;
+  double? _maxAmountValue;
 
   Map<dynamic, bool> focusMap = {};
 
@@ -92,7 +92,7 @@ class _FiltersViewState extends State<FiltersView> {
           child: Form(
             key: _accountValueFormKey,
             child: TextFormField(
-              decoration: addTransactionFormFieldDecoration(context, focused: focusMap[AddTransactionFields.Account]),
+              decoration: addTransactionFormFieldDecoration(context, focused: focusMap[AddTransactionFields.Account] ?? false),
               controller: _accountFieldController,
               readOnly: true,
               showCursor: false,
@@ -122,7 +122,7 @@ class _FiltersViewState extends State<FiltersView> {
           child: Form(
             key: _categoryValueFormKey,
             child: TextFormField(
-              decoration: addTransactionFormFieldDecoration(context, focused: focusMap[AddTransactionFields.Category]),
+              decoration: addTransactionFormFieldDecoration(context, focused: focusMap[AddTransactionFields.Category] ?? false),
               controller: _categoryFieldController,
               readOnly: true,
               showCursor: false,
@@ -130,7 +130,7 @@ class _FiltersViewState extends State<FiltersView> {
                 setState(() {
                   focusOnField(focusMap, AddTransactionFields.Category);
                 });
-                List list = await showMultiChoiceModal(context: context, type: MultiChoiceModalType.Category);
+                // List list = await showMultiChoiceModal(context: context, type: MultiChoiceModalType.Category);
                 _categoryFieldController.text = "";
               },
             ),
@@ -159,7 +159,7 @@ class _FiltersViewState extends State<FiltersView> {
                   child: TextFormField(
                     textAlign: TextAlign.center,
                     decoration: addTransactionFormFieldDecoration(context, hintText: "Min",
-                      focused: focusMap[AddTransactionFields.MinAmount]
+                      focused: focusMap[AddTransactionFields.MinAmount] ?? false
                     ),
                     readOnly: true,
                     showCursor: true,
@@ -177,7 +177,7 @@ class _FiltersViewState extends State<FiltersView> {
                           updateAmountCallback: updateMinAmountCallback,
                           showSubcurrencies: false);
                     },
-                    onSaved: (value) => _minAmountValue = double.tryParse(value),
+                    onSaved: (value) => _minAmountValue = double.tryParse(value ?? ""),
                   ),
                 ),
               ),
@@ -188,7 +188,7 @@ class _FiltersViewState extends State<FiltersView> {
                   child: TextFormField(
                     textAlign: TextAlign.center,
                     decoration: addTransactionFormFieldDecoration(context, hintText: "Max",
-                      focused: focusMap[AddTransactionFields.MaxAmount],
+                      focused: focusMap[AddTransactionFields.MaxAmount] ?? false,
                     ),
                     readOnly: true,
                     showCursor: true,
@@ -206,7 +206,7 @@ class _FiltersViewState extends State<FiltersView> {
                           updateAmountCallback: updateMaxAmountCallback,
                           showSubcurrencies: false);
                     },
-                    onSaved: (value) => _maxAmountValue = double.tryParse(value),
+                    onSaved: (value) => _maxAmountValue = double.tryParse(value ?? ""),
                   ),
                 ),
               ),
@@ -221,8 +221,8 @@ class _FiltersViewState extends State<FiltersView> {
     return ColoredElevatedButton(
         child: Text("Apply filters"),
         onPressed: () {
-          _minAmountValueFormKey.currentState.save();
-          _maxAmountValueFormKey.currentState.save();
+          _minAmountValueFormKey.currentState?.save();
+          _maxAmountValueFormKey.currentState?.save();
           BlocProvider.of<SearchTransactionsBloc>(context).add(SearchTransactionsByFilters(
             minAmount: _minAmountValue,
             maxAmount: _maxAmountValue,

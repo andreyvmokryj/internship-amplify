@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class CenteredScrollView extends StatelessWidget {
-  const CenteredScrollView({Key key, @required this.child}) : super(key: key);
+  const CenteredScrollView({Key? key, required this.child}) : super(key: key);
 
   final Widget child;
 

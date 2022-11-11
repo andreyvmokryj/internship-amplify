@@ -43,10 +43,10 @@ class SignUpEmailBloc extends Bloc<SignUpEmailEvent, SignUpEmailState> {
   }
 
   Stream<SignUpEmailState> _mapSignUpEmailSubmittedToState({
-    @required String email,
-    @required String password,
-    @required String username,
-    @required bool biometricsPairingStatus,
+    required String email,
+    required String password,
+    required String username,
+    required bool biometricsPairingStatus,
   }) async* {
     yield state.setDetailsProcessing();
 
@@ -67,7 +67,7 @@ class SignUpEmailBloc extends Bloc<SignUpEmailEvent, SignUpEmailState> {
         }
       } on FirebaseAuthException catch (exception) {
         // TODO: localize FB-related errors
-        yield state.showError(errorMessage: exception.message);
+        yield state.showError(errorMessage: exception.message ?? "");
       } catch (e) {
         yield state.showError(errorMessage: e.toString());
       }

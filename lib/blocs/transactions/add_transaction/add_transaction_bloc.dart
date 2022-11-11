@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:radency_internship_project_2/blocs/transactions/add_transaction/temp_values.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
@@ -12,7 +11,7 @@ part 'add_transaction_event.dart';
 part 'add_transaction_state.dart';
 
 class AddTransactionBloc extends Bloc<AddTransactionEvent, AddTransactionState> {
-  AddTransactionBloc({@required this.transactionsRepository}) : super(AddTransactionInitial());
+  AddTransactionBloc({required this.transactionsRepository}) : super(AddTransactionInitial());
 
   final TransactionsRepository transactionsRepository;
 

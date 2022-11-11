@@ -48,7 +48,7 @@ class HiveProvider {
   }
 
   Future<Box> openCredentialsBox() async {
-    var encryptionKey = base64Url.decode(await secureStorage.read(key: 'key'));
+    var encryptionKey = base64Url.decode(await secureStorage.read(key: 'key') ?? "");
     Box box;
     if (!Hive.isBoxOpen(credentialsBoxKey)) {
       box = await Hive.openBox(credentialsBoxKey, encryptionCipher: HiveAesCipher(encryptionKey));

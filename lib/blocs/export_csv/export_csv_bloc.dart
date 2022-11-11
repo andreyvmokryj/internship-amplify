@@ -13,7 +13,7 @@ part 'export_csv_event.dart';
 part 'export_csv_state.dart';
 
 class CsvExportBloc extends Bloc<CsvExportEvent, CsvExportState> {
-  CsvExportBloc({this.transactionsRepository}) : super(CsvExportStateInitial());
+  CsvExportBloc({required this.transactionsRepository}) : super(CsvExportStateInitial());
 
   final TransactionsRepository transactionsRepository;
   @override
@@ -60,8 +60,8 @@ class CsvExportBloc extends Bloc<CsvExportEvent, CsvExportState> {
   }
 
   Future<String> getCsvFilePath() async{
-    Directory dir = await getExternalStorageDirectory();
-    String path = dir.path;
+    Directory? dir = await getExternalStorageDirectory();
+    String path = dir!.path;
     var timestamp = DateTime.now();
     var milliseconds = timestamp.millisecondsSinceEpoch;
     return '$path/expensesData$milliseconds.csv';

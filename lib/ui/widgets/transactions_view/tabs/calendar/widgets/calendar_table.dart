@@ -12,7 +12,7 @@ import 'package:radency_internship_project_2/utils/ui_utils.dart';
 import 'day_cell.dart';
 
 class CalendarTable extends StatefulWidget {
-  const CalendarTable({Key key, @required this.days}) : super(key: key);
+  const CalendarTable({Key? key, required this.days}) : super(key: key);
 
   final List<CalendarDay> days;
 
@@ -93,7 +93,7 @@ class _CalendarTableState extends State<CalendarTable> {
     });
   }
 
-  double getCalendarHeight(BuildContext context, {@required double maxHeight}) {
+  double getCalendarHeight(BuildContext context, {required double maxHeight}) {
     bool isTablet = checkIfTablet(context);
     Orientation orientation = MediaQuery.of(context).orientation;
 

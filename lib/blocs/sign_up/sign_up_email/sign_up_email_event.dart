@@ -15,7 +15,7 @@ class SignUpEmailSubmitted extends SignUpEmailEvent {
   final String username;
   final bool biometricsPairingStatus;
 
-  SignUpEmailSubmitted({@required this.email, @required this.password, @required this.username, @required this.biometricsPairingStatus});
+  SignUpEmailSubmitted({required this.email, required this.password, required this.username, required this.biometricsPairingStatus});
 
   @override
   List<Object> get props => [email, password, username, biometricsPairingStatus];

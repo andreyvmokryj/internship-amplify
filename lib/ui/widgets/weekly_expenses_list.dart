@@ -10,7 +10,7 @@ import 'package:radency_internship_project_2/utils/strings.dart';
 
 
 class WeeklySummaryList extends StatelessWidget {
-  const WeeklySummaryList({Key key}) : super(key: key);
+  const WeeklySummaryList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +43,8 @@ class WeeklySummaryList extends StatelessWidget {
 
 class WeeklyDetailsItem extends StatelessWidget {
   const WeeklyDetailsItem({
-    Key key,
-    this.itemEntity,
+    Key? key,
+    required this.itemEntity,
   }) : super(key: key);
 
   final WeekDetails itemEntity;

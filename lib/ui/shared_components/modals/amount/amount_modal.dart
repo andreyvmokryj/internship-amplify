@@ -15,15 +15,16 @@ class AmountModal extends StatelessWidget{
   final title;
   final bool showSubcurrencies;
 
-  const AmountModal({Key key, this.onUpdateCallback, this.title, this.showSubcurrencies = true, }) : super(key: key);
+  const AmountModal({Key? key, this.onUpdateCallback, this.title, this.showSubcurrencies = true, }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> contents = _buttonLabels.map((element) {
+    List<ButtonStyleButton?> contents = _buttonLabels.map((element) {
       if(element != null) {
         return TextButton(
           onPressed: (){
-            return onPressed(context, element);
+            // return onPressed(context, element);
+            onPressed(context, element);
           },
           child: element is String ? Text(
             element,
@@ -31,7 +32,7 @@ class AmountModal extends StatelessWidget{
               fontSize: 22,
               color: element == "OK" ? Colors.red : null
             ),
-          ) : element,
+          ) : element as Widget,
         );
       }
 
@@ -57,7 +58,7 @@ class AmountModal extends StatelessWidget{
     );
   }
 
-  String onPressed(BuildContext context, var title) {
+  String? onPressed(BuildContext context, var title) {
     switch(title.runtimeType){
       case String:
         if (title == "OK"){
@@ -70,6 +71,7 @@ class AmountModal extends StatelessWidget{
         onUpdateCallback(CalculatorButton.Back);
         break;
     }
+    return null;
   }
 
   void _showAvailableCurrencies(BuildContext context) async {

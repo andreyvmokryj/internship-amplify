@@ -30,7 +30,7 @@ class OnboardingPageState extends State<OnboardingPage> {
               Container(
                 child: Text(
                   titleText, 
-                  style: textStyleHeader(color: Theme.of(context).accentColor)),
+                  style: textStyleHeader(color: Theme.of(context).colorScheme.secondary)),
                 margin: EdgeInsets.only(bottom: 24),
               ),
               Container(
@@ -96,7 +96,7 @@ class OnboardingPageState extends State<OnboardingPage> {
                 child: DotsIndicator(
                   controller: controller,
                   itemCount: pages.length,
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).colorScheme.secondary,
                   onPageSelected: selectPage(pages.length - 1),
                 ),
               ),
@@ -110,21 +110,21 @@ class OnboardingPageState extends State<OnboardingPage> {
 
 class DotsIndicator extends AnimatedWidget {
   DotsIndicator({
-    this.controller,
-    this.itemCount,
-    this.onPageSelected,
+    required this.controller,
+    required this.itemCount,
+    required this.onPageSelected,
     this.color,
   }) : super(listenable: controller);
 
   final PageController controller;
   final int itemCount;
   final ValueChanged<int> onPageSelected;
-  final Color color;
+  final Color? color;
 
   static const double dotSize = 8.0;
   static const double dotSizeIndex = 2.5;
   
-  Function buildDot(context) {
+  Widget Function(int) buildDot(context) {
     return (int index) {
       double selectedness = Curves.easeOut.transform(
         max(
@@ -139,7 +139,7 @@ class DotsIndicator extends AnimatedWidget {
           child: Container(
             width: dotSize * zoom,
             height: dotSize,
-            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(4)), color: Theme.of(context).accentColor,),
+            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(4)), color: Theme.of(context).colorScheme.secondary,),
             child: InkWell(
               onTap: () => onPageSelected(index),
             ),
@@ -162,11 +162,11 @@ class DotsIndicator extends AnimatedWidget {
         Flexible(
           flex: 1,
           child: GestureDetector(
-            onTap: () => onPageSelected(controller.page.round() + 1),
+            onTap: () => onPageSelected((controller.page ?? 0).round() + 1),
             child: Container(
               padding: EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: Theme.of(context).accentColor, 
+                color: Theme.of(context).colorScheme.secondary,
                 borderRadius: BorderRadius.all(Radius.circular(8))),
               child: Icon(Icons.arrow_forward_ios_sharp, color: Colors.white, size: 12))
           ))

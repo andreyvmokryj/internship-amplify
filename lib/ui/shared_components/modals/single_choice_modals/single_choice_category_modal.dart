@@ -6,11 +6,11 @@ class SingleChoiceCategoryModal extends StatelessWidget{
   final List<String> categories;
   final onAddCallback;
 
-  const SingleChoiceCategoryModal({Key key, this.categories, this.onAddCallback}) : super(key: key);
+  const SingleChoiceCategoryModal({Key? key, required this.categories, this.onAddCallback}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> contents = categories.map((element) => TextButton(
+    List<ButtonStyleButton> contents = categories.map((element) => TextButton(
       onPressed: (){
         Navigator.of(context).pop(element);
       },

@@ -12,7 +12,7 @@ class ExpensesChartInitial extends ExpensesChartState {}
 class ExpensesChartLoading extends ExpensesChartState {
   final String sliderCurrentTimeIntervalString;
 
-  ExpensesChartLoading({@required this.sliderCurrentTimeIntervalString});
+  ExpensesChartLoading({required this.sliderCurrentTimeIntervalString});
 
   @override
   List<Object> get props => [sliderCurrentTimeIntervalString];
@@ -24,9 +24,9 @@ class ExpensesChartLoaded extends ExpensesChartState {
   final List<ChartCategoryDetails> allCategories;
 
   ExpensesChartLoaded({
-    @required this.chartCategories,
-    @required this.allCategories,
-    @required this.sliderCurrentTimeIntervalString,
+    required this.chartCategories,
+    required this.allCategories,
+    required this.sliderCurrentTimeIntervalString,
   });
 
   @override

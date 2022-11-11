@@ -10,7 +10,7 @@ const String FUNCTIONS_WEEKS_END_KEY = 'end';
 
 // Discontinued
 class FirebaseFunctionsProvider {
-  Future<List<MonthDetails>> getYearSummary({@required int year}) async {
+  Future<List<MonthDetails>> getYearSummary({required int year}) async {
     List<MonthDetails> monthlySummary = [];
 
     HttpsCallable callable = FirebaseFunctions.instance

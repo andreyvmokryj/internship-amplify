@@ -16,7 +16,7 @@ class TransactionsView extends StatefulWidget {
 }
 
 class _TransactionsViewState extends State<TransactionsView>  with SingleTickerProviderStateMixin {
-  TabController tabBarController;
+  late TabController tabBarController;
 
   @override
   void initState() {

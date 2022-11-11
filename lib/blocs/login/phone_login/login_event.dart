@@ -9,7 +9,7 @@ class LoginCredentialsSubmitted extends LoginEvent {
 
   final String phoneNumber;
 
-  LoginCredentialsSubmitted({@required this.phoneNumber});
+  LoginCredentialsSubmitted({required this.phoneNumber});
 
   @override
   List<Object> get props => [phoneNumber];
@@ -19,7 +19,7 @@ class LoginOtpSubmitted extends LoginEvent {
 
   final String oneTimePassword;
 
-  LoginOtpSubmitted({@required this.oneTimePassword});
+  LoginOtpSubmitted({required this.oneTimePassword});
 
   @override
   List<Object> get props => [oneTimePassword];
@@ -33,7 +33,7 @@ class LoginWrongNumberPressed extends LoginEvent {
 class LoginSignInWithPhoneCredentialCalled extends LoginEvent {
   final AuthCredential authCredential;
 
-  LoginSignInWithPhoneCredentialCalled({@required this.authCredential});
+  LoginSignInWithPhoneCredentialCalled({required this.authCredential});
 
   @override
   List<Object> get props => [authCredential];
@@ -48,7 +48,7 @@ class LoginVerificationFailed extends LoginEvent {
 
   final FirebaseAuthException exception;
 
-  LoginVerificationFailed({@required this.exception});
+  LoginVerificationFailed({required this.exception});
 
 
   @override

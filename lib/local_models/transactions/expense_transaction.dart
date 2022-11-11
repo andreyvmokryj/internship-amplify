@@ -4,14 +4,15 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
+import 'package:uuid/uuid.dart';
 
 part 'expense_transaction.g.dart';
 
 enum ExpenseCreationType { IMPORT, AI, MANUAL }
 
-@JsonSerializable(nullable: true)
+@JsonSerializable()
 class ExpenseTransaction extends AppTransaction {
-  String id;
+  String? id;
   TransactionType transactionType = TransactionType.Expense;
   String category;
   String accountOrigin;
@@ -19,30 +20,37 @@ class ExpenseTransaction extends AppTransaction {
   DateTime date;
   String note;
   String currency;
-  String subcurrency;
-  double locationLatitude;
-  double locationLongitude;
+  String? subcurrency;
+  double? locationLatitude;
+  double? locationLongitude;
   ExpenseCreationType creationType;
-  DateTime creationDate;
   // TODO: investigate and fix saving/reading image byte array when contact has photo
   // @JsonKey(fromJson: contactFromJson, toJson: contactJsonEncode)
   // Contact sharedContact;
 
   ExpenseTransaction({
-    @required this.date,
-    @required this.accountOrigin,
-    @required this.category,
-    @required this.amount,
-    @required this.note,
-    @required this.currency,
+    required this.date,
+    required this.accountOrigin,
+    required this.category,
+    required this.amount,
+    required this.note,
+    required this.currency,
     this.id,
     //this.sharedContact,
     this.subcurrency,
-    @required this.locationLatitude,
-    @required this.locationLongitude,
-    @required this.creationType,
-    this.creationDate,
-  });
+    this.locationLatitude,
+    this.locationLongitude,
+    required this.creationType,
+  }) : super(
+    id: id,
+    date: date,
+    accountOrigin: accountOrigin,
+    transactionType: TransactionType.Expense,
+    amount: amount,
+    note: note,
+    currency: currency,
+    subcurrency: subcurrency,
+  );
 
   factory ExpenseTransaction.fromJson(Map<String, dynamic> json, String id) {
     return _$ExpenseTransactionFromJson(json)..id = id;

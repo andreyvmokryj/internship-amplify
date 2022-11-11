@@ -44,7 +44,7 @@ class StyleSettingPage extends StatelessWidget {
   }
 
   Widget buildRoundColorButton(BuildContext context, String buttonColor, String activeColor) {
-    Color accentColor = Theme.of(context).accentColor;
+    Color accentColor = Theme.of(context).colorScheme.secondary;
 
     return Expanded(
         child: GestureDetector(
@@ -91,7 +91,7 @@ class StyleSettingPage extends StatelessWidget {
             value: value,
             groupValue: groupValue,
             onChanged: (value) {
-              context.read<StylesBloc>().add(ChangeTheme(newSettingValue: value));
+              context.read<StylesBloc>().add(ChangeTheme(newSettingValue: value ?? ""));
             },
           ),
         ));

@@ -12,12 +12,12 @@ import 'package:radency_internship_project_2/utils/styles.dart';
 class TransactionWidget extends StatelessWidget {
   final AppTransaction transaction;
 
-  const TransactionWidget({Key key, this.transaction}) : super(key: key);
+  const TransactionWidget({Key? key, required this.transaction}) : super(key: key);
 
   Widget build(BuildContext context) {
     String currency = BlocProvider.of<SettingsBloc>(context).state.currency;
 
-    Color valueColor = null;
+    Color? valueColor;
     String subLabel = "";
     String accountLabel = "";
 

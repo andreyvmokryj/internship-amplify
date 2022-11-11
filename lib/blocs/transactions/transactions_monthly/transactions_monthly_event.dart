@@ -23,7 +23,7 @@ class TransactionsMonthlyGetNextYearPressed extends TransactionsMonthlyEvent {
 class TransactionsMonthlyFetchRequested extends TransactionsMonthlyEvent {
   final DateTime dateForFetch;
 
-  TransactionsMonthlyFetchRequested({@required this.dateForFetch});
+  TransactionsMonthlyFetchRequested({required this.dateForFetch});
 
   @override
   List<Object> get props => [dateForFetch];
@@ -33,7 +33,7 @@ class TransactionMonthlyDisplayRequested extends TransactionsMonthlyEvent {
   final String sliderCurrentTimeIntervalString;
   final List<AppTransaction> yearTransactions;
 
-  TransactionMonthlyDisplayRequested({this.yearTransactions, @required this.sliderCurrentTimeIntervalString});
+  TransactionMonthlyDisplayRequested({required this.yearTransactions, required this.sliderCurrentTimeIntervalString});
 
   @override
   List<Object> get props => [yearTransactions, sliderCurrentTimeIntervalString];

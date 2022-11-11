@@ -7,7 +7,7 @@ abstract class StatsEvent extends Equatable {
 class StatsPageModeChanged extends StatsEvent {
   final StatsPageMode statsPageMode;
 
-  StatsPageModeChanged({@required this.statsPageMode});
+  StatsPageModeChanged({required this.statsPageMode});
 
   @override
   List<Object> get props => [statsPageMode];

@@ -1,5 +1,3 @@
-import 'package:meta/meta.dart';
-
 class WeekDetails {
   final DateTime firstDay;
   final DateTime lastDay;
@@ -9,11 +7,11 @@ class WeekDetails {
   double expenses;
 
   WeekDetails({
-    @required this.firstDay,
-    @required this.lastDay,
-    @required this.weekNumberInSet,
-    @required this.income,
-    @required this.expenses,
-    @required this.rangeString,
+    required this.firstDay,
+    required this.lastDay,
+    required this.weekNumberInSet,
+    required this.income,
+    required this.expenses,
+    required this.rangeString,
   });
 }

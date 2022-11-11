@@ -9,14 +9,20 @@ class SignUpEmailState extends Equatable {
   });
 
   final bool areDetailsProcessing;
-  final String errorMessage;
+  final String? errorMessage;
   final bool biometricsAvailable;
   final bool signUpFlowInitializationStatus;
 
   @override
-  List<Object> get props => [areDetailsProcessing, errorMessage, biometricsAvailable, signUpFlowInitializationStatus];
+  List<Object> get props {
+    List<Object> _props = [areDetailsProcessing, biometricsAvailable, signUpFlowInitializationStatus];
+    if(errorMessage != null) {
+      _props.add(errorMessage!);
+    }
+    return _props;
+  }
 
-  SignUpEmailState setInitializationState({@required bool isInitialized, @required bool biometricAuthAvailable}) {
+  SignUpEmailState setInitializationState({required bool isInitialized, required bool biometricAuthAvailable}) {
     return copyWith(signUpFlowInitializationStatus: isInitialized, biometricsAvailable: biometricAuthAvailable);
   }
 
@@ -24,15 +30,15 @@ class SignUpEmailState extends Equatable {
     return copyWith(areDetailsProcessing: true);
   }
 
-  SignUpEmailState showError({@required String errorMessage}) {
+  SignUpEmailState showError({required String errorMessage}) {
     return copyWith(areDetailsProcessing: false, errorMessage: errorMessage);
   }
 
   SignUpEmailState copyWith({
-    bool areDetailsProcessing,
-    String errorMessage,
-    bool signUpFlowInitializationStatus,
-    bool biometricsAvailable,
+    bool? areDetailsProcessing,
+    String? errorMessage,
+    bool? signUpFlowInitializationStatus,
+    bool? biometricsAvailable,
   }) {
     return SignUpEmailState(
       signUpFlowInitializationStatus: signUpFlowInitializationStatus ?? this.signUpFlowInitializationStatus,

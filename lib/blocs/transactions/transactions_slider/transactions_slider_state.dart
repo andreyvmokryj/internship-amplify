@@ -17,7 +17,7 @@ class TransactionsSliderLoading extends TransactionsSliderState {
 class TransactionsSliderLoaded extends TransactionsSliderState {
   final TransactionsSliderMode transactionsSliderMode;
 
-  TransactionsSliderLoaded({@required this.transactionsSliderMode});
+  TransactionsSliderLoaded({required this.transactionsSliderMode});
 
   @override
   List<Object> get props => [transactionsSliderMode];

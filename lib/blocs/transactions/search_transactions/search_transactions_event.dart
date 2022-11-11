@@ -10,21 +10,21 @@ class SearchTransactionsInitialize extends SearchTransactionsEvent{
 }
 
 class SearchTransactionsByFilters extends SearchTransactionsEvent{
-  final List<String> accounts;
-  final List<String> categories;
-  final double minAmount;
-  final double maxAmount;
+  final List<String>? accounts;
+  final List<String>? categories;
+  final double? minAmount;
+  final double? maxAmount;
 
   SearchTransactionsByFilters({this.accounts, this.categories, this.minAmount, this.maxAmount});
 
   @override
-  List<Object> get props => [...accounts, ...categories, minAmount, maxAmount];
+  List<Object> get props => [...?accounts, ...?categories, minAmount ?? '', maxAmount ?? ''];
 }
 
 class SearchTransactionsDisplayRequested extends SearchTransactionsEvent{
   final List<AppTransaction> transactions;
 
-  SearchTransactionsDisplayRequested({this.transactions});
+  SearchTransactionsDisplayRequested({required this.transactions});
 
   @override
   List<Object> get props => [...transactions];

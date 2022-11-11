@@ -12,7 +12,7 @@ class TransactionLocationMenuOpened extends TransactionLocationEvent {
 class TransactionLocationCurrentPressed extends TransactionLocationEvent {
   final String languageCode;
 
-  TransactionLocationCurrentPressed({@required this.languageCode});
+  TransactionLocationCurrentPressed({required this.languageCode});
 
   @override
   List<Object> get props => [];
@@ -22,7 +22,7 @@ class TransactionLocationFromMapPressed extends TransactionLocationEvent {
   final String languageCode;
   final LatLng latLng;
 
-  TransactionLocationFromMapPressed({@required this.languageCode, @required this.latLng});
+  TransactionLocationFromMapPressed({required this.languageCode, required this.latLng});
 
   List<Object> get props => [languageCode];
 }

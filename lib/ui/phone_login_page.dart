@@ -44,21 +44,21 @@ class _LoginFormState extends State<LoginForm> {
   String _otpText = "";
   String _phoneNumber = "";
 
-  TextEditingController codeController;
+  TextEditingController? codeController;
 
-  StreamController<ErrorAnimationType> errorController;
+  late StreamController<ErrorAnimationType> errorController;
 
   @override
   void initState() {
     super.initState();
-    if (errorController == null || !errorController.hasListener) {
+    if (errorController == null || !errorController!.hasListener) {
       errorController = StreamController<ErrorAnimationType>();
     }
   }
 
   @override
   void dispose() {
-    errorController.close();
+    errorController?.close();
     super.dispose();
   }
 
@@ -69,7 +69,7 @@ class _LoginFormState extends State<LoginForm> {
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(
-            SnackBar(content: Text(state.errorMessage)),
+            SnackBar(content: Text(state.errorMessage!)),
           );
       }
     }, builder: (context, state) {
@@ -94,7 +94,6 @@ class _LoginFormState extends State<LoginForm> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [phoneNumberInput(context)],
                           ));
-                      break;
                     case LoginPageMode.OTP:
                       return Column(
                         children: [
@@ -116,7 +115,7 @@ class _LoginFormState extends State<LoginForm> {
                             child: TextButton(
                               child: Text(
                                 S.current.wrongNumber,
-                                style: TextStyle(color: Theme.of(context).accentColor),
+                                style: TextStyle(color: Theme.of(context).colorScheme.secondary),
                               ),
                               onPressed: () {
                                 setState(() {
@@ -128,7 +127,6 @@ class _LoginFormState extends State<LoginForm> {
                           otpPassInput(context, _phoneNumber)
                         ],
                       );
-                      break;
                   }
                 }(),
               ),
@@ -143,9 +141,9 @@ class _LoginFormState extends State<LoginForm> {
 
                     switch (state.loginPageMode) {
                       case LoginPageMode.Credentials:
-                        _formKey.currentState.save();
+                        _formKey.currentState?.save();
 
-                        if (_formKey.currentState.validate()) {
+                        if (_formKey.currentState?.validate() ?? false) {
                           if (!errorController.isClosed) {
                             print('_PhoneAuthScreenState: !errorController.isClosed');
                             errorController.close();
@@ -156,7 +154,6 @@ class _LoginFormState extends State<LoginForm> {
                         break;
                       case LoginPageMode.OTP:
                         return context.read<LoginBloc>().add(LoginOtpSubmitted(oneTimePassword: _otpText));
-                        break;
                     }
                   },
                   child: Container(
@@ -165,10 +162,8 @@ class _LoginFormState extends State<LoginForm> {
                       switch (state.loginPageMode) {
                         case LoginPageMode.Credentials:
                           return buttonText(S.current.loginButton);
-                          break;
                         case LoginPageMode.OTP:
                           return buttonText(S.current.confirmButton);
-                          break;
                       }
                     }()),
                   ),
@@ -186,9 +181,9 @@ class _LoginFormState extends State<LoginForm> {
   Widget phoneNumberInput(context) {
     return Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.center, children: [
       TextFormField(
-          initialValue: _phoneNumber?.replaceAll('+', '') ?? '',
+          initialValue: _phoneNumber.replaceAll('+', ''),
           validator: (val) {
-            if (val.trim().isEmpty) {
+            if (val == null || val.trim().isEmpty) {
               return S.current.enterPhoneNumber;
             }
 
@@ -207,7 +202,7 @@ class _LoginFormState extends State<LoginForm> {
               focusedErrorBorder: getColoredBorder(Colors.red),
               errorBorder: getColoredBorder(Colors.redAccent),
               focusedBorder: getColoredBorder(Colors.grey),
-              enabledBorder: getColoredBorder(Colors.grey[300]),
+              enabledBorder: getColoredBorder(Colors.grey[300]!),
               prefixText: '+',
               labelText: S.current.yourPhoneNumber)),
     ]);
@@ -227,7 +222,7 @@ class _LoginFormState extends State<LoginForm> {
                 borderRadius: BorderRadius.circular(5),
                 fieldHeight: 50,
                 fieldWidth: 40,
-                selectedColor: Theme.of(context).accentColor,
+                selectedColor: Theme.of(context).colorScheme.secondary,
                 selectedFillColor: Colors.blueGrey,
                 inactiveFillColor: Theme.of(context).scaffoldBackgroundColor,
                 inactiveColor: Theme.of(context).disabledColor,
@@ -253,13 +248,13 @@ class _LoginFormState extends State<LoginForm> {
     return Container(
         margin: const EdgeInsets.only(left: 20, right: 20, bottom: 16),
         child: Text(S.current.appTitle,
-            style: TextStyle(color: Theme.of(context).accentColor, fontSize: 32, fontWeight: FontWeight.bold)));
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 32, fontWeight: FontWeight.bold)));
   }
 
   Widget appLogo() {
     return Container(
       margin: const EdgeInsets.all(16.0),
-      color: Theme.of(context).accentColor,
+      color: Theme.of(context).colorScheme.secondary,
       width: 100.0,
       height: 100.0,
       child:
@@ -275,7 +270,7 @@ class _LoginFormState extends State<LoginForm> {
           children: <TextSpan>[
             TextSpan(
                 text: ' ${S.current.createNewAccount}',
-                style: TextStyle(color: Theme.of(context).accentColor, fontSize: 14),
+                style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 14),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     Navigator.of(context).pushNamed(Routes.signUpPage);
@@ -285,7 +280,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   Widget buttonText(String text) {
-    return Text(text, style: Theme.of(context).textTheme.headline5.copyWith(color: Colors.white));
+    return Text(text, style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white));
   }
 }
 

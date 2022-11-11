@@ -86,7 +86,7 @@ class _BudgetOverviewTabState extends State<BudgetOverviewTab> {
                   Text(
                     getCurrencySymbol(settingsState.currency),
                     style:
-                        textStyleTransactionListCurrency(color: Theme.of(context).textTheme.bodyText1.color, size: 30),
+                        textStyleTransactionListCurrency(color: Theme.of(context).textTheme.bodyText1?.color, size: 30),
                   ),
                   Text(
                     '${budgetOverviewState.summary.budgetLeft.toStringAsFixed(2)}',

@@ -7,7 +7,7 @@ abstract class UserProfileEvent extends Equatable {
 class UserProfileEntityChanged extends UserProfileEvent {
   final UserEntity userEntity;
 
-  UserProfileEntityChanged({@required this.userEntity});
+  UserProfileEntityChanged({required this.userEntity});
 
   @override
   List<Object> get props => [userEntity];

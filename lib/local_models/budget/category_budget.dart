@@ -11,5 +11,5 @@ class CategoryBudget {
   @HiveField(1)
   double budgetValue;
 
-  CategoryBudget({@required this.category, @required this.budgetValue});
+  CategoryBudget({required this.category, required this.budgetValue});
 }

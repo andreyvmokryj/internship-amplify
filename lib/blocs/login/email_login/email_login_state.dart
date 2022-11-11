@@ -11,17 +11,25 @@ class EmailLoginState extends Equatable {
 
   final bool loginFlowInitialized;
   final bool areDetailsProcessing;
-  final String errorMessage;
+  final String? errorMessage;
   final bool biometricsCredentialsEnrolled;
-  final String savedEmail;
+  final String? savedEmail;
 
   @override
-  List<Object> get props =>
-      [areDetailsProcessing, errorMessage, loginFlowInitialized, biometricsCredentialsEnrolled, savedEmail];
+  List<Object> get props {
+    List<Object> _props = [areDetailsProcessing, loginFlowInitialized, biometricsCredentialsEnrolled];
+    if (errorMessage != null) {
+      _props.add(errorMessage!);
+    }
+    if (savedEmail != null) {
+      _props.add(savedEmail!);
+    }
+    return _props;
+  }
 
   EmailLoginState setInitializationState({
-    @required bool isInitialized,
-    @required bool biometricsCredentialsEnrolled,
+    required bool isInitialized,
+    required bool biometricsCredentialsEnrolled,
   }) {
     return copyWith(
       loginFlowInitialized: isInitialized,
@@ -33,7 +41,7 @@ class EmailLoginState extends Equatable {
     return copyWith(areDetailsProcessing: true);
   }
 
-  EmailLoginState showMessage({@required String message}) {
+  EmailLoginState showMessage({required String message}) {
     return copyWith(areDetailsProcessing: false, errorMessage: message);
   }
 
@@ -41,16 +49,16 @@ class EmailLoginState extends Equatable {
     return copyWith(errorMessage: null);
   }
 
-  EmailLoginState setEmailValue({@required String savedEmail}) {
+  EmailLoginState setEmailValue({required String savedEmail}) {
     return copyWith(savedEmail: savedEmail);
   }
 
   EmailLoginState copyWith({
-    bool areDetailsProcessing,
-    String errorMessage,
-    bool loginFlowInitialized,
-    bool biometricsCredentialsEnrolled,
-    String savedEmail,
+    bool? areDetailsProcessing,
+    String? errorMessage,
+    bool? loginFlowInitialized,
+    bool? biometricsCredentialsEnrolled,
+    String? savedEmail,
   }) {
     return EmailLoginState(
       areDetailsProcessing: areDetailsProcessing ?? this.areDetailsProcessing,

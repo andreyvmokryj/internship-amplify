@@ -5,7 +5,7 @@ import 'package:radency_internship_project_2/generated/l10n.dart';
 import 'package:radency_internship_project_2/ui/shared_components/elevated_buttons/colored_elevated_button.dart';
 
 class EmailVerificationResendScreen extends StatefulWidget {
-  const EmailVerificationResendScreen({Key key}) : super(key: key);
+  const EmailVerificationResendScreen({Key? key}) : super(key: key);
 
   @override
   _EmailVerificationResendScreenState createState() => _EmailVerificationResendScreenState();

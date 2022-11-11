@@ -5,7 +5,6 @@ import 'package:radency_internship_project_2/blocs/settings/category/category_sl
 import 'package:radency_internship_project_2/generated/l10n.dart';
 import 'package:radency_internship_project_2/ui/category_page/category_page_common.dart';
 import 'package:radency_internship_project_2/ui/shared_components/modals/multi_choice_modals/item_row.dart';
-import 'package:radency_internship_project_2/utils/styles.dart';
 import 'package:provider/provider.dart';
 
 class CategoryView extends StatefulWidget{
@@ -14,7 +13,7 @@ class CategoryView extends StatefulWidget{
 }
 
 class _CategoryViewState extends State<CategoryView>with SingleTickerProviderStateMixin  {
-  TabController tabBarController;
+  late TabController tabBarController;
 
   @override
   void initState() {

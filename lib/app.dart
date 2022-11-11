@@ -61,13 +61,13 @@ import 'utils/styles.dart';
 
 class App extends StatelessWidget {
   const App({
-    Key key,
-    @required this.authenticationService,
-    @required this.budgetsRepository,
-    @required this.biometricCredentialsService,
-    @required this.firebaseRealtimeDatabaseProvider,
-    @required this.transactionsRepository,
-    @required this.firebaseFunctionsProvider,
+    Key? key,
+    required this.authenticationService,
+    required this.budgetsRepository,
+    required this.biometricCredentialsService,
+    required this.firebaseRealtimeDatabaseProvider,
+    required this.transactionsRepository,
+    required this.firebaseFunctionsProvider,
   })  : assert(authenticationService != null),
         super(key: key);
 
@@ -216,7 +216,7 @@ class AppView extends StatefulWidget {
 class _AppViewState extends State<AppView> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
-  NavigatorState get _navigator => _navigatorKey.currentState;
+  NavigatorState get _navigator => _navigatorKey.currentState!;
 
   @override
   Widget build(BuildContext context) {
@@ -273,7 +273,7 @@ class _AppViewState extends State<AppView> {
                     }
                     break;
                   case AuthenticationStatus.unauthenticated:
-                    bool onboardingCompleted = settingsState.onboardingCompleted;
+                    bool onboardingCompleted = settingsState.onboardingCompleted ?? false;
                     if (onboardingCompleted == true) {
                       _navigator.pushNamedAndRemoveUntil(Routes.loginPage, (route) => false);
                     } else {

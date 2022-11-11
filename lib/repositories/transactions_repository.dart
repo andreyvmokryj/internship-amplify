@@ -1,5 +1,4 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:meta/meta.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transaction.dart' as mtr;
 import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transactions_helper.dart';
@@ -9,7 +8,7 @@ import 'package:radency_internship_project_2/repositories/repository.dart';
 
 class TransactionsRepository extends IRepository<mtr.AppTransaction> {
   TransactionsRepository(
-      {@required this.firebaseRealtimeDatabaseProvider, @required this.firebaseAuthenticationService});
+      {required this.firebaseRealtimeDatabaseProvider, required this.firebaseAuthenticationService});
 
   final FirebaseRealtimeDatabaseProvider firebaseRealtimeDatabaseProvider;
   final FirebaseAuthenticationService firebaseAuthenticationService;
@@ -24,23 +23,23 @@ class TransactionsRepository extends IRepository<mtr.AppTransaction> {
   }
 
   @override
-  Future<void> delete({@required String transactionID}) async {
+  Future<void> delete({String? transactionID}) async {
     String uid = await firebaseAuthenticationService.getUserID();
     await firebaseRealtimeDatabaseProvider.transactionsReference(uid).then((reference) async {
-      await reference.child(transactionID).remove();
+      await reference.child(transactionID!).remove();
     });
   }
 
   @override
-  Future<mtr.AppTransaction> find({@required String transactionID}) async {
-    mtr.AppTransaction transaction;
+  Future<mtr.AppTransaction?> find({String? transactionID}) async {
+    mtr.AppTransaction? transaction;
 
     String uid = await firebaseAuthenticationService.getUserID();
     await firebaseRealtimeDatabaseProvider.transactionsReference(uid).then((reference) async {
-      await reference.child(transactionID).once().then((snapshot) async {
+      await reference.child(transactionID!).once().then((snapshot) async {
         if (snapshot.snapshot.value != null) {
           transaction = TransactionsHelper()
-              .convertJsonToTransaction(json: Map<String, dynamic>.from(snapshot.snapshot.value), key: snapshot.snapshot.key);
+              .convertJsonToTransaction(json: Map<String, dynamic>.from(snapshot.snapshot.value as Map<String, dynamic>), key: snapshot.snapshot.key!);
         }
       });
     });
@@ -49,16 +48,16 @@ class TransactionsRepository extends IRepository<mtr.AppTransaction> {
   }
 
   @override
-  Future<void> update({mtr.AppTransaction transaction}) async {
+  Future<void> update({mtr.AppTransaction? transaction}) async {
     String uid = await firebaseAuthenticationService.getUserID();
     DatabaseReference reference = await firebaseRealtimeDatabaseProvider.transactionsReference(uid);
 
-    Map<String, dynamic> transactionMap = TransactionsHelper().convertTransactionToJson(transaction: transaction);
+    Map<String, dynamic> transactionMap = TransactionsHelper().convertTransactionToJson(transaction: transaction!);
 
-    reference.child(transaction.id).update(transactionMap);
+    reference.child(transaction.id!).update(transactionMap);
   }
 
-  Future<List<mtr.AppTransaction>> getTransactionsByTimePeriod({@required DateTime start, @required DateTime end}) async {
+  Future<List<mtr.AppTransaction>> getTransactionsByTimePeriod({required DateTime start, required DateTime end}) async {
     List<mtr.AppTransaction> list = [];
 
     String uid = await firebaseAuthenticationService.getUserID();
@@ -68,7 +67,7 @@ class TransactionsRepository extends IRepository<mtr.AppTransaction> {
     (await reference.orderByChild(DATE_KEY).startAt(start.toIso8601String()).endAt(end.toIso8601String()).once()).snapshot;
 
     if (snapshot.value != null) {
-      Map<dynamic, dynamic> values = snapshot.value;
+      Map<dynamic, dynamic> values = snapshot.value as Map<String, dynamic>;
       values.forEach((key, value) {
         mtr.AppTransaction transaction =
             TransactionsHelper().convertJsonToTransaction(json: Map<String, dynamic>.from(value), key: key);

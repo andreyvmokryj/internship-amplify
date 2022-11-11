@@ -11,7 +11,7 @@ import 'package:radency_internship_project_2/utils/strings.dart';
 import 'package:radency_internship_project_2/utils/styles.dart';
 
 class EmailSignUpPage extends StatelessWidget {
-  const EmailSignUpPage({Key key}) : super(key: key);
+  const EmailSignUpPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class EmailSignUpPage extends StatelessWidget {
 }
 
 class EmailSignUpForm extends StatefulWidget {
-  const EmailSignUpForm({Key key}) : super(key: key);
+  const EmailSignUpForm({Key? key}) : super(key: key);
 
   @override
   _EmailSignUpFormState createState() => _EmailSignUpFormState();
@@ -40,10 +40,10 @@ class EmailSignUpForm extends StatefulWidget {
 class _EmailSignUpFormState extends State<EmailSignUpForm> {
   static const double _padding = 0.0;
 
-  String _email;
-  String _username;
-  String _password;
-  String _passwordConfirmation;
+  String _email = "";
+  String _username = "";
+  String _password = "";
+  String _passwordConfirmation = "";
   bool _biometricsPairingEnabled = false;
 
   static final GlobalKey<FormState> _emailFormKey = GlobalKey<FormState>();
@@ -61,7 +61,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              SnackBar(content: Text(state.errorMessage)),
+              SnackBar(content: Text(state.errorMessage!)),
             );
         }
       },
@@ -118,7 +118,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
   }
 
   Widget _emailField() {
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: _padding),
@@ -127,14 +127,14 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
         child: TextFormField(
           autovalidateMode: autovalidateMode,
           keyboardType: TextInputType.emailAddress,
-          initialValue: _email ?? '',
+          initialValue: _email,
           cursorColor: accentColor,
           decoration: addTransactionFormFieldDecoration(
             context,
             hintText: S.current.signUpEmailLabelText,
           ),
           validator: (val) {
-            if (val.trim().isEmpty) {
+            if (val == null || val.trim().isEmpty) {
               return S.current.signUpEmailValidatorEmpty;
             }
 
@@ -144,14 +144,14 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
 
             return null;
           },
-          onSaved: (value) => _email = value,
+          onSaved: (value) => _email = value ?? "",
         ),
       ),
     );
   }
 
   Widget _usernameField() {
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: _padding),
@@ -159,27 +159,27 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
         key: _usernameFormKey,
         child: TextFormField(
           autovalidateMode: autovalidateMode,
-          initialValue: _username ?? '',
+          initialValue: _username,
           cursorColor: accentColor,
           decoration: addTransactionFormFieldDecoration(
             context,
             hintText: S.current.signUpUsernameLabelText,
           ),
           validator: (val) {
-            if (val.trim().isEmpty) {
+            if (val == null || val.trim().isEmpty) {
               return S.current.signUpUsernameValidatorEmpty;
             }
 
             return null;
           },
-          onSaved: (value) => _username = value,
+          onSaved: (value) => _username = value ?? "",
         ),
       ),
     );
   }
 
   Widget _passwordField() {
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: _padding),
@@ -187,7 +187,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
         key: _passwordFormKey,
         child: TextFormField(
           autovalidateMode: autovalidateMode,
-          initialValue: _password ?? '',
+          initialValue: _password,
           obscureText: true,
           cursorColor: accentColor,
           decoration: addTransactionFormFieldDecoration(
@@ -195,16 +195,16 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
             hintText: S.current.signUpPasswordLabelText,
           ),
           validator: (val) {
-            if (val.trim().isEmpty) {
+            if (val == null || val.trim().isEmpty) {
               return S.current.signUpPasswordValidatorEmpty;
             }
 
             return null;
           },
-          onSaved: (value) => _password = value,
+          onSaved: (value) => _password = value ?? "",
           onChanged: (value) {
             _password = value;
-            _passwordConfirmationFormKey.currentState.validate();
+            _passwordConfirmationFormKey.currentState?.validate();
           },
         ),
       ),
@@ -212,7 +212,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
   }
 
   Widget _passwordConfirmationField() {
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: _padding),
@@ -220,7 +220,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
         key: _passwordConfirmationFormKey,
         child: TextFormField(
           autovalidateMode: autovalidateMode,
-          initialValue: _passwordConfirmation ?? '',
+          initialValue: _passwordConfirmation,
           obscureText: true,
           cursorColor: accentColor,
           decoration: addTransactionFormFieldDecoration(
@@ -234,7 +234,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
 
             return null;
           },
-          onSaved: (value) => _passwordConfirmation = value,
+          onSaved: (value) => _passwordConfirmation = value ?? "",
         ),
       ),
     );
@@ -251,7 +251,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
                   value: _biometricsPairingEnabled,
                   onChanged: (value) {
                     setState(() {
-                      _biometricsPairingEnabled = value;
+                      _biometricsPairingEnabled = value ?? false;
                     });
                   }),
               Expanded(child: Text(S.current.authenticationBiometricsPairCheckbox)),
@@ -300,25 +300,25 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
   }
 
   void _saveForms() {
-    _emailFormKey.currentState.save();
-    _usernameFormKey.currentState.save();
-    _passwordFormKey.currentState.save();
-    _passwordConfirmationFormKey.currentState.save();
+    _emailFormKey.currentState?.save();
+    _usernameFormKey.currentState?.save();
+    _passwordFormKey.currentState?.save();
+    _passwordConfirmationFormKey.currentState?.save();
   }
 
   bool _validateForms() {
     bool result = true;
 
-    if (!_emailFormKey.currentState.validate()) {
+    if (!(_emailFormKey.currentState?.validate() ?? false)) {
       result = false;
     }
-    if (!_usernameFormKey.currentState.validate()) {
+    if (!(_usernameFormKey.currentState?.validate() ?? false)) {
       result = false;
     }
-    if (!_passwordFormKey.currentState.validate()) {
+    if (!(_passwordFormKey.currentState?.validate() ?? false)) {
       result = false;
     }
-    if (!_passwordConfirmationFormKey.currentState.validate()) {
+    if (!(_passwordConfirmationFormKey.currentState?.validate() ?? false)) {
       result = false;
     }
 

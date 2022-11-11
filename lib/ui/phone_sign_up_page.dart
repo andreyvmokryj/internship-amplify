@@ -12,7 +12,7 @@ import 'package:radency_internship_project_2/ui/shared_components/elevated_butto
 import 'package:radency_internship_project_2/utils/strings.dart';
 
 class PhoneSignUpPage extends StatelessWidget {
-  const PhoneSignUpPage({Key key}) : super(key: key);
+  const PhoneSignUpPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,16 +37,16 @@ class SignUpForm extends StatefulWidget {
 class _SignUpFormState extends State<SignUpForm> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String _email;
-  String _phoneNumber;
-  String _username;
-  String _oneTimePassword;
+  String? _email;
+  String? _phoneNumber;
+  String? _username;
+  String? _oneTimePassword;
 
   bool otpHasError = false;
 
-  TextEditingController codeController;
+  late TextEditingController codeController;
 
-  StreamController<ErrorAnimationType> errorController;
+  late StreamController<ErrorAnimationType> errorController;
 
   static const double _padding = 0.0;
 
@@ -72,7 +72,7 @@ class _SignUpFormState extends State<SignUpForm> {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              SnackBar(content: Text(state.errorMessage)),
+              SnackBar(content: Text(state.errorMessage!)),
             );
         }
       },
@@ -80,10 +80,8 @@ class _SignUpFormState extends State<SignUpForm> {
         switch (state.signUpPageMode) {
           case PhoneSignUpPageMode.Credentials:
             return _signUpDetails();
-            break;
           case PhoneSignUpPageMode.OTP:
             return _otpInput();
-            break;
           default:
             return Center(
               child: CircularProgressIndicator(),
@@ -140,14 +138,14 @@ class _SignUpFormState extends State<SignUpForm> {
             onPressed: state.areDetailsProcessing
                 ? null
                 : () {
-                    _formKey.currentState.save();
-                    if (_formKey.currentState.validate()) {
+                    _formKey.currentState!.save();
+                    if (_formKey.currentState!.validate()) {
                       if (!errorController.isClosed) {
                         errorController.close();
                       }
                       errorController = StreamController<ErrorAnimationType>();
                       context.read<PhoneSignUpBloc>().add(
-                          SignUpCredentialsSubmitted(phoneNumber: _phoneNumber, email: _email, username: _username));
+                          SignUpCredentialsSubmitted(phoneNumber: _phoneNumber!, email: _email!, username: _username!));
                     }
                   },
             child: state.areDetailsProcessing
@@ -179,7 +177,7 @@ class _SignUpFormState extends State<SignUpForm> {
             labelText: S.current.signUpPhoneNumberLabelText,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(5))),
         validator: (val) {
-          if (val.trim().isEmpty) {
+          if (val == null || val.trim().isEmpty) {
             return S.current.signUpPhoneNumberValidatorEmpty;
           }
 
@@ -205,7 +203,7 @@ class _SignUpFormState extends State<SignUpForm> {
             labelText: S.current.signUpEmailLabelText,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(5))),
         validator: (val) {
-          if (val.trim().isEmpty) {
+          if (val == null || val.trim().isEmpty) {
             return S.current.signUpEmailValidatorEmpty;
           }
 
@@ -230,7 +228,7 @@ class _SignUpFormState extends State<SignUpForm> {
             labelText: S.current.signUpUsernameLabelText,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(5))),
         validator: (val) {
-          if (val.trim().isEmpty) {
+          if (val == null || val.trim().isEmpty) {
             return S.current.signUpUsernameValidatorEmpty;
           }
 
@@ -255,7 +253,7 @@ class _SignUpFormState extends State<SignUpForm> {
         ),
         SizedBox(height: 10),
         Text(
-          _phoneNumber,
+          _phoneNumber ?? "",
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 20.0),
         ),
@@ -263,7 +261,7 @@ class _SignUpFormState extends State<SignUpForm> {
         TextButton(
           child: Text(
             S.current.signUpWrongNumberButton,
-            style: TextStyle(color: Theme.of(context).accentColor),
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
           ),
           onPressed: () {
             setState(() {
@@ -304,7 +302,7 @@ class _SignUpFormState extends State<SignUpForm> {
           borderRadius: BorderRadius.circular(5),
           fieldHeight: 30,
           fieldWidth: 30,
-          selectedColor: Theme.of(context).accentColor,
+          selectedColor: Theme.of(context).colorScheme.secondary,
           selectedFillColor: Colors.blueGrey,
           inactiveFillColor: Theme.of(context).scaffoldBackgroundColor,
           inactiveColor: Theme.of(context).disabledColor,
@@ -343,7 +341,7 @@ class _SignUpFormState extends State<SignUpForm> {
                       otpHasError = true;
                     });
                   } else {
-                    context.read<PhoneSignUpBloc>().add(SignUpOtpSubmitted(oneTimePassword: _oneTimePassword));
+                    context.read<PhoneSignUpBloc>().add(SignUpOtpSubmitted(oneTimePassword: _oneTimePassword!));
                   }
                 },
           child: state.isOTPProcessing
@@ -351,7 +349,7 @@ class _SignUpFormState extends State<SignUpForm> {
               : Text(
                   S.current.signUpOTPContinueButton,
                   style: TextStyle(
-                    color: Theme.of(context).accentColor,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
         ),
@@ -359,7 +357,7 @@ class _SignUpFormState extends State<SignUpForm> {
     });
   }
 
-  Widget centeredScrollView({@required Widget child}) {
+  Widget centeredScrollView({required Widget child}) {
     return Center(
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 8),

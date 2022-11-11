@@ -20,10 +20,10 @@ part 'transactions_daily_state.dart';
 
 class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDailyState> {
   TransactionsDailyBloc({
-    @required this.settingsBloc,
-    @required this.transactionsRepository,
-    @required this.firebaseAuthenticationService,
-    @required this.firebaseRealtimeDatabaseProvider,
+    required this.settingsBloc,
+    required this.transactionsRepository,
+    required this.firebaseAuthenticationService,
+    required this.firebaseRealtimeDatabaseProvider,
   }) : super(TransactionsDailyInitial());
 
   final FirebaseAuthenticationService firebaseAuthenticationService;
@@ -31,20 +31,20 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
   final FirebaseRealtimeDatabaseProvider firebaseRealtimeDatabaseProvider;
 
   SettingsBloc settingsBloc;
-  StreamSubscription settingsSubscription;
+  StreamSubscription? settingsSubscription;
   String locale = '';
 
-  DateTime _observedDate;
+  DateTime? _observedDate;
   String _sliderCurrentTimeIntervalString = '';
 
   List<AppTransaction> dailyData = [];
 
-  StreamSubscription dailyTransactionsSubscription;
+  StreamSubscription? dailyTransactionsSubscription;
 
-  StreamSubscription<DatabaseEvent> _onTransactionAddedSubscription;
-  StreamSubscription<DatabaseEvent> _onTransactionChangedSubscription;
-  StreamSubscription<DatabaseEvent> _onTransactionDeletedSubscription;
-  StreamSubscription<UserEntity> _onUserChangedSubscription;
+  StreamSubscription<DatabaseEvent>? _onTransactionAddedSubscription;
+  StreamSubscription<DatabaseEvent>? _onTransactionChangedSubscription;
+  StreamSubscription<DatabaseEvent>? _onTransactionDeletedSubscription;
+  StreamSubscription<UserEntity>? _onUserChangedSubscription;
 
   @override
   Future<void> close() {
@@ -119,11 +119,11 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
 
     _observedDate = DateTime.now();
 
-    add(TransactionsDailyFetchRequested(dateForFetch: _observedDate));
+    add(TransactionsDailyFetchRequested(dateForFetch: _observedDate!));
   }
 
   Stream<TransactionsDailyState> _mapTransactionsDailyLocaleChangedToState() async* {
-    _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate, locale: locale);
+    _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate!, locale: locale);
 
     print("TransactionsDailyBloc._mapTransactionsDailyLocaleChangedToState: $_sliderCurrentTimeIntervalString");
 
@@ -135,14 +135,14 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
     }
   }
 
-  Stream<TransactionsDailyState> _mapTransactionsDailyFetchRequestedToState({@required DateTime dateForFetch}) async* {
+  Stream<TransactionsDailyState> _mapTransactionsDailyFetchRequestedToState({required DateTime dateForFetch}) async* {
     dailyTransactionsSubscription?.cancel();
 
-    _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate);
+    _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate!);
     yield TransactionsDailyLoading(sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString);
     dailyTransactionsSubscription = transactionsRepository
         .getTransactionsByTimePeriod(
-            start: DateHelper().getFirstDayOfMonth(_observedDate), end: DateHelper().getLastDayOfMonth(_observedDate))
+            start: DateHelper().getFirstDayOfMonth(_observedDate!), end: DateHelper().getLastDayOfMonth(_observedDate!))
         .asStream()
         .listen((event) {
       dailyData = event;
@@ -163,24 +163,24 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
   }
 
   Stream<TransactionsDailyState> _mapTransactionsDailyGetPreviousMonthPressedToState() async* {
-    _observedDate = DateTime(_observedDate.year, _observedDate.month - 1);
-    add(TransactionsDailyFetchRequested(dateForFetch: _observedDate));
+    _observedDate = DateTime(_observedDate!.year, _observedDate!.month - 1);
+    add(TransactionsDailyFetchRequested(dateForFetch: _observedDate!));
   }
 
   Stream<TransactionsDailyState> _mapTransactionsDailyGetNextMonthPressedToState() async* {
-    _observedDate = DateTime(_observedDate.year, _observedDate.month + 1);
-    add(TransactionsDailyFetchRequested(dateForFetch: _observedDate));
+    _observedDate = DateTime(_observedDate!.year, _observedDate!.month + 1);
+    add(TransactionsDailyFetchRequested(dateForFetch: _observedDate!));
   }
 
   _onTransactionAdded(DatabaseEvent event) async {
     print('TransactionsBloc: snapshot ${event.snapshot}');
     AppTransaction transaction = TransactionsHelper()
-        .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value), key: event.snapshot.key);
+        .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value as Map), key: event.snapshot.key!);
 
     // TODO: split this into readable appearance..
-    if ((transaction.date.isAfter(DateHelper().getFirstDayOfMonth(_observedDate)) ||
-            transaction.date == DateHelper().getFirstDayOfMonth(_observedDate)) &&
-        transaction.date.isBefore(DateHelper().getLastDayOfMonth(_observedDate)) &&
+    if ((transaction.date.isAfter(DateHelper().getFirstDayOfMonth(_observedDate!)) ||
+            transaction.date == DateHelper().getFirstDayOfMonth(_observedDate!)) &&
+        transaction.date.isBefore(DateHelper().getLastDayOfMonth(_observedDate!)) &&
         dailyData.indexWhere((element) => element.id == transaction.id) == -1) {
       dailyData.add(transaction);
       add(TransactionsDailyDisplayRequested(
@@ -191,7 +191,7 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
   _onTransactionChanged(DatabaseEvent event) async {
     int oldTransactionIndex = dailyData.indexWhere((transaction) => transaction.id == event.snapshot.key);
     AppTransaction changedTransaction = TransactionsHelper()
-        .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value), key: event.snapshot.key);
+        .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value as Map), key: event.snapshot.key!);
     if (oldTransactionIndex != -1) {
       dailyData[oldTransactionIndex] = changedTransaction;
     }
@@ -216,7 +216,7 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
       if (!map.containsKey(element.date.day)) {
         map[element.date.day] = [element];
       } else {
-        map[element.date.day].add(element);
+        map[element.date.day]!.add(element);
       }
     });
 

@@ -12,7 +12,7 @@ import 'package:radency_internship_project_2/ui/widgets/daily_transactions_list.
 import 'package:radency_internship_project_2/utils/text_styles.dart';
 
 class CalendarDayDialog extends StatefulWidget {
-  const CalendarDayDialog({Key key, @required this.day, @required this.currencySymbol}) : super(key: key);
+  const CalendarDayDialog({Key? key, required this.day, required this.currencySymbol}) : super(key: key);
 
   final CalendarDay day;
   final String currencySymbol;
@@ -98,7 +98,6 @@ class _CalendarDayDialogState extends State<CalendarDayDialog> {
             ),
           ],
         );
-        break;
       case TransactionType.Expense:
         return _transactionRow(
           children: [
@@ -122,7 +121,6 @@ class _CalendarDayDialogState extends State<CalendarDayDialog> {
             ),
           ],
         );
-        break;
       case TransactionType.Transfer:
         return _transactionRow(
           children: [
@@ -139,13 +137,12 @@ class _CalendarDayDialogState extends State<CalendarDayDialog> {
             ),
           ],
         );
-        break;
       default:
         return SizedBox();
     }
   }
 
-  Widget _transactionRow({@required List<Widget> children}) {
+  Widget _transactionRow({required List<Widget> children}) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -155,7 +152,7 @@ class _CalendarDayDialogState extends State<CalendarDayDialog> {
     );
   }
 
-  Widget _expandedContainer({Widget child}) {
+  Widget _expandedContainer({required Widget child}) {
     return Expanded(
       child: Container(child: child),
       flex: 1,

@@ -11,7 +11,7 @@ class ImportCsvInitial implements ImportCsvState {
 }
 
 class ImportCsvLoaded implements ImportCsvState {
-  ImportCsvLoaded({this.expensesData});
+  ImportCsvLoaded({required this.expensesData});
 
  List<AppTransaction> expensesData;
 }

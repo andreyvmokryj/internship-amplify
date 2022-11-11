@@ -9,8 +9,8 @@ class SettingsRepository {
   get() async {    
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String settings = prefs.getString('settings');
-      String onboardingCompletedJson = prefs.getString('onboardingCompleted');
+      String settings = prefs.getString('settings') ?? "";
+      String onboardingCompletedJson = prefs.getString('onboardingCompleted') ?? "";
 
       Map settingsObject =  jsonDecode(settings);
       bool onboardingCompleted = jsonDecode(onboardingCompletedJson);
@@ -31,7 +31,7 @@ class SettingsRepository {
 
   set(settingName, newSettingValue) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String settings = prefs.getString('settings');
+    String settings = prefs.getString('settings') ?? "";
     Map settingsObject = jsonDecode(settings);
 
     settingsObject[settingName] = newSettingValue;

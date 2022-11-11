@@ -6,12 +6,18 @@ class PhoneSignUpState extends Equatable {
   const PhoneSignUpState({this.signUpPageMode = PhoneSignUpPageMode.Credentials, this.errorMessage, this.areDetailsProcessing = false, this.isOTPProcessing = false});
 
   final PhoneSignUpPageMode signUpPageMode;
-  final String errorMessage;
+  final String? errorMessage;
   final bool areDetailsProcessing;
   final bool isOTPProcessing;
 
   @override
-  List<Object> get props => [signUpPageMode, errorMessage, areDetailsProcessing, isOTPProcessing];
+  List<Object> get props {
+    List<Object> _props = [signUpPageMode, areDetailsProcessing, isOTPProcessing];
+    if(errorMessage != null) {
+      _props.add(errorMessage!);
+    }
+    return _props;
+  }
 
   PhoneSignUpState onNumberProcessing() {
     return copyWith(areDetailsProcessing: true);
@@ -34,10 +40,10 @@ class PhoneSignUpState extends Equatable {
   }
 
   PhoneSignUpState copyWith({
-    PhoneSignUpPageMode signUpPageMode,
-    String errorMessage,
-    bool areDetailsProcessing,
-    bool isOTPProcessing,
+    PhoneSignUpPageMode? signUpPageMode,
+    String? errorMessage,
+    bool? areDetailsProcessing,
+    bool? isOTPProcessing,
   }) {
     return PhoneSignUpState(
         signUpPageMode: signUpPageMode ?? this.signUpPageMode,

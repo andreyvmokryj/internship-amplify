@@ -22,7 +22,7 @@ class TransactionsSummaryGetNextMonthPressed extends TransactionsSummaryEvent {
 class TransactionsSummaryFetchRequested extends TransactionsSummaryEvent {
   final DateTime dateForFetch;
 
-  TransactionsSummaryFetchRequested({@required this.dateForFetch});
+  TransactionsSummaryFetchRequested({required this.dateForFetch});
 
   @override
   List<Object> get props => [dateForFetch];
@@ -32,7 +32,7 @@ class TransactionSummaryDisplayRequested extends TransactionsSummaryEvent {
   final String sliderCurrentTimeIntervalString;
   final List<AppTransaction> transactions;
 
-  TransactionSummaryDisplayRequested({@required this.transactions, @required this.sliderCurrentTimeIntervalString});
+  TransactionSummaryDisplayRequested({required this.transactions, required this.sliderCurrentTimeIntervalString});
 
   @override
   List<Object> get props => [sliderCurrentTimeIntervalString, transactions];

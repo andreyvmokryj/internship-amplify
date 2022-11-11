@@ -11,23 +11,23 @@ class TransactionLocationMapState extends Equatable {
   });
 
   final bool isInitialized;
-  final CameraPosition initialCameraPosition;
+  final CameraPosition? initialCameraPosition;
   final bool isFocusing;
   final bool shouldAnimateToPosition;
-  final LatLng animateTargetPosition;
-  final String message;
+  final LatLng? animateTargetPosition;
+  final String? message;
 
   @override
   List<Object> get props => [
         isInitialized,
-        initialCameraPosition,
+        initialCameraPosition ?? "",
         isFocusing,
         shouldAnimateToPosition,
-        animateTargetPosition,
-        message,
+        animateTargetPosition ?? "",
+        message ?? "",
       ];
 
-  TransactionLocationMapState initial({@required CameraPosition cameraPosition}) {
+  TransactionLocationMapState initial({required CameraPosition cameraPosition}) {
     return copyWith(initialCameraPosition: cameraPosition, isInitialized: true);
   }
 
@@ -39,7 +39,7 @@ class TransactionLocationMapState extends Equatable {
     return copyWith(isFocusing: false);
   }
 
-  TransactionLocationMapState animateToPosition({@required LatLng latLng}) {
+  TransactionLocationMapState animateToPosition({required LatLng latLng}) {
     return copyWith(animateTargetPosition: latLng, shouldAnimateToPosition: true);
   }
 
@@ -48,12 +48,12 @@ class TransactionLocationMapState extends Equatable {
   }
 
   TransactionLocationMapState copyWith({
-    bool isInitialized,
-    CameraPosition initialCameraPosition,
-    bool isFocusing,
-    bool shouldAnimateToPosition,
-    LatLng animateTargetPosition,
-    String message,
+    bool? isInitialized,
+    CameraPosition? initialCameraPosition,
+    bool? isFocusing,
+    bool? shouldAnimateToPosition,
+    LatLng? animateTargetPosition,
+    String? message,
   }) {
     return TransactionLocationMapState(
         initialCameraPosition: initialCameraPosition ?? this.initialCameraPosition,

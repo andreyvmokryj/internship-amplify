@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class TransactionsDataPlaceholder extends StatelessWidget {
   final String text;
 
-  TransactionsDataPlaceholder({@required this.text});
+  TransactionsDataPlaceholder({required this.text});
 
   @override
   Widget build(BuildContext context) {

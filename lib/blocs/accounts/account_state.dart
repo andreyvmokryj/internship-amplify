@@ -5,7 +5,7 @@ class AccountState extends Equatable{
   final List<String> selectedAccounts;
   final List<String> appliedAccounts;
 
-  AccountState({this.accounts, this.selectedAccounts, this.appliedAccounts});
+  AccountState({required this.accounts, required this.selectedAccounts, required this.appliedAccounts});
 
   @override
   List<Object> get props => [...accounts, ...selectedAccounts, ...appliedAccounts];

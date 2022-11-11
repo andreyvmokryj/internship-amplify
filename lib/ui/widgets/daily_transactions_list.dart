@@ -17,7 +17,7 @@ import 'package:radency_internship_project_2/utils/time.dart';
 import 'common_transactions_list.dart';
 
 class DailyTransactionList extends StatelessWidget {
-  const DailyTransactionList({Key key}) : super(key: key);
+  const DailyTransactionList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class DailyTransactionList extends StatelessWidget {
 }
 
 class _StickyExpensesDaily extends StatelessWidget {
-  const _StickyExpensesDaily({Key key, this.items}) : super(key: key);
+  const _StickyExpensesDaily({Key? key, required this.items}) : super(key: key);
 
   final List<AppTransaction> items;
 
@@ -79,8 +79,8 @@ class _StickyExpensesDaily extends StatelessWidget {
         delegate: SliverChildBuilderDelegate(
           (context, i) => Dismissible(
             onDismissed: (direction) =>
-                context.read<TransactionsDailyBloc>().add(TransactionDailyDelete(transactionId: items[i].id)),
-            key: Key(items[i].id),
+                context.read<TransactionsDailyBloc>().add(TransactionDailyDelete(transactionId: items[i].id!)),
+            key: Key(items[i].id!),
             child: ListTile(
               title: DailyTransactionItem(transaction: items[i]),
             ),
@@ -94,8 +94,8 @@ class _StickyExpensesDaily extends StatelessWidget {
 
 class DailyTransactionItem extends StatelessWidget {
   const DailyTransactionItem({
-    Key key,
-    this.transaction,
+    Key? key,
+    required this.transaction,
   }) : super(key: key);
 
   final AppTransaction transaction;
@@ -188,8 +188,8 @@ class DailyTransactionItem extends StatelessWidget {
 
 class DailyExpensesHeader extends StatelessWidget {
   const DailyExpensesHeader({
-    Key key,
-    this.dateTime,
+    Key? key,
+    required this.dateTime,
     this.incomeTotal = 0.0,
     this.outcomeTotal = 0.0,
   }) : super(key: key);

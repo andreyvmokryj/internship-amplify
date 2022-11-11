@@ -15,7 +15,7 @@ class BudgetsRepository extends IRepository<CategoryBudget> {
   }
 
   @override
-  Future<void> delete({@required String categoryName}) async {
+  Future<void> delete({String? categoryName}) async {
     Box<CategoryBudget> box = await HiveProvider().openBudgetsBox();
 
     int index = box.values.toList().indexWhere((element) => element.category == categoryName);
@@ -24,7 +24,7 @@ class BudgetsRepository extends IRepository<CategoryBudget> {
   }
 
   @override
-  Future<CategoryBudget> find({@required String categoryName}) async {
+  Future<CategoryBudget> find({String? categoryName}) async {
     CategoryBudget categoryBudget;
 
     Box<CategoryBudget> box = await HiveProvider().openBudgetsBox();
@@ -35,9 +35,9 @@ class BudgetsRepository extends IRepository<CategoryBudget> {
   }
 
   @override
-  Future<void> update({@required CategoryBudget categoryBudget}) async {
+  Future<void> update({CategoryBudget? categoryBudget}) async {
     Box<CategoryBudget> box = await HiveProvider().openBudgetsBox();
-    await box.add(categoryBudget);
+    await box.add(categoryBudget!);
   }
 
   Future<List<CategoryBudget>> findAll() async {

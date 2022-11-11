@@ -1,15 +1,14 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:meta/meta.dart';
 
 class FirebaseRealtimeDatabaseProvider {
-  FirebaseRealtimeDatabaseProvider({@required this.database}) {
+  FirebaseRealtimeDatabaseProvider({required this.database}) {
     databaseReference = database.ref();
     print("FirebaseRealtimeDatabaseProvider.FirebaseRealtimeDatabaseProvider: ${database.databaseURL}");
   }
 
   final FirebaseDatabase database;
 
-  DatabaseReference databaseReference;
+  late DatabaseReference databaseReference;
 
   final String TRANSACTIONS_NODE = 'transactions';
 
@@ -36,5 +35,5 @@ class FirebaseStreamsGroup {
   Stream<DatabaseEvent> onChildDeleted;
   Stream<DatabaseEvent> onChildChanged;
 
-  FirebaseStreamsGroup({@required this.onChildAdded, @required this.onChildChanged, @required this.onChildDeleted});
+  FirebaseStreamsGroup({required this.onChildAdded, required this.onChildChanged, required this.onChildDeleted});
 }

@@ -11,7 +11,7 @@ import 'package:radency_internship_project_2/utils/strings.dart';
 import 'package:radency_internship_project_2/utils/styles.dart';
 
 class EmailLoginPage extends StatelessWidget {
-  const EmailLoginPage({Key key}) : super(key: key);
+  const EmailLoginPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class EmailLoginPage extends StatelessWidget {
 }
 
 class EmailLoginForm extends StatefulWidget {
-  const EmailLoginForm({Key key}) : super(key: key);
+  const EmailLoginForm({Key? key}) : super(key: key);
 
   @override
   _EmailLoginFormState createState() => _EmailLoginFormState();
@@ -39,8 +39,8 @@ class EmailLoginForm extends StatefulWidget {
 class _EmailLoginFormState extends State<EmailLoginForm> {
   static const double _padding = 0.0;
 
-  String _email;
-  String _password;
+  String _email = "";
+  String _password = "";
   bool _biometricsPairingEnabled = false;
 
   static final GlobalKey<FormState> _emailFormKey = GlobalKey<FormState>();
@@ -58,13 +58,13 @@ class _EmailLoginFormState extends State<EmailLoginForm> {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              SnackBar(content: Text(state.errorMessage)),
+              SnackBar(content: Text(state.errorMessage!)),
             );
         }
 
         if (state.savedEmail != null) {
-          _emailController.text = state.savedEmail;
-          _email = state.savedEmail;
+          _emailController.text = state.savedEmail!;
+          _email = state.savedEmail!;
         }
       },
       builder: (context, state) {
@@ -148,7 +148,7 @@ class _EmailLoginFormState extends State<EmailLoginForm> {
         // TODO: implement password restore
       },
       style: TextButton.styleFrom(
-        primary: Theme.of(context).accentColor,
+        foregroundColor: Theme.of(context).colorScheme.secondary,
       ),
     );
   }
@@ -160,7 +160,7 @@ class _EmailLoginFormState extends State<EmailLoginForm> {
         Text(S.current.loginNoAccountNotice),
         TextButton(
           style: TextButton.styleFrom(
-            primary: Theme.of(context).accentColor,
+            foregroundColor: Theme.of(context).colorScheme.secondary,
           ),
           child: Text(S.current.loginCreateAccountButton),
           onPressed: () {
@@ -172,7 +172,7 @@ class _EmailLoginFormState extends State<EmailLoginForm> {
   }
 
   Widget _emailField() {
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: _padding),
@@ -191,7 +191,7 @@ class _EmailLoginFormState extends State<EmailLoginForm> {
               ),
               prefixWidth: 50),
           validator: (val) {
-            if (val.trim().isEmpty) {
+            if (val == null || val.trim().isEmpty) {
               return S.current.loginEmailValidatorEmpty;
             }
 
@@ -201,14 +201,14 @@ class _EmailLoginFormState extends State<EmailLoginForm> {
 
             return null;
           },
-          onSaved: (value) => _email = value,
+          onSaved: (value) => _email,
         ),
       ),
     );
   }
 
   Widget _passwordField() {
-    final accentColor = Theme.of(context).accentColor;
+    final accentColor = Theme.of(context).colorScheme.secondary;
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: _padding),
@@ -216,7 +216,7 @@ class _EmailLoginFormState extends State<EmailLoginForm> {
         key: _passwordFormKey,
         child: TextFormField(
           autovalidateMode: autovalidateMode,
-          initialValue: _password ?? '',
+          initialValue: _password,
           obscureText: true,
           cursorColor: accentColor,
           decoration: addTransactionFormFieldDecoration(context,
@@ -227,13 +227,13 @@ class _EmailLoginFormState extends State<EmailLoginForm> {
               ),
               prefixWidth: 50),
           validator: (val) {
-            if (val.trim().isEmpty) {
+            if (val == null || val.trim().isEmpty) {
               return S.current.loginPasswordValidatorEmpty;
             }
 
             return null;
           },
-          onSaved: (value) => _password = value,
+          onSaved: (value) => _password = value ?? "",
         ),
       ),
     );
@@ -287,7 +287,7 @@ class _EmailLoginFormState extends State<EmailLoginForm> {
                   value: _biometricsPairingEnabled,
                   onChanged: (value) {
                     setState(() {
-                      _biometricsPairingEnabled = value;
+                      _biometricsPairingEnabled = value ?? false;
                     });
                   }),
               Expanded(child: Text(S.current.authenticationBiometricsPairCheckbox)),
@@ -301,17 +301,17 @@ class _EmailLoginFormState extends State<EmailLoginForm> {
   }
 
   void _saveForms() {
-    _emailFormKey.currentState.save();
-    _passwordFormKey.currentState.save();
+    _emailFormKey.currentState?.save();
+    _passwordFormKey.currentState?.save();
   }
 
   bool _validateForms() {
     bool result = true;
 
-    if (!_emailFormKey.currentState.validate()) {
+    if (!(_emailFormKey.currentState?.validate() ?? false)) {
       result = false;
     }
-    if (!_passwordFormKey.currentState.validate()) {
+    if (!(_passwordFormKey.currentState?.validate() ?? false)) {
       result = false;
     }
 

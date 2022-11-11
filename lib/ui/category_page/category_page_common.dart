@@ -95,7 +95,7 @@ Widget buildReorderedCategoryList(BuildContext context, String categoriesType) {
 }
 
 class CategoryItem extends StatelessWidget {
-  CategoryItem({this.data, this.categoryType});
+  CategoryItem({required this.data, required this.categoryType});
 
   final CategoryItemData data;
   final String categoryType;

@@ -4,25 +4,24 @@ import 'package:meta/meta.dart';
 class UserEntity extends Equatable {
   /// {@macro user}
   const UserEntity({
-    @required this.email,
-    @required this.id,
-    @required this.name,
-    @required this.photo,
-    @required this.emailVerified,
-  })  :
-        assert(id != null);
+    required this.email,
+    required this.id,
+    required this.name,
+    required this.photo,
+    required this.emailVerified,
+  });
 
   /// The current user's email address.
-  final String email;
+  final String? email;
 
   /// The current user's id.
   final String id;
 
   /// The current user's name (display name).
-  final String name;
+  final String? name;
 
   /// Url for the current user's photo.
-  final String photo;
+  final String? photo;
 
   final bool emailVerified;
 
@@ -30,5 +29,5 @@ class UserEntity extends Equatable {
   static const empty = UserEntity(email: '', id: '', name: null, photo: null, emailVerified: false);
 
   @override
-  List<Object> get props => [email, id, name, photo, emailVerified];
+  List<Object> get props => [email ?? "", id, name ?? "", photo ?? "", emailVerified];
 }
