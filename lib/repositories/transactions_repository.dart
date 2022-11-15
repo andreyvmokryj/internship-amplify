@@ -1,12 +1,11 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:radency_internship_project_2/local_models/transactions/transaction.dart' as mtr;
 import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transactions_helper.dart';
 import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
 import 'package:radency_internship_project_2/providers/firebase_realtime_database_provider.dart';
 import 'package:radency_internship_project_2/repositories/repository.dart';
 
-class TransactionsRepository extends IRepository<mtr.AppTransaction> {
+class TransactionsRepository extends IRepository<AppTransaction> {
   TransactionsRepository(
       {required this.firebaseRealtimeDatabaseProvider, required this.firebaseAuthenticationService});
 
@@ -14,7 +13,7 @@ class TransactionsRepository extends IRepository<mtr.AppTransaction> {
   final FirebaseAuthenticationService firebaseAuthenticationService;
 
   @override
-  Future<void> add(mtr.AppTransaction transaction) async {
+  Future<void> add(AppTransaction transaction) async {
     String uid = await firebaseAuthenticationService.getUserID();
     await firebaseRealtimeDatabaseProvider.transactionsReference(uid).then((reference) async {
       Map<String, dynamic> transactionMap = TransactionsHelper().convertTransactionToJson(transaction: transaction);
@@ -31,15 +30,15 @@ class TransactionsRepository extends IRepository<mtr.AppTransaction> {
   }
 
   @override
-  Future<mtr.AppTransaction?> find({String? transactionID}) async {
-    mtr.AppTransaction? transaction;
+  Future<AppTransaction?> find({String? transactionID}) async {
+    AppTransaction? transaction;
 
     String uid = await firebaseAuthenticationService.getUserID();
     await firebaseRealtimeDatabaseProvider.transactionsReference(uid).then((reference) async {
-      await reference.child(transactionID!).once().then((snapshot) async {
-        if (snapshot.snapshot.value != null) {
+      await reference.child(transactionID!).once().then((event) async {
+        if (event.snapshot.value != null) {
           transaction = TransactionsHelper()
-              .convertJsonToTransaction(json: Map<String, dynamic>.from(snapshot.snapshot.value as Map<String, dynamic>), key: snapshot.snapshot.key!);
+              .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value as Map<String, dynamic>), key: event.snapshot.key!);
         }
       });
     });
@@ -48,7 +47,7 @@ class TransactionsRepository extends IRepository<mtr.AppTransaction> {
   }
 
   @override
-  Future<void> update({mtr.AppTransaction? transaction}) async {
+  Future<void> update({AppTransaction? transaction}) async {
     String uid = await firebaseAuthenticationService.getUserID();
     DatabaseReference reference = await firebaseRealtimeDatabaseProvider.transactionsReference(uid);
 
@@ -57,8 +56,8 @@ class TransactionsRepository extends IRepository<mtr.AppTransaction> {
     reference.child(transaction.id!).update(transactionMap);
   }
 
-  Future<List<mtr.AppTransaction>> getTransactionsByTimePeriod({required DateTime start, required DateTime end}) async {
-    List<mtr.AppTransaction> list = [];
+  Future<List<AppTransaction>> getTransactionsByTimePeriod({required DateTime start, required DateTime end}) async {
+    List<AppTransaction> list = [];
 
     String uid = await firebaseAuthenticationService.getUserID();
     DatabaseReference reference = await firebaseRealtimeDatabaseProvider.transactionsReference(uid);
@@ -69,7 +68,7 @@ class TransactionsRepository extends IRepository<mtr.AppTransaction> {
     if (snapshot.value != null) {
       Map<dynamic, dynamic> values = snapshot.value as Map<String, dynamic>;
       values.forEach((key, value) {
-        mtr.AppTransaction transaction =
+        AppTransaction transaction =
             TransactionsHelper().convertJsonToTransaction(json: Map<String, dynamic>.from(value), key: key);
 
         list.add(transaction);
@@ -79,8 +78,8 @@ class TransactionsRepository extends IRepository<mtr.AppTransaction> {
     return list;
   }
 
-  Future<List<mtr.AppTransaction>> getAllData() async {
-    List<mtr.AppTransaction> list = [];
+  Future<List<AppTransaction>> getAllData() async {
+    List<AppTransaction> list = [];
 
     String uid = await firebaseAuthenticationService.getUserID();
     DatabaseReference reference = await firebaseRealtimeDatabaseProvider.transactionsReference(uid);
@@ -88,7 +87,7 @@ class TransactionsRepository extends IRepository<mtr.AppTransaction> {
     DataSnapshot snapshot = (await reference.once()).snapshot;
     var values = snapshot.value as Map;
     values.forEach((key, value) {
-      mtr.AppTransaction transaction =
+      AppTransaction transaction =
             TransactionsHelper().convertJsonToTransaction(json: Map<String, dynamic>.from(value), key: key);
 
         list.add(transaction);
