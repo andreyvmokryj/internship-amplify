@@ -70,7 +70,7 @@ dependencies:
   # Amplify
   amplify_flutter: ^0.6.10
   amplify_datastore: ^0.6.10
-  # amplify_api: ^0.6.0 // UNCOMMENT this line after backend is deployed
+  amplify_api: ^0.6.10 # UNCOMMENT this line after backend is deployed
 
 dev_dependencies:
   flutter_test:
