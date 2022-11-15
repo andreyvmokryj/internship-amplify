@@ -18,7 +18,7 @@ import 'providers/firebase_auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await _configureAmplify();
+  await _configureAmplify();
   final FirebaseApp app = await Firebase.initializeApp();
 
   var directory = await path_provider.getApplicationDocumentsDirectory();
@@ -47,11 +47,11 @@ void main() async {
   ));
 }
 
-// Future<void> _configureAmplify() async {
-//
-//   // await Amplify.addPlugin(AmplifyAPI()); // UNCOMMENT this line after backend is deployed
-//   await Amplify.addPlugin(AmplifyDataStore(modelProvider: ModelProvider.instance));
-//
-//   // Once Plugins are added, configure Amplify
-//   await Amplify.configure(amplifyconfig);
-// }
+Future<void> _configureAmplify() async {
+
+  // await Amplify.addPlugin(AmplifyAPI()); // UNCOMMENT this line after backend is deployed
+  await Amplify.addPlugin(AmplifyDataStore(modelProvider: ModelProvider.instance));
+
+  // Once Plugins are added, configure Amplify
+  await Amplify.configure(amplifyconfig);
+}
