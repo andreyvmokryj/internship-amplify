@@ -247,7 +247,7 @@ class _AppViewState extends State<AppView> {
             Routes.loginPage: (context) => EmailLoginPage(),
             Routes.homePage: (context) => HomePage(),
             Routes.signUpPage: (context) => EmailSignUpPage(),
-            Routes.splashScreen: (context) => SplashPage(),
+            Routes.splashScreen: (context) => HomePage(),
             Routes.statsPage: (context) => StatsView(),
             Routes.budgetSettings: (context) => BudgetSettingsPage(),
             Routes.settingsPage: (context) => SettingsPage(),
@@ -263,7 +263,7 @@ class _AppViewState extends State<AppView> {
             Routes.emailVerificationResendPage: (context) => EmailVerificationResendScreen(),
             Routes.searchExpensesPage: (context) => SearchExpensesPage(),
           },
-          initialRoute: Routes.homePage,
+          // initialRoute: Routes.homePage,
           // builder: (context, child) {
           //   return BlocListener<AuthenticationBloc, AuthenticationState>(
           //     listener: (context, state) {

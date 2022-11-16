@@ -35,7 +35,7 @@ dependencies:
   cupertino_icons: 1.0.2
   currency_picker: 2.0.4
   equatable: 2.0.0
-  file_picker_cross: 4.6.0
+#  file_picker_cross: 4.6.0
   firebase_analytics: 10.0.5
   firebase_auth: 4.1.2
   firebase_core: 2.2.0
@@ -69,11 +69,11 @@ dependencies:
 #  meta: 1.8.0
 
   # Amplify
-  amplify_flutter: ^0.6.10
-  amplify_datastore: ^0.6.10
-  amplify_api: ^0.6.10 # UNCOMMENT this line after backend is deployed
-  amplify_auth_cognito: ^0.6.10
-  amplify_authenticator: ^0.2.4
+  amplify_flutter: ^1.0.0-next.1
+  amplify_datastore: ^1.0.0-next.1
+  amplify_api: ^1.0.0-next.1 # UNCOMMENT this line after backend is deployed
+  amplify_auth_cognito: ^1.0.0-next.1
+  amplify_authenticator: ^1.0.0-next.1
 
 dev_dependencies:
   flutter_test:

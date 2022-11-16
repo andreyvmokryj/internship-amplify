@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:csv/csv.dart';
 import 'package:bloc/bloc.dart';
-import 'package:file_picker_cross/file_picker_cross.dart';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transactions_helper.dart';
@@ -25,16 +24,18 @@ class ImportCsvBloc extends Bloc<ImportCsvEvent, ImportCsvState> {
   }
 
   Future<List<AppTransaction>> getDataFromCsv() async{
-    FilePickerCross file = await importCsv();
-    List<List<dynamic>> expensesData = CsvToListConverter().convert(file.toString());
-   
-    List<AppTransaction> listOfTransactions = createListOfTransactions(expensesData);
+    // FilePickerCross file = await importCsv();
+    // List<List<dynamic>> expensesData = CsvToListConverter().convert(file.toString());
+    //
+    // List<AppTransaction> listOfTransactions = createListOfTransactions(expensesData);
+    //
+    // listOfTransactions.forEach((transaction) async {
+    //   await transactionsRepository.add(transaction);
+    // });
+    //
+    // return listOfTransactions;
 
-    listOfTransactions.forEach((transaction) async {
-      await transactionsRepository.add(transaction);
-    });
-
-    return listOfTransactions;
+    return [];
   }
 
   List<AppTransaction> createListOfTransactions(expensesData) {
@@ -49,12 +50,12 @@ class ImportCsvBloc extends Bloc<ImportCsvEvent, ImportCsvState> {
     return listOfExpenses;
   }
 
-  Future<FilePickerCross> importCsv() async {
-    FilePickerCross csvFile = await FilePickerCross.importFromStorage(
-      type: FileTypeCross.custom,
-      fileExtension: 'csv'
-    );
-    
-    return csvFile;
-  }
+  // Future<FilePickerCross> importCsv() async {
+  //   FilePickerCross csvFile = await FilePickerCross.importFromStorage(
+  //     type: FileTypeCross.custom,
+  //     fileExtension: 'csv'
+  //   );
+  //
+  //   return csvFile;
+  // }
 }
