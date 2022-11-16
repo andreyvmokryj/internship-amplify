@@ -65,6 +65,7 @@ dependencies:
   uuid: 3.0.6
   permission_handler: 8.0.0+2
   collection: 1.16.0
+  pinput: 2.2.16
 #  meta: 1.8.0
 
   # Amplify

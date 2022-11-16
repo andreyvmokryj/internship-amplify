@@ -6,16 +6,18 @@ class SignUpEmailState extends Equatable {
     this.errorMessage,
     this.biometricsAvailable = false,
     this.signUpFlowInitializationStatus = false,
+    this.signUpCodeConfirmation = false,
   });
 
   final bool areDetailsProcessing;
   final String? errorMessage;
   final bool biometricsAvailable;
   final bool signUpFlowInitializationStatus;
+  final bool signUpCodeConfirmation;
 
   @override
   List<Object> get props {
-    List<Object> _props = [areDetailsProcessing, biometricsAvailable, signUpFlowInitializationStatus];
+    List<Object> _props = [areDetailsProcessing, biometricsAvailable, signUpFlowInitializationStatus, signUpCodeConfirmation];
     if(errorMessage != null) {
       _props.add(errorMessage!);
     }
@@ -39,9 +41,11 @@ class SignUpEmailState extends Equatable {
     String? errorMessage,
     bool? signUpFlowInitializationStatus,
     bool? biometricsAvailable,
+    bool? signUpCodeConfirmation,
   }) {
     return SignUpEmailState(
       signUpFlowInitializationStatus: signUpFlowInitializationStatus ?? this.signUpFlowInitializationStatus,
+      signUpCodeConfirmation: signUpCodeConfirmation ?? this.signUpCodeConfirmation,
       biometricsAvailable: biometricsAvailable ?? this.biometricsAvailable,
       areDetailsProcessing: areDetailsProcessing ?? this.areDetailsProcessing,
       errorMessage: errorMessage ?? null,

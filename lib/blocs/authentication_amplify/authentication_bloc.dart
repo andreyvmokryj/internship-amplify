@@ -17,6 +17,7 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
   })  : _authenticationService = authenticationService,
         super(const AuthenticationState.unknown()) {
     _userAuthStateSubscription = Amplify.Hub.listen([HubChannel.Auth], (hubEvent) {
+      print("hubEvent.eventName = " + hubEvent.eventName);
       switch(hubEvent.eventName) {
         case 'SIGNED_IN':
           print('USER IS SIGNED IN');

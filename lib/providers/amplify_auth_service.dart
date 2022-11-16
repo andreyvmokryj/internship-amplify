@@ -121,14 +121,14 @@ class AmplifyAuthenticationService {
   Future<void> signUpWithEmailAndPassword(
       {required String email, required String password, required String username}) async {
     final userAttributes = <CognitoUserAttributeKey, String>{
-      CognitoUserAttributeKey.email: email,
+      CognitoUserAttributeKey.nickname: username,
       // CognitoUserAttributeKey.phoneNumber: '+15559101234',
       // additional attributes as needed
     };
 
     // await _amplifyAuth.createUserWithEmailAndPassword(email: email, password: password);
     await Amplify.Auth.signUp(
-      username: username,
+      username: email,
       password: password,
       options: CognitoSignUpOptions(userAttributes: userAttributes),
     );
@@ -143,6 +143,14 @@ class AmplifyAuthenticationService {
     // await sendEmailVerification();
   }
 
+  Future<void> confirmSignUp({required String email, required String code}) async {
+    await Amplify.Auth.confirmSignUp(
+      username: email,
+      confirmationCode: code,
+    );
+
+  }
+
   // Future<void> sendEmailVerification() async {
   //
   //   (await _amplifyAuth.getCurrentUser())?.sendEmailVerification();
@@ -154,7 +162,7 @@ class AmplifyAuthenticationService {
 
   Future<String> getUserID() async {
     AuthUser? user = await Amplify.Auth.getCurrentUser();
-    return user?.userId ?? "";
+    return user.userId ?? "";
   }
 
   Future<void> logOut() async {

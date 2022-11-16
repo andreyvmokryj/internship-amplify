@@ -20,3 +20,12 @@ class SignUpEmailSubmitted extends SignUpEmailEvent {
   @override
   List<Object> get props => [email, password, username, biometricsPairingStatus];
 }
+
+class SignUpEmailConfirm extends SignUpEmailEvent {
+  final String code;
+
+  SignUpEmailConfirm({required this.code});
+
+  @override
+  List<Object> get props => [code];
+}

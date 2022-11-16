@@ -30,6 +30,8 @@ class SignUpEmailBloc extends Bloc<SignUpEmailEvent, SignUpEmailState> {
       );
     } else if (event is SignUpEmailInitialize) {
       yield* _mapSignUpEmailInitializeToState();
+    } else if (event is SignUpEmailConfirm) {
+      yield* _mapSignUpEmailConfirmToState(event);
     }
   }
 
@@ -37,6 +39,10 @@ class SignUpEmailBloc extends Bloc<SignUpEmailEvent, SignUpEmailState> {
     areBiometricsEnrolled = await _biometricCredentialsService.checkIfAnyBiometricsEnrolled();
 
     yield state.setInitializationState(isInitialized: true, biometricAuthAvailable: areBiometricsEnrolled);
+  }
+
+  Stream<SignUpEmailState> _mapSignUpEmailConfirmToState(SignUpEmailConfirm event) async* {
+    await _authenticationService.confirmSignUp(email: email, code: event.code);
   }
 
   Stream<SignUpEmailState> _mapSignUpEmailSubmittedToState({

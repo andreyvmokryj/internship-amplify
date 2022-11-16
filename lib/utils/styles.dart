@@ -20,6 +20,21 @@ const addTransactionAvatarTextStyle = TextStyle(
   fontSize: 28,
 );
 
+TextStyle medium({Color? color, double size = 14}) {
+  return TextStyle(
+      color: color ?? Colors.black,
+      fontSize: size,
+      fontWeight: FontWeight.w500);
+}
+
+TextStyle regular({Color? color, double? size, TextDecoration? decoration}) {
+  return TextStyle(
+      color: color ?? Colors.black,
+      fontSize: size ?? 14,
+      fontWeight: FontWeight.w400,
+      decoration: decoration);
+}
+
 var primaryColorsArray = [
   //"#FFFFFF", "#E25F4E", "#EB839A", "#5ABC7B", "#4896F4", "#4A4A4A", "#947EB0"
   "#947EB0", "#5ABC7B", "#4896F4", "#E25F4E",
