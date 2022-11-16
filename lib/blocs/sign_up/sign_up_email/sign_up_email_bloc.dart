@@ -3,21 +3,18 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:meta/meta.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
+import 'package:radency_internship_project_2/providers/amplify_auth_service.dart';
 import 'package:radency_internship_project_2/providers/biometric_credentials_service.dart';
-import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
 
 part 'sign_up_email_event.dart';
-
 part 'sign_up_email_state.dart';
 
 class SignUpEmailBloc extends Bloc<SignUpEmailEvent, SignUpEmailState> {
   SignUpEmailBloc(this._authenticationService, this._biometricCredentialsService)
-      : assert(_authenticationService != null),
-        super(SignUpEmailState());
+      : super(SignUpEmailState());
 
-  final FirebaseAuthenticationService _authenticationService;
+  final AmplifyAuthenticationService _authenticationService;
   final BiometricCredentialsService _biometricCredentialsService;
 
   bool areBiometricsEnrolled = false;

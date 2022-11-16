@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radency_internship_project_2/blocs/login/email_login/email_login_bloc.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
+import 'package:radency_internship_project_2/providers/amplify_auth_service.dart';
 import 'package:radency_internship_project_2/providers/biometric_credentials_service.dart';
-import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
 import 'package:radency_internship_project_2/ui/shared_components/elevated_buttons/colored_elevated_button.dart';
 import 'package:radency_internship_project_2/ui/widgets/centered_scroll_view.dart';
 import 'package:radency_internship_project_2/utils/routes.dart';
@@ -20,7 +20,7 @@ class EmailLoginPage extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: BlocProvider<EmailLoginBloc>(
           create: (_) =>
-              EmailLoginBloc(context.read<FirebaseAuthenticationService>(), context.read<BiometricCredentialsService>())
+              EmailLoginBloc(context.read<AmplifyAuthenticationService>(), context.read<BiometricCredentialsService>())
                 ..add(EmailLoginInitialize()),
           child: EmailLoginForm(),
         ),

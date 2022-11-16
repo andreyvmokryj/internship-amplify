@@ -10,6 +10,15 @@
       "StackName": "amplify-internshipamplify-staging-153949",
       "StackId": "arn:aws:cloudformation:us-east-2:257392609252:stack/amplify-internshipamplify-staging-153949/bdafb010-64fb-11ed-b343-064ffeffc350",
       "AmplifyAppId": "dgtrfzweswmbb"
+    },
+    "categories": {
+      "api": {
+        "internshipamplify": {}
+      },
+      "auth": {
+        "internshipamplifyb4ddde5a": {},
+        "internshipamplify4ff72bb2": {}
+      }
     }
   }
 }

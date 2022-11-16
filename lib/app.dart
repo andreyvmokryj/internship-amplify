@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:radency_internship_project_2/blocs/accounts/account_bloc.dart';
+import 'package:radency_internship_project_2/blocs/authentication_amplify/authentication_bloc.dart';
 import 'package:radency_internship_project_2/blocs/export_csv/export_csv_bloc.dart';
 import 'package:radency_internship_project_2/blocs/forex/forex_bloc.dart';
 import 'package:radency_internship_project_2/blocs/image_picker/image_picker_bloc.dart';
@@ -15,6 +16,7 @@ import 'package:radency_internship_project_2/blocs/transactions/add_transaction/
 import 'package:radency_internship_project_2/blocs/transactions/add_transaction/transaction_type/transaction_type_bloc.dart';
 import 'package:radency_internship_project_2/blocs/transactions/transactions_calendar/transactions_calendar_bloc.dart';
 import 'package:radency_internship_project_2/blocs/transactions/transactions_summary/transactions_summary_bloc.dart';
+import 'package:radency_internship_project_2/providers/amplify_auth_service.dart';
 import 'package:radency_internship_project_2/providers/biometric_credentials_service.dart';
 import 'package:radency_internship_project_2/providers/firebase_functions_provider.dart';
 import 'package:radency_internship_project_2/providers/firebase_realtime_database_provider.dart';
@@ -36,7 +38,6 @@ import 'package:radency_internship_project_2/ui/widgets/add_transaction_view/tra
 import 'package:radency_internship_project_2/ui/widgets/stats_view/stats_view.dart';
 import 'package:radency_internship_project_2/ui/widgets/stats_view/tabs/budget_overview/budget_settings_page.dart';
 import 'package:radency_internship_project_2/ui/widgets/stats_view/tabs/budget_overview/category_budget_setup_view.dart';
-import 'blocs/authentication/authentication_bloc.dart';
 import 'blocs/settings/category/category_bloc.dart';
 import 'blocs/settings/category/category_slider/category_slider_bloc.dart';
 import 'blocs/settings/settings_bloc.dart';
@@ -63,14 +64,15 @@ class App extends StatelessWidget {
   const App({
     Key? key,
     required this.authenticationService,
+    required this.amplifyAuthenticationService,
     required this.budgetsRepository,
     required this.biometricCredentialsService,
     required this.firebaseRealtimeDatabaseProvider,
     required this.transactionsRepository,
     required this.firebaseFunctionsProvider,
-  })  : assert(authenticationService != null),
-        super(key: key);
+  })  : super(key: key);
 
+  final AmplifyAuthenticationService amplifyAuthenticationService;
   final FirebaseAuthenticationService authenticationService;
   final BudgetsRepository budgetsRepository;
   final BiometricCredentialsService biometricCredentialsService;
@@ -83,6 +85,7 @@ class App extends StatelessWidget {
     return MultiRepositoryProvider(
         providers: [
           RepositoryProvider.value(value: authenticationService),
+          RepositoryProvider.value(value: amplifyAuthenticationService),
           RepositoryProvider.value(value: biometricCredentialsService),
           RepositoryProvider.value(value: budgetsRepository),
           RepositoryProvider.value(value: firebaseRealtimeDatabaseProvider),
@@ -95,7 +98,7 @@ class App extends StatelessWidget {
             ),
             BlocProvider(
               create: (context) => AuthenticationBloc(
-                authenticationService: authenticationService,
+                authenticationService: amplifyAuthenticationService,
               ),
             ),
             BlocProvider(

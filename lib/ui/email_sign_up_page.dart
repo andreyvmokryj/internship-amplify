@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radency_internship_project_2/blocs/sign_up/sign_up_email/sign_up_email_bloc.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
+import 'package:radency_internship_project_2/providers/amplify_auth_service.dart';
 import 'package:radency_internship_project_2/providers/biometric_credentials_service.dart';
-import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
 import 'package:radency_internship_project_2/ui/shared_components/elevated_buttons/colored_elevated_button.dart';
 import 'package:radency_internship_project_2/ui/widgets/centered_scroll_view.dart';
 import 'package:radency_internship_project_2/utils/strings.dart';
@@ -17,7 +17,7 @@ class EmailSignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<SignUpEmailBloc>(
       create: (_) => SignUpEmailBloc(
-        context.read<FirebaseAuthenticationService>(),
+        context.read<AmplifyAuthenticationService>(),
         context.read<BiometricCredentialsService>(),
       )..add(SignUpEmailInitialize()),
       child: Scaffold(

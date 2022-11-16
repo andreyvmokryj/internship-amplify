@@ -5,10 +5,9 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/error_codes.dart';
-import 'package:meta/meta.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
+import 'package:radency_internship_project_2/providers/amplify_auth_service.dart';
 import 'package:radency_internship_project_2/providers/biometric_credentials_service.dart';
-import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
 
 part 'email_login_event.dart';
 
@@ -16,10 +15,9 @@ part 'email_login_state.dart';
 
 class EmailLoginBloc extends Bloc<EmailLoginEvent, EmailLoginState> {
   EmailLoginBloc(this._authenticationService, this._biometricCredentialsService)
-      : assert(_authenticationService != null),
-        super(EmailLoginState());
+      : super(EmailLoginState());
 
-  final FirebaseAuthenticationService _authenticationService;
+  final AmplifyAuthenticationService _authenticationService;
   final BiometricCredentialsService _biometricCredentialsService;
 
   @override

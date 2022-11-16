@@ -9,6 +9,12 @@ PODS:
     - Flutter
     - SwiftFormat/CLI
     - SwiftLint (= 0.48.0)
+  - amplify_auth_cognito_ios (0.0.1):
+    - Amplify (= 1.28.2)
+    - amplify_core
+    - AmplifyPlugins/AWSCognitoAuthPlugin (= 1.28.2)
+    - Flutter
+    - ObjectMapper
   - amplify_core (0.0.1):
     - Flutter
     - SwiftFormat/CLI
@@ -250,6 +256,7 @@ PODS:
     - nanopb/encode (= 2.30909.0)
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
+  - ObjectMapper (4.2.0)
   - package_info_plus (0.4.5):
     - Flutter
   - path_provider_ios (0.0.1):
@@ -278,6 +285,7 @@ PODS:
 
 DEPENDENCIES:
   - amplify_api_ios (from `.symlinks/plugins/amplify_api_ios/ios`)
+  - amplify_auth_cognito_ios (from `.symlinks/plugins/amplify_auth_cognito_ios/ios`)
   - amplify_core (from `.symlinks/plugins/amplify_core/ios`)
   - amplify_datastore (from `.symlinks/plugins/amplify_datastore/ios`)
   - amplify_flutter_ios (from `.symlinks/plugins/amplify_flutter_ios/ios`)
@@ -338,6 +346,7 @@ SPEC REPOS:
     - GTMSessionFetcher
     - leveldb-library
     - nanopb
+    - ObjectMapper
     - PromisesObjC
     - SDWebImage
     - SQLite.swift
@@ -349,6 +358,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   amplify_api_ios:
     :path: ".symlinks/plugins/amplify_api_ios/ios"
+  amplify_auth_cognito_ios:
+    :path: ".symlinks/plugins/amplify_auth_cognito_ios/ios"
   amplify_core:
     :path: ".symlinks/plugins/amplify_core/ios"
   amplify_datastore:
@@ -405,6 +416,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Amplify: 5dfd8bdcd41f8a67d96ebd72e5ef1c5aab8500b5
   amplify_api_ios: e7dcf9758c6b6985f5e624d0f48fbfed4e1e1c8f
+  amplify_auth_cognito_ios: 5995925d2e821ab78dd445f047aff8aa525aadc9
   amplify_core: 0876b2fbbcec7619f5b58b20c59ecc0118f65a47
   amplify_datastore: 52417a5978a69db98e59e854b3a409d1624ffe2d
   amplify_flutter_ios: 8b85da543bdfdcb746c48a420771b8259dd9ba31
@@ -453,6 +465,7 @@ SPEC CHECKSUMS:
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   local_auth: 25938960984c3a7f6e3253e3f8d962fdd16852bd
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
+  ObjectMapper: 1eb41f610210777375fa806bf161dc39fb832b81
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
