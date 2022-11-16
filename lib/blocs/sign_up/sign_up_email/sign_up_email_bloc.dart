@@ -42,7 +42,7 @@ class SignUpEmailBloc extends Bloc<SignUpEmailEvent, SignUpEmailState> {
   }
 
   Stream<SignUpEmailState> _mapSignUpEmailConfirmToState(SignUpEmailConfirm event) async* {
-    await _authenticationService.confirmSignUp(email: email, code: event.code);
+    // await _authenticationService.confirmSignUp(email: email, code: event.code);
   }
 
   Stream<SignUpEmailState> _mapSignUpEmailSubmittedToState({

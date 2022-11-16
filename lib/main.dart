@@ -1,4 +1,5 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_api/amplify_api.dart';
@@ -41,14 +42,16 @@ void main() async {
       firebaseAuthenticationService: firebaseAuthenticationService);
   FirebaseFunctionsProvider firebaseFunctionsProvider = FirebaseFunctionsProvider();
 
-  runApp(App(
-    authenticationService: firebaseAuthenticationService,
-    amplifyAuthenticationService: amplifyAuthenticationService,
-    biometricCredentialsService: BiometricCredentialsService(),
-    budgetsRepository: BudgetsRepository(),
-    firebaseRealtimeDatabaseProvider: firebaseRealtimeDatabaseProvider,
-    transactionsRepository: transactionsRepository,
-    firebaseFunctionsProvider: firebaseFunctionsProvider,
+  runApp(Authenticator(
+    child: App(
+      authenticationService: firebaseAuthenticationService,
+      amplifyAuthenticationService: amplifyAuthenticationService,
+      biometricCredentialsService: BiometricCredentialsService(),
+      budgetsRepository: BudgetsRepository(),
+      firebaseRealtimeDatabaseProvider: firebaseRealtimeDatabaseProvider,
+      transactionsRepository: transactionsRepository,
+      firebaseFunctionsProvider: firebaseFunctionsProvider,
+    ),
   ));
 }
 

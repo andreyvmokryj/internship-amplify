@@ -1,8 +1,8 @@
+import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:radency_internship_project_2/blocs/accounts/account_bloc.dart';
-import 'package:radency_internship_project_2/blocs/authentication_amplify/authentication_bloc.dart';
 import 'package:radency_internship_project_2/blocs/export_csv/export_csv_bloc.dart';
 import 'package:radency_internship_project_2/blocs/forex/forex_bloc.dart';
 import 'package:radency_internship_project_2/blocs/image_picker/image_picker_bloc.dart';
@@ -96,11 +96,11 @@ class App extends StatelessWidget {
             BlocProvider(
               create: (context) => SettingsBloc(SettingsRepository())..add(InitialSettingsEvent()),
             ),
-            BlocProvider(
-              create: (context) => AuthenticationBloc(
-                authenticationService: amplifyAuthenticationService,
-              ),
-            ),
+            // BlocProvider(
+            //   create: (context) => AuthenticationBloc(
+            //     authenticationService: amplifyAuthenticationService,
+            //   ),
+            // ),
             BlocProvider(
               create: (context) => UserProfileBloc(
                 authenticationService: authenticationService,
@@ -263,34 +263,36 @@ class _AppViewState extends State<AppView> {
             Routes.emailVerificationResendPage: (context) => EmailVerificationResendScreen(),
             Routes.searchExpensesPage: (context) => SearchExpensesPage(),
           },
-          builder: (context, child) {
-            return BlocListener<AuthenticationBloc, AuthenticationState>(
-              listener: (context, state) {
-                switch (state.status) {
-                  case AuthenticationStatus.authenticated:
-                    print("_AppViewState.build: AuthenticationStatus.authenticated ${state.user.emailVerified}");
-                    if (state.user.emailVerified) {
-                      _navigator.pushNamedAndRemoveUntil(Routes.homePage, (route) => false);
-                    } else {
-                      _navigator.pushNamedAndRemoveUntil(Routes.emailVerificationResendPage, (route) => false);
-                    }
-                    break;
-                  case AuthenticationStatus.unauthenticated:
-                    bool onboardingCompleted = settingsState.onboardingCompleted ?? false;
-                    if (onboardingCompleted == true) {
-                      _navigator.pushNamedAndRemoveUntil(Routes.loginPage, (route) => false);
-                    } else {
-                      _navigator.pushNamedAndRemoveUntil(Routes.onboardingPage, (route) => false);
-                    }
-                    break;
-                  default:
-                    _navigator.pushNamedAndRemoveUntil(Routes.splashScreen, (route) => false);
-                    break;
-                }
-              },
-              child: child,
-            );
-          },
+          initialRoute: Routes.homePage,
+          // builder: (context, child) {
+          //   return BlocListener<AuthenticationBloc, AuthenticationState>(
+          //     listener: (context, state) {
+          //       switch (state.status) {
+          //         case AuthenticationStatus.authenticated:
+          //           print("_AppViewState.build: AuthenticationStatus.authenticated ${state.user.emailVerified}");
+          //           if (state.user.emailVerified) {
+          //             _navigator.pushNamedAndRemoveUntil(Routes.homePage, (route) => false);
+          //           } else {
+          //             _navigator.pushNamedAndRemoveUntil(Routes.emailVerificationResendPage, (route) => false);
+          //           }
+          //           break;
+          //         case AuthenticationStatus.unauthenticated:
+          //           bool onboardingCompleted = settingsState.onboardingCompleted ?? false;
+          //           if (onboardingCompleted == true) {
+          //             _navigator.pushNamedAndRemoveUntil(Routes.loginPage, (route) => false);
+          //           } else {
+          //             _navigator.pushNamedAndRemoveUntil(Routes.onboardingPage, (route) => false);
+          //           }
+          //           break;
+          //         default:
+          //           _navigator.pushNamedAndRemoveUntil(Routes.splashScreen, (route) => false);
+          //           break;
+          //       }
+          //     },
+          //     child: child,
+          //   );
+          // },
+          builder: Authenticator.builder(),
         );
       });
     });
