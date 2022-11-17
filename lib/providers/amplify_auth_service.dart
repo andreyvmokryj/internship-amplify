@@ -16,24 +16,23 @@ class SignUpWithPhoneNumberFailure implements Exception {
 class LogOutFailure implements Exception {}
 
 class AmplifyAuthenticationService {
-  // StreamSubscription<HubEvent> hubSubscription = Amplify.Hub.listen([HubChannel.Auth], (hubEvent) {
-  //   switch(hubEvent.eventName) {
-  //     case 'SIGNED_IN':
-  //       print('USER IS SIGNED IN');
-  //       break;
-  //     case 'SIGNED_OUT':
-  //       print('USER IS SIGNED OUT');
-  //       break;
-  //     case 'SESSION_EXPIRED':
-  //       print('SESSION HAS EXPIRED');
-  //       break;
-  //     case 'USER_DELETED':
-  //       print('USER HAS BEEN DELETED');
-  //       break;
-  //   }
+  // StreamSubscription<AuthHubEvent> authSubscription = Amplify.Hub.listen(HubChannel.Auth, (hubEvent) {
+    // switch(hubEvent) {
+    //   case 'SIGNED_IN':
+    //     print('USER IS SIGNED IN');
+    //     break;
+    //   case 'SIGNED_OUT':
+    //     print('USER IS SIGNED OUT');
+    //     break;
+    //   case 'SESSION_EXPIRED':
+    //     print('SESSION HAS EXPIRED');
+    //     break;
+    //   case 'USER_DELETED':
+    //     print('USER HAS BEEN DELETED');
+    //     break;
+    // }
+  //   // hubSubscription?.cancel();
   // });
-
-
 
   // Stream<UserEntity> get userFromAuthState {
   //   return FirebaseAuth.instance.authStateChanges().map((firebaseUser) {

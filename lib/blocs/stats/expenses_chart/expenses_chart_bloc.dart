@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
@@ -42,7 +43,7 @@ class ExpensesChartBloc extends Bloc<ExpensesChartEvent, ExpensesChartState> {
   List<AppTransaction> transactions = [];
 
   StreamSubscription? expensesChartTransactionsSubscription;
-  StreamSubscription<UserEntity>? _onUserChangedSubscription;
+  StreamSubscription<AuthHubEvent>? _onUserChangedSubscription;
 
   @override
   Future<void> close() {
@@ -86,16 +87,16 @@ class ExpensesChartBloc extends Bloc<ExpensesChartEvent, ExpensesChartState> {
       }
     });
 
-    // _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
-    //   if (user == UserEntity.empty) {
-    //     transactions.clear();
-    //     add(ExpensesChartDisplayRequested(
-    //         sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: transactions));
-    //   } else {
-    //     _observedDate = DateTime.now();
-    //     add(ExpensesChartFetchRequested(dateForFetch: _observedDate!));
-    //   }
-    // });
+    _onUserChangedSubscription = Amplify.Hub.listen(HubChannel.Auth, (hubEvent) {
+      if (hubEvent.payload == null) {
+        transactions.clear();
+        add(ExpensesChartDisplayRequested(
+            sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: transactions));
+      } else {
+        _observedDate = DateTime.now();
+        add(ExpensesChartFetchRequested(dateForFetch: _observedDate!));
+      }
+    });
 
     add(ExpensesChartFetchRequested(dateForFetch: _observedDate!));
   }

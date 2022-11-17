@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -34,7 +36,7 @@ class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, Transaction
   String locale = '';
 
   StreamSubscription? summaryTransactionsSubscription;
-  StreamSubscription<UserEntity>? _onUserChangedSubscription;
+  StreamSubscription<AuthHubEvent>? _onUserChangedSubscription;
 
   DateTime? _observedDate;
   String _sliderCurrentTimeIntervalString = '';
@@ -86,16 +88,16 @@ class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, Transaction
       }
     });
 
-    // _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
-    //   if (user == UserEntity.empty) {
-    //     transactions.clear();
-    //     add(TransactionSummaryDisplayRequested(
-    //         sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: transactions));
-    //   } else {
-    //     _observedDate = DateTime.now();
-    //     add(TransactionsSummaryFetchRequested(dateForFetch: _observedDate!));
-    //   }
-    // });
+    _onUserChangedSubscription = Amplify.Hub.listen(HubChannel.Auth, (hubEvent) {
+      if (hubEvent.payload == null) {
+        transactions.clear();
+        add(TransactionSummaryDisplayRequested(
+            sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: transactions));
+      } else {
+        _observedDate = DateTime.now();
+        add(TransactionsSummaryFetchRequested(dateForFetch: _observedDate!));
+      }
+    });
   }
 
   Stream<TransactionsSummaryState> _mapTransactionsSummaryLocaleChangedToState() async* {

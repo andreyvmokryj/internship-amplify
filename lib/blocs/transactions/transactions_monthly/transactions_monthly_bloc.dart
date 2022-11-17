@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
@@ -32,7 +34,7 @@ class TransactionsMonthlyBloc extends Bloc<TransactionsMonthlyEvent, Transaction
   List<AppTransaction> observedYearTransactions = [];
   List<MonthDetails> yearSummary = [];
 
-  StreamSubscription<UserEntity>? _onUserChangedSubscription;
+  StreamSubscription<AuthHubEvent>? _onUserChangedSubscription;
   StreamSubscription? monthlyTransactionsSubscription;
 
   @override
@@ -89,17 +91,17 @@ class TransactionsMonthlyBloc extends Bloc<TransactionsMonthlyEvent, Transaction
   }
 
   Stream<TransactionsMonthlyState> _mapTransactionsMonthlyInitializeToState() async* {
-    // _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
-    //   if (user == UserEntity.empty) {
-    //     observedYearTransactions.clear();
-    //     add(TransactionMonthlyDisplayRequested(
-    //         sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString,
-    //         yearTransactions: observedYearTransactions));
-    //   } else {
-    //     _observedDate = DateTime.now();
-    //     add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate!));
-    //   }
-    // });
+    _onUserChangedSubscription = Amplify.Hub.listen(HubChannel.Auth, (hubEvent) {
+      if (hubEvent.payload == null) {
+        observedYearTransactions.clear();
+        add(TransactionMonthlyDisplayRequested(
+            sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString,
+            yearTransactions: observedYearTransactions));
+      } else {
+        _observedDate = DateTime.now();
+        add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate!));
+      }
+    });
 
     _observedDate = DateTime.now();
     add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate!));

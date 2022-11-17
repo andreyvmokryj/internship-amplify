@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -44,7 +45,7 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
   // StreamSubscription<DatabaseEvent>? _onTransactionAddedSubscription;
   // StreamSubscription<DatabaseEvent>? _onTransactionChangedSubscription;
   // StreamSubscription<DatabaseEvent>? _onTransactionDeletedSubscription;
-  StreamSubscription<UserEntity>? _onUserChangedSubscription;
+  StreamSubscription<AuthHubEvent>? _onUserChangedSubscription;
 
   @override
   Future<void> close() {
@@ -83,19 +84,19 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
   Stream<TransactionsDailyState> _mapTransactionsDailyInitializeToState() async* {
     _observedDate = DateTime.now();
 
-    // _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
-    //   // _onTransactionChangedSubscription?.cancel();
-    //   // _onTransactionAddedSubscription?.cancel();
-    //   // _onTransactionDeletedSubscription?.cancel();
-    //
-    //   if (user == UserEntity.empty) {
-    //     dailyData.clear();
-    //     add(TransactionsDailyDisplayRequested(
-    //         sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: dailyData));
-    //   } else {
-    //     add(TransactionDailyUserChanged(id: user.id));
-    //   }
-    // });
+    _onUserChangedSubscription = Amplify.Hub.listen(HubChannel.Auth, (hubEvent) {
+      print("${hubEvent.payload?.userId}");
+      // _onTransactionChangedSubscription?.cancel();
+      // _onTransactionAddedSubscription?.cancel();
+      // _onTransactionDeletedSubscription?.cancel();
+        if (hubEvent.payload == null) {
+          dailyData.clear();
+          add(TransactionsDailyDisplayRequested(
+              sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: dailyData));
+        } else {
+          add(TransactionDailyUserChanged(id: hubEvent.payload!.userId));
+        }
+    });
 
     if (settingsBloc.state is LoadedSettingsState) {
       locale = settingsBloc.state.language;

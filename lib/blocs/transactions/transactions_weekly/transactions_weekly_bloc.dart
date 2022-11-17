@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
@@ -38,7 +40,7 @@ class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsW
   String _sliderCurrentTimeIntervalString = '';
 
   StreamSubscription? _weeklyTransactionsSubscription;
-  StreamSubscription<UserEntity>? _onUserChangedSubscription;
+  StreamSubscription<AuthHubEvent>? _onUserChangedSubscription;
 
   @override
   Future<void> close() {
@@ -99,17 +101,17 @@ class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsW
   }
 
   Stream<TransactionsWeeklyState> _mapTransactionsWeeklyInitializeToState() async* {
-    // _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
-    //   if (user == UserEntity.empty) {
-    //     observedMonthTransactions.clear();
-    //     add(TransactionWeeklyDisplayRequested(
-    //         sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString,
-    //         transactions: observedMonthTransactions));
-    //   } else {
-    //     _observedDate = DateTime.now();
-    //     add(TransactionsWeeklyFetchRequested(dateForFetch: _observedDate));
-    //   }
-    // });
+    _onUserChangedSubscription = Amplify.Hub.listen(HubChannel.Auth, (hubEvent) {
+      if (hubEvent.payload == null) {
+        observedMonthTransactions.clear();
+        add(TransactionWeeklyDisplayRequested(
+            sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString,
+            transactions: observedMonthTransactions));
+      } else {
+        _observedDate = DateTime.now();
+        add(TransactionsWeeklyFetchRequested(dateForFetch: _observedDate));
+      }
+    });
 
     _observedDate = DateTime.now();
     add(TransactionsWeeklyFetchRequested(dateForFetch: _observedDate));

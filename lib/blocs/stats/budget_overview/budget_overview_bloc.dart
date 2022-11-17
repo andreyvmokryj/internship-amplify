@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
@@ -52,7 +53,7 @@ class BudgetOverviewBloc extends Bloc<BudgetOverviewEvent, BudgetOverviewState> 
   MonthlyCategoryExpense? summary;
 
   StreamSubscription? budgetOverviewSubscription;
-  StreamSubscription<UserEntity>? _onUserChangedSubscription;
+  StreamSubscription<AuthHubEvent>? _onUserChangedSubscription;
   // StreamSubscription<DatabaseEvent>? _onTransactionAddedSubscription;
   // StreamSubscription<DatabaseEvent>? _onTransactionChangedSubscription;
   // StreamSubscription<DatabaseEvent>? _onTransactionDeletedSubscription;
@@ -106,24 +107,24 @@ class BudgetOverviewBloc extends Bloc<BudgetOverviewEvent, BudgetOverviewState> 
       }
     });
 
-    // _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
-    //   // _onTransactionChangedSubscription?.cancel();
-    //   // _onTransactionAddedSubscription?.cancel();
-    //   // _onTransactionDeletedSubscription?.cancel();
-    //
-    //   if (user == UserEntity.empty) {
-    //     transactions.clear();
-    //     monthlyCategoryExpenses.clear();
-    //     budgets.clear();
-    //
-    //     monthlyCategoryExpenses = _getMonthlyCategoriesExpenses(transactions);
-    //
-    //     add(BudgetOverviewDisplayRequested());
-    //   } else {
-    //     _observedDate = DateTime.now();
-    //     add(BudgetOverviewUserChanged(userId: user.id));
-    //   }
-    // });
+    _onUserChangedSubscription = Amplify.Hub.listen(HubChannel.Auth, (hubEvent) {
+      // _onTransactionChangedSubscription?.cancel();
+      // _onTransactionAddedSubscription?.cancel();
+      // _onTransactionDeletedSubscription?.cancel();
+
+      if (hubEvent.payload == null) {
+        transactions.clear();
+        monthlyCategoryExpenses.clear();
+        budgets.clear();
+
+        monthlyCategoryExpenses = _getMonthlyCategoriesExpenses(transactions);
+
+        add(BudgetOverviewDisplayRequested());
+      } else {
+        _observedDate = DateTime.now();
+        add(BudgetOverviewUserChanged(userId: hubEvent.payload!.userId));
+      }
+    });
 
     add(BudgetOverviewFetchRequested(dateForFetch: _observedDate!));
   }

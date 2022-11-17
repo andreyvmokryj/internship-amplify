@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
@@ -54,7 +55,7 @@ class TransactionsCalendarBloc extends Bloc<TransactionsCalendarEvent, Transacti
   // StreamSubscription<DatabaseEvent>? _onTransactionAddedSubscription;
   // StreamSubscription<DatabaseEvent>? _onTransactionChangedSubscription;
   // StreamSubscription<DatabaseEvent>? _onTransactionDeletedSubscription;
-  StreamSubscription<UserEntity>? _onUserChangedSubscription;
+  StreamSubscription<AuthHubEvent>? _onUserChangedSubscription;
 
   @override
   Stream<TransactionsCalendarState> mapEventToState(
@@ -96,24 +97,24 @@ class TransactionsCalendarBloc extends Bloc<TransactionsCalendarEvent, Transacti
     _observedDate = DateTime.now();
     add(TransactionsCalendarFetchRequested(dateForFetch: _observedDate!));
 
-    // _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
-    //   // _onTransactionChangedSubscription?.cancel();
-    //   // _onTransactionAddedSubscription?.cancel();
-    //   // _onTransactionDeletedSubscription?.cancel();
-    //
-    //   if (user == UserEntity.empty) {
-    //     calendarData.clear();
-    //     transactionsList.clear();
-    //     add(TransactionsCalendarDisplayRequested(
-    //       sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString,
-    //       daysData: calendarData,
-    //       incomeSummary: 0.0,
-    //       expensesSummary: 0.0,
-    //     ));
-    //   } else {
-    //     add(TransactionsCalendarUserChanged(id: user.id));
-    //   }
-    // });
+    _onUserChangedSubscription = Amplify.Hub.listen(HubChannel.Auth, (hubEvent) {
+      // _onTransactionChangedSubscription?.cancel();
+      // _onTransactionAddedSubscription?.cancel();
+      // _onTransactionDeletedSubscription?.cancel();
+
+      if (hubEvent.payload == null) {
+        calendarData.clear();
+        transactionsList.clear();
+        add(TransactionsCalendarDisplayRequested(
+          sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString,
+          daysData: calendarData,
+          incomeSummary: 0.0,
+          expensesSummary: 0.0,
+        ));
+      } else {
+        add(TransactionsCalendarUserChanged(id: hubEvent.payload!.userId));
+      }
+    });
 
     if (settingsBloc.state is LoadedSettingsState) {
       locale = settingsBloc.state.language;
