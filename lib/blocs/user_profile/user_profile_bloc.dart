@@ -11,16 +11,18 @@ part 'user_profile_event.dart';
 part 'user_profile_state.dart';
 
 class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
-  UserProfileBloc({
-    required FirebaseAuthenticationService authenticationService,
-  })  : _authenticationService = authenticationService,
-        super(UserProfileState()) {
-    _userSubscription = _authenticationService.userFromAnyChanges.listen(
-      (user) => add(UserProfileEntityChanged(userEntity: user)),
-    );
-  }
+  // UserProfileBloc({
+  //   required FirebaseAuthenticationService authenticationService,
+  // })  : //_authenticationService = authenticationService,
+  //       super(UserProfileState()) {
+  //   _userSubscription = _authenticationService.userFromAnyChanges.listen(
+  //     (user) => add(UserProfileEntityChanged(userEntity: user)),
+  //   );
+  // }
 
-  final FirebaseAuthenticationService _authenticationService;
+  UserProfileBloc() : super(UserProfileState());
+
+  // final FirebaseAuthenticationService _authenticationService;
   StreamSubscription<UserEntity>? _userSubscription;
 
   @override

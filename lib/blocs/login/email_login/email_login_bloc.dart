@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/error_codes.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
@@ -90,9 +89,9 @@ class EmailLoginBloc extends Bloc<EmailLoginEvent, EmailLoginState> {
         if (shouldPairWithBiometrics) {
           await _biometricCredentialsService.saveBiometricCredentials(email: email, password: password);
         }
-      } on FirebaseAuthException catch (exception) {
-        // TODO: localize FB-related errors
-        yield state.showMessage(message: exception.message ?? "");
+      // } on FirebaseAuthException catch (exception) {
+      //   // TODO: localize FB-related errors
+      //   yield state.showMessage(message: exception.message ?? "");
       } catch (e) {
         yield state.showMessage(message: e.toString());
       }

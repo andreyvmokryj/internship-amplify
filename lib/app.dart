@@ -63,20 +63,20 @@ import 'utils/styles.dart';
 class App extends StatelessWidget {
   const App({
     Key? key,
-    required this.authenticationService,
+    // required this.authenticationService,
     required this.amplifyAuthenticationService,
     required this.budgetsRepository,
     required this.biometricCredentialsService,
-    required this.firebaseRealtimeDatabaseProvider,
+    // required this.firebaseRealtimeDatabaseProvider,
     required this.transactionsRepository,
     required this.firebaseFunctionsProvider,
   })  : super(key: key);
 
   final AmplifyAuthenticationService amplifyAuthenticationService;
-  final FirebaseAuthenticationService authenticationService;
+  // final FirebaseAuthenticationService authenticationService;
   final BudgetsRepository budgetsRepository;
   final BiometricCredentialsService biometricCredentialsService;
-  final FirebaseRealtimeDatabaseProvider firebaseRealtimeDatabaseProvider;
+  // final FirebaseRealtimeDatabaseProvider firebaseRealtimeDatabaseProvider;
   final TransactionsRepository transactionsRepository;
   final FirebaseFunctionsProvider firebaseFunctionsProvider;
 
@@ -84,11 +84,11 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
         providers: [
-          RepositoryProvider.value(value: authenticationService),
+          // RepositoryProvider.value(value: authenticationService),
           RepositoryProvider.value(value: amplifyAuthenticationService),
           RepositoryProvider.value(value: biometricCredentialsService),
           RepositoryProvider.value(value: budgetsRepository),
-          RepositoryProvider.value(value: firebaseRealtimeDatabaseProvider),
+          // RepositoryProvider.value(value: firebaseRealtimeDatabaseProvider),
           RepositoryProvider.value(value: transactionsRepository),
         ],
         child: MultiBlocProvider(
@@ -103,7 +103,7 @@ class App extends StatelessWidget {
             // ),
             BlocProvider(
               create: (context) => UserProfileBloc(
-                authenticationService: authenticationService,
+                // authenticationService: authenticationService,
               ),
             ),
             BlocProvider(
@@ -130,18 +130,19 @@ class App extends StatelessWidget {
               create: (context) => TransactionsDailyBloc(
                 settingsBloc: BlocProvider.of<SettingsBloc>(context),
                 transactionsRepository: transactionsRepository,
-                firebaseAuthenticationService: authenticationService,
-                firebaseRealtimeDatabaseProvider: firebaseRealtimeDatabaseProvider,
+                // firebaseAuthenticationService: authenticationService,
+                // firebaseRealtimeDatabaseProvider: firebaseRealtimeDatabaseProvider,
               )..add(TransactionsDailyInitialize()),
             ),
             BlocProvider(
               create: (context) => TransactionsWeeklyBloc(
-                  firebaseAuthenticationService: authenticationService, transactionsRepository: transactionsRepository)
+                  // firebaseAuthenticationService: authenticationService,
+                  transactionsRepository: transactionsRepository)
                 ..add(TransactionsWeeklyInitialize()),
             ),
             BlocProvider(
               create: (context) => TransactionsMonthlyBloc(
-                firebaseAuthenticationService: authenticationService,
+                // firebaseAuthenticationService: authenticationService,
                 transactionsRepository: transactionsRepository,
               )..add(TransactionsMonthlyInitialize()),
             ),
@@ -149,21 +150,21 @@ class App extends StatelessWidget {
               create: (context) => TransactionsSummaryBloc(
                 settingsBloc: BlocProvider.of<SettingsBloc>(context),
                 transactionsRepository: transactionsRepository,
-                firebaseAuthenticationService: authenticationService,
+                // firebaseAuthenticationService: authenticationService,
               )..add(TransactionsSummaryInitialize()),
             ),
             BlocProvider(
               create: (context) => TransactionsCalendarBloc(
                 settingsBloc: BlocProvider.of<SettingsBloc>(context),
                 transactionsRepository: transactionsRepository,
-                firebaseAuthenticationService: authenticationService,
-                firebaseRealtimeDatabaseProvider: firebaseRealtimeDatabaseProvider,
+                // firebaseAuthenticationService: authenticationService,
+                // firebaseRealtimeDatabaseProvider: firebaseRealtimeDatabaseProvider,
               )..add(TransactionsCalendarInitialize()),
             ),
             BlocProvider(
               create: (context) => BudgetOverviewBloc(
-                firebaseRealtimeDatabaseProvider: firebaseRealtimeDatabaseProvider,
-                firebaseAuthenticationService: authenticationService,
+                // firebaseRealtimeDatabaseProvider: firebaseRealtimeDatabaseProvider,
+                // firebaseAuthenticationService: authenticationService,
                 settingsBloc: BlocProvider.of<SettingsBloc>(context),
                 budgetsRepository: budgetsRepository,
                 transactionsRepository: transactionsRepository,
@@ -181,7 +182,7 @@ class App extends StatelessWidget {
               create: (context) => ExpensesChartBloc(
                 settingsBloc: BlocProvider.of<SettingsBloc>(context),
                 transactionsRepository: transactionsRepository,
-                firebaseAuthenticationService: authenticationService,
+                // firebaseAuthenticationService: authenticationService,
               )..add(ExpensesChartInitialize()),
             ),
             BlocProvider<TransactionsSliderBloc>(

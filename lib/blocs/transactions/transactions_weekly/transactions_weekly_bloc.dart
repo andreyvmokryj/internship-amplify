@@ -16,11 +16,14 @@ part 'transactions_weekly_event.dart';
 part 'transactions_weekly_state.dart';
 
 class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsWeeklyState> {
-  TransactionsWeeklyBloc({required this.transactionsRepository, required this.firebaseAuthenticationService})
+  TransactionsWeeklyBloc({
+    required this.transactionsRepository,
+    // required this.firebaseAuthenticationService
+  })
       : super(TransactionsWeeklyInitial());
 
   final TransactionsRepository transactionsRepository;
-  final FirebaseAuthenticationService firebaseAuthenticationService;
+  // final FirebaseAuthenticationService firebaseAuthenticationService;
 
   /// In accordance with ISO 8601
   /// a week starts with Monday, which has the value 1.
@@ -94,17 +97,17 @@ class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsW
   }
 
   Stream<TransactionsWeeklyState> _mapTransactionsWeeklyInitializeToState() async* {
-    _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
-      if (user == UserEntity.empty) {
-        observedMonthTransactions.clear();
-        add(TransactionWeeklyDisplayRequested(
-            sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString,
-            transactions: observedMonthTransactions));
-      } else {
-        _observedDate = DateTime.now();
-        add(TransactionsWeeklyFetchRequested(dateForFetch: _observedDate));
-      }
-    });
+    // _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
+    //   if (user == UserEntity.empty) {
+    //     observedMonthTransactions.clear();
+    //     add(TransactionWeeklyDisplayRequested(
+    //         sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString,
+    //         transactions: observedMonthTransactions));
+    //   } else {
+    //     _observedDate = DateTime.now();
+    //     add(TransactionsWeeklyFetchRequested(dateForFetch: _observedDate));
+    //   }
+    // });
 
     _observedDate = DateTime.now();
     add(TransactionsWeeklyFetchRequested(dateForFetch: _observedDate));

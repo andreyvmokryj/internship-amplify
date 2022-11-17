@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/blocs/transactions/add_transaction/temp_values.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
@@ -27,13 +26,14 @@ class BudgetOverviewBloc extends Bloc<BudgetOverviewEvent, BudgetOverviewState> 
       {required this.settingsBloc,
       required this.budgetsRepository,
       required this.transactionsRepository,
-      required this.firebaseAuthenticationService,
-      required this.firebaseRealtimeDatabaseProvider})
+      // required this.firebaseAuthenticationService,
+      // required this.firebaseRealtimeDatabaseProvider
+      })
       : super(BudgetOverviewInitial());
 
   final TransactionsRepository transactionsRepository;
-  final FirebaseAuthenticationService firebaseAuthenticationService;
-  final FirebaseRealtimeDatabaseProvider firebaseRealtimeDatabaseProvider;
+  // final FirebaseAuthenticationService firebaseAuthenticationService;
+  // final FirebaseRealtimeDatabaseProvider firebaseRealtimeDatabaseProvider;
 
   SettingsBloc settingsBloc;
   StreamSubscription? settingsSubscription;
@@ -52,18 +52,18 @@ class BudgetOverviewBloc extends Bloc<BudgetOverviewEvent, BudgetOverviewState> 
 
   StreamSubscription? budgetOverviewSubscription;
   StreamSubscription<UserEntity>? _onUserChangedSubscription;
-  StreamSubscription<DatabaseEvent>? _onTransactionAddedSubscription;
-  StreamSubscription<DatabaseEvent>? _onTransactionChangedSubscription;
-  StreamSubscription<DatabaseEvent>? _onTransactionDeletedSubscription;
+  // StreamSubscription<DatabaseEvent>? _onTransactionAddedSubscription;
+  // StreamSubscription<DatabaseEvent>? _onTransactionChangedSubscription;
+  // StreamSubscription<DatabaseEvent>? _onTransactionDeletedSubscription;
 
   @override
   Future<void> close() {
     budgetOverviewSubscription?.cancel();
     _onUserChangedSubscription?.cancel();
     settingsSubscription?.cancel();
-    _onTransactionChangedSubscription?.cancel();
-    _onTransactionAddedSubscription?.cancel();
-    _onTransactionDeletedSubscription?.cancel();
+    // _onTransactionChangedSubscription?.cancel();
+    // _onTransactionAddedSubscription?.cancel();
+    // _onTransactionDeletedSubscription?.cancel();
 
     return super.close();
   }
@@ -105,24 +105,24 @@ class BudgetOverviewBloc extends Bloc<BudgetOverviewEvent, BudgetOverviewState> 
       }
     });
 
-    _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
-      _onTransactionChangedSubscription?.cancel();
-      _onTransactionAddedSubscription?.cancel();
-      _onTransactionDeletedSubscription?.cancel();
-
-      if (user == UserEntity.empty) {
-        transactions.clear();
-        monthlyCategoryExpenses.clear();
-        budgets.clear();
-
-        monthlyCategoryExpenses = _getMonthlyCategoriesExpenses(transactions);
-
-        add(BudgetOverviewDisplayRequested());
-      } else {
-        _observedDate = DateTime.now();
-        add(BudgetOverviewUserChanged(userId: user.id));
-      }
-    });
+    // _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
+    //   // _onTransactionChangedSubscription?.cancel();
+    //   // _onTransactionAddedSubscription?.cancel();
+    //   // _onTransactionDeletedSubscription?.cancel();
+    //
+    //   if (user == UserEntity.empty) {
+    //     transactions.clear();
+    //     monthlyCategoryExpenses.clear();
+    //     budgets.clear();
+    //
+    //     monthlyCategoryExpenses = _getMonthlyCategoriesExpenses(transactions);
+    //
+    //     add(BudgetOverviewDisplayRequested());
+    //   } else {
+    //     _observedDate = DateTime.now();
+    //     add(BudgetOverviewUserChanged(userId: user.id));
+    //   }
+    // });
 
     add(BudgetOverviewFetchRequested(dateForFetch: _observedDate!));
   }
@@ -143,10 +143,10 @@ class BudgetOverviewBloc extends Bloc<BudgetOverviewEvent, BudgetOverviewState> 
   Stream<BudgetOverviewState> _mapBudgetOverviewUserChangedToState(String id) async* {
     yield BudgetOverviewLoading(sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString);
 
-    FirebaseStreamsGroup streams = await firebaseRealtimeDatabaseProvider.transactionStreams(id);
-    _onTransactionAddedSubscription = streams.onChildAdded.listen(_onTransactionAdded);
-    _onTransactionChangedSubscription = streams.onChildChanged.listen(_onTransactionChanged);
-    _onTransactionDeletedSubscription = streams.onChildDeleted.listen(_onTransactionDeleted);
+    // FirebaseStreamsGroup streams = await firebaseRealtimeDatabaseProvider.transactionStreams(id);
+    // _onTransactionAddedSubscription = streams.onChildAdded.listen(_onTransactionAdded);
+    // _onTransactionChangedSubscription = streams.onChildChanged.listen(_onTransactionChanged);
+    // _onTransactionDeletedSubscription = streams.onChildDeleted.listen(_onTransactionDeleted);
 
     _observedDate = DateTime.now();
 
@@ -282,35 +282,35 @@ class BudgetOverviewBloc extends Bloc<BudgetOverviewEvent, BudgetOverviewState> 
     return list;
   }
 
-  _onTransactionAdded(DatabaseEvent event) async {
-    AppTransaction transaction = TransactionsHelper()
-        .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value as Map), key: event.snapshot.key!);
-
-    // TODO: refactor
-    if ((transaction.date.isAfter(DateHelper().getFirstDayOfMonth(_observedDate!)) ||
-            transaction.date == DateHelper().getFirstDayOfMonth(_observedDate!)) &&
-        transaction.date.isBefore(DateHelper().getLastDayOfMonth(_observedDate!))) {
-      transactions.add(transaction);
-      add(BudgetOverviewDisplayRequested());
-    }
-  }
-
-  _onTransactionChanged(DatabaseEvent event) async {
-    int oldTransactionIndex = transactions.indexWhere((transaction) => transaction.id == event.snapshot.key);
-    AppTransaction changedTransaction = TransactionsHelper()
-        .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value as Map), key: event.snapshot.key!);
-    if (oldTransactionIndex != -1) {
-      transactions[oldTransactionIndex] = changedTransaction;
-    }
-    add(BudgetOverviewDisplayRequested());
-  }
-
-  _onTransactionDeleted(DatabaseEvent event) async {
-    int index = transactions.indexWhere((transaction) => transaction.id == event.snapshot.key);
-    if (index != -1) {
-      transactions.removeAt(index);
-    }
-
-    add(BudgetOverviewDisplayRequested());
-  }
+  // _onTransactionAdded(DatabaseEvent event) async {
+  //   AppTransaction transaction = TransactionsHelper()
+  //       .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value as Map), key: event.snapshot.key!);
+  //
+  //   // TODO: refactor
+  //   if ((transaction.date.isAfter(DateHelper().getFirstDayOfMonth(_observedDate!)) ||
+  //           transaction.date == DateHelper().getFirstDayOfMonth(_observedDate!)) &&
+  //       transaction.date.isBefore(DateHelper().getLastDayOfMonth(_observedDate!))) {
+  //     transactions.add(transaction);
+  //     add(BudgetOverviewDisplayRequested());
+  //   }
+  // }
+  //
+  // _onTransactionChanged(DatabaseEvent event) async {
+  //   int oldTransactionIndex = transactions.indexWhere((transaction) => transaction.id == event.snapshot.key);
+  //   AppTransaction changedTransaction = TransactionsHelper()
+  //       .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value as Map), key: event.snapshot.key!);
+  //   if (oldTransactionIndex != -1) {
+  //     transactions[oldTransactionIndex] = changedTransaction;
+  //   }
+  //   add(BudgetOverviewDisplayRequested());
+  // }
+  //
+  // _onTransactionDeleted(DatabaseEvent event) async {
+  //   int index = transactions.indexWhere((transaction) => transaction.id == event.snapshot.key);
+  //   if (index != -1) {
+  //     transactions.removeAt(index);
+  //   }
+  //
+  //   add(BudgetOverviewDisplayRequested());
+  // }
 }

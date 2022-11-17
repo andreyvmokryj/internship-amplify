@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
 import 'package:radency_internship_project_2/providers/amplify_auth_service.dart';
 import 'package:radency_internship_project_2/providers/biometric_credentials_service.dart';
@@ -68,9 +67,9 @@ class SignUpEmailBloc extends Bloc<SignUpEmailEvent, SignUpEmailState> {
         if (biometricsPairingStatus) {
           await _biometricCredentialsService.saveBiometricCredentials(email: email, password: password);
         }
-      } on FirebaseAuthException catch (exception) {
-        // TODO: localize FB-related errors
-        yield state.showError(errorMessage: exception.message ?? "");
+      // } on FirebaseAuthException catch (exception) {
+      //   // TODO: localize FB-related errors
+      //   yield state.showError(errorMessage: exception.message ?? "");
       } catch (e) {
         yield state.showError(errorMessage: e.toString());
       }

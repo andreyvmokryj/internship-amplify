@@ -18,10 +18,10 @@ part 'transactions_monthly_state.dart';
 class TransactionsMonthlyBloc extends Bloc<TransactionsMonthlyEvent, TransactionsMonthlyState> {
   TransactionsMonthlyBloc({
     required this.transactionsRepository,
-    required this.firebaseAuthenticationService,
+    // required this.firebaseAuthenticationService,
   }) : super(TransactionsMonthlyInitial());
 
-  final FirebaseAuthenticationService firebaseAuthenticationService;
+  // final FirebaseAuthenticationService firebaseAuthenticationService;
   final TransactionsRepository transactionsRepository;
 
   DateTime? _observedDate;
@@ -87,17 +87,17 @@ class TransactionsMonthlyBloc extends Bloc<TransactionsMonthlyEvent, Transaction
   }
 
   Stream<TransactionsMonthlyState> _mapTransactionsMonthlyInitializeToState() async* {
-    _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
-      if (user == UserEntity.empty) {
-        observedYearTransactions.clear();
-        add(TransactionMonthlyDisplayRequested(
-            sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString,
-            yearTransactions: observedYearTransactions));
-      } else {
-        _observedDate = DateTime.now();
-        add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate!));
-      }
-    });
+    // _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
+    //   if (user == UserEntity.empty) {
+    //     observedYearTransactions.clear();
+    //     add(TransactionMonthlyDisplayRequested(
+    //         sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString,
+    //         yearTransactions: observedYearTransactions));
+    //   } else {
+    //     _observedDate = DateTime.now();
+    //     add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate!));
+    //   }
+    // });
 
     _observedDate = DateTime.now();
     add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate!));

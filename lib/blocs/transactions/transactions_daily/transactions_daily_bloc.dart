@@ -3,7 +3,6 @@ import 'dart:collection';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:meta/meta.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
@@ -22,13 +21,13 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
   TransactionsDailyBloc({
     required this.settingsBloc,
     required this.transactionsRepository,
-    required this.firebaseAuthenticationService,
-    required this.firebaseRealtimeDatabaseProvider,
+    // required this.firebaseAuthenticationService,
+    // required this.firebaseRealtimeDatabaseProvider,
   }) : super(TransactionsDailyInitial());
 
-  final FirebaseAuthenticationService firebaseAuthenticationService;
+  // final FirebaseAuthenticationService firebaseAuthenticationService;
   final TransactionsRepository transactionsRepository;
-  final FirebaseRealtimeDatabaseProvider firebaseRealtimeDatabaseProvider;
+  // final FirebaseRealtimeDatabaseProvider firebaseRealtimeDatabaseProvider;
 
   SettingsBloc settingsBloc;
   StreamSubscription? settingsSubscription;
@@ -41,18 +40,18 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
 
   StreamSubscription? dailyTransactionsSubscription;
 
-  StreamSubscription<DatabaseEvent>? _onTransactionAddedSubscription;
-  StreamSubscription<DatabaseEvent>? _onTransactionChangedSubscription;
-  StreamSubscription<DatabaseEvent>? _onTransactionDeletedSubscription;
+  // StreamSubscription<DatabaseEvent>? _onTransactionAddedSubscription;
+  // StreamSubscription<DatabaseEvent>? _onTransactionChangedSubscription;
+  // StreamSubscription<DatabaseEvent>? _onTransactionDeletedSubscription;
   StreamSubscription<UserEntity>? _onUserChangedSubscription;
 
   @override
   Future<void> close() {
     dailyTransactionsSubscription?.cancel();
     settingsSubscription?.cancel();
-    _onTransactionChangedSubscription?.cancel();
-    _onTransactionAddedSubscription?.cancel();
-    _onTransactionDeletedSubscription?.cancel();
+    // _onTransactionChangedSubscription?.cancel();
+    // _onTransactionAddedSubscription?.cancel();
+    // _onTransactionDeletedSubscription?.cancel();
     _onUserChangedSubscription?.cancel();
     return super.close();
   }
@@ -83,19 +82,19 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
   Stream<TransactionsDailyState> _mapTransactionsDailyInitializeToState() async* {
     _observedDate = DateTime.now();
 
-    _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
-      _onTransactionChangedSubscription?.cancel();
-      _onTransactionAddedSubscription?.cancel();
-      _onTransactionDeletedSubscription?.cancel();
-
-      if (user == UserEntity.empty) {
-        dailyData.clear();
-        add(TransactionsDailyDisplayRequested(
-            sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: dailyData));
-      } else {
-        add(TransactionDailyUserChanged(id: user.id));
-      }
-    });
+    // _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
+    //   // _onTransactionChangedSubscription?.cancel();
+    //   // _onTransactionAddedSubscription?.cancel();
+    //   // _onTransactionDeletedSubscription?.cancel();
+    //
+    //   if (user == UserEntity.empty) {
+    //     dailyData.clear();
+    //     add(TransactionsDailyDisplayRequested(
+    //         sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: dailyData));
+    //   } else {
+    //     add(TransactionDailyUserChanged(id: user.id));
+    //   }
+    // });
 
     if (settingsBloc.state is LoadedSettingsState) {
       locale = settingsBloc.state.language;
@@ -112,10 +111,10 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
   Stream<TransactionsDailyState> _mapTransactionDailyUserChangedToState(String id) async* {
     yield TransactionsDailyLoading(sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString);
 
-    FirebaseStreamsGroup streams = await firebaseRealtimeDatabaseProvider.transactionStreams(id);
-    _onTransactionAddedSubscription = streams.onChildAdded.listen(_onTransactionAdded);
-    _onTransactionChangedSubscription = streams.onChildChanged.listen(_onTransactionChanged);
-    _onTransactionDeletedSubscription = streams.onChildDeleted.listen(_onTransactionDeleted);
+    // FirebaseStreamsGroup streams = await firebaseRealtimeDatabaseProvider.transactionStreams(id);
+    // _onTransactionAddedSubscription = streams.onChildAdded.listen(_onTransactionAdded);
+    // _onTransactionChangedSubscription = streams.onChildChanged.listen(_onTransactionChanged);
+    // _onTransactionDeletedSubscription = streams.onChildDeleted.listen(_onTransactionDeleted);
 
     _observedDate = DateTime.now();
 
@@ -172,42 +171,42 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
     add(TransactionsDailyFetchRequested(dateForFetch: _observedDate!));
   }
 
-  _onTransactionAdded(DatabaseEvent event) async {
-    print('TransactionsBloc: snapshot ${event.snapshot}');
-    AppTransaction transaction = TransactionsHelper()
-        .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value as Map), key: event.snapshot.key!);
-
-    // TODO: split this into readable appearance..
-    if ((transaction.date.isAfter(DateHelper().getFirstDayOfMonth(_observedDate!)) ||
-            transaction.date == DateHelper().getFirstDayOfMonth(_observedDate!)) &&
-        transaction.date.isBefore(DateHelper().getLastDayOfMonth(_observedDate!)) &&
-        dailyData.indexWhere((element) => element.id == transaction.id) == -1) {
-      dailyData.add(transaction);
-      add(TransactionsDailyDisplayRequested(
-          sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: dailyData));
-    }
-  }
-
-  _onTransactionChanged(DatabaseEvent event) async {
-    int oldTransactionIndex = dailyData.indexWhere((transaction) => transaction.id == event.snapshot.key);
-    AppTransaction changedTransaction = TransactionsHelper()
-        .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value as Map), key: event.snapshot.key!);
-    if (oldTransactionIndex != -1) {
-      dailyData[oldTransactionIndex] = changedTransaction;
-    }
-    add(TransactionsDailyDisplayRequested(
-        sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: dailyData));
-  }
-
-  _onTransactionDeleted(DatabaseEvent event) async {
-    int index = dailyData.indexWhere((transaction) => transaction.id == event.snapshot.key);
-    if (index != -1) {
-      dailyData.removeAt(index);
-    }
-
-    add(TransactionsDailyDisplayRequested(
-        sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: dailyData));
-  }
+  // _onTransactionAdded(DatabaseEvent event) async {
+  //   print('TransactionsBloc: snapshot ${event.snapshot}');
+  //   AppTransaction transaction = TransactionsHelper()
+  //       .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value as Map), key: event.snapshot.key!);
+  //
+  //   // TODO: split this into readable appearance..
+  //   if ((transaction.date.isAfter(DateHelper().getFirstDayOfMonth(_observedDate!)) ||
+  //           transaction.date == DateHelper().getFirstDayOfMonth(_observedDate!)) &&
+  //       transaction.date.isBefore(DateHelper().getLastDayOfMonth(_observedDate!)) &&
+  //       dailyData.indexWhere((element) => element.id == transaction.id) == -1) {
+  //     dailyData.add(transaction);
+  //     add(TransactionsDailyDisplayRequested(
+  //         sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: dailyData));
+  //   }
+  // }
+  //
+  // _onTransactionChanged(DatabaseEvent event) async {
+  //   int oldTransactionIndex = dailyData.indexWhere((transaction) => transaction.id == event.snapshot.key);
+  //   AppTransaction changedTransaction = TransactionsHelper()
+  //       .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value as Map), key: event.snapshot.key!);
+  //   if (oldTransactionIndex != -1) {
+  //     dailyData[oldTransactionIndex] = changedTransaction;
+  //   }
+  //   add(TransactionsDailyDisplayRequested(
+  //       sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: dailyData));
+  // }
+  //
+  // _onTransactionDeleted(DatabaseEvent event) async {
+  //   int index = dailyData.indexWhere((transaction) => transaction.id == event.snapshot.key);
+  //   if (index != -1) {
+  //     dailyData.removeAt(index);
+  //   }
+  //
+  //   add(TransactionsDailyDisplayRequested(
+  //       sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: dailyData));
+  // }
 
   Map<int, List<AppTransaction>> sortTransactionsByDays(List<AppTransaction> list) {
     SplayTreeMap<int, List<AppTransaction>> map = SplayTreeMap();

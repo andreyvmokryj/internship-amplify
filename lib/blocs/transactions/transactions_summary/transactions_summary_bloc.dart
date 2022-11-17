@@ -20,12 +20,12 @@ part 'transactions_summary_state.dart';
 class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, TransactionsSummaryState> {
   TransactionsSummaryBloc({
     required this.settingsBloc,
-    required this.firebaseAuthenticationService,
+    // required this.firebaseAuthenticationService,
     required this.transactionsRepository,
   }) : super(TransactionsSummaryInitial());
 
   final TransactionsRepository transactionsRepository;
-  final FirebaseAuthenticationService firebaseAuthenticationService;
+  // final FirebaseAuthenticationService firebaseAuthenticationService;
   final SettingsBloc settingsBloc;
 
   StreamSubscription? settingsSubscription;
@@ -84,16 +84,16 @@ class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, Transaction
       }
     });
 
-    _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
-      if (user == UserEntity.empty) {
-        transactions.clear();
-        add(TransactionSummaryDisplayRequested(
-            sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: transactions));
-      } else {
-        _observedDate = DateTime.now();
-        add(TransactionsSummaryFetchRequested(dateForFetch: _observedDate!));
-      }
-    });
+    // _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
+    //   if (user == UserEntity.empty) {
+    //     transactions.clear();
+    //     add(TransactionSummaryDisplayRequested(
+    //         sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: transactions));
+    //   } else {
+    //     _observedDate = DateTime.now();
+    //     add(TransactionsSummaryFetchRequested(dateForFetch: _observedDate!));
+    //   }
+    // });
   }
 
   Stream<TransactionsSummaryState> _mapTransactionsSummaryLocaleChangedToState() async* {

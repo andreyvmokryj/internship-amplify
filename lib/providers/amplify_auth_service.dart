@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:radency_internship_project_2/local_models/user.dart';
 
 class SignUpFailure implements Exception {}

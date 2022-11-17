@@ -25,11 +25,11 @@ class ExpensesChartBloc extends Bloc<ExpensesChartEvent, ExpensesChartState> {
   ExpensesChartBloc({
     required this.settingsBloc,
     required this.transactionsRepository,
-    required this.firebaseAuthenticationService,
+    // required this.firebaseAuthenticationService,
   }) : super(ExpensesChartInitial());
 
   final TransactionsRepository transactionsRepository;
-  final FirebaseAuthenticationService firebaseAuthenticationService;
+  // final FirebaseAuthenticationService firebaseAuthenticationService;
 
   SettingsBloc settingsBloc;
   StreamSubscription? settingsSubscription;
@@ -85,16 +85,16 @@ class ExpensesChartBloc extends Bloc<ExpensesChartEvent, ExpensesChartState> {
       }
     });
 
-    _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
-      if (user == UserEntity.empty) {
-        transactions.clear();
-        add(ExpensesChartDisplayRequested(
-            sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: transactions));
-      } else {
-        _observedDate = DateTime.now();
-        add(ExpensesChartFetchRequested(dateForFetch: _observedDate!));
-      }
-    });
+    // _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
+    //   if (user == UserEntity.empty) {
+    //     transactions.clear();
+    //     add(ExpensesChartDisplayRequested(
+    //         sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: transactions));
+    //   } else {
+    //     _observedDate = DateTime.now();
+    //     add(ExpensesChartFetchRequested(dateForFetch: _observedDate!));
+    //   }
+    // });
 
     add(ExpensesChartFetchRequested(dateForFetch: _observedDate!));
   }
