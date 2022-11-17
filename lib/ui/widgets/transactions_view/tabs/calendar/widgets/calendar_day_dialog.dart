@@ -79,7 +79,7 @@ class _CalendarDayDialogState extends State<CalendarDayDialog> {
       case TransactionType.Income:
         return _transactionRow(
           children: [
-            _expandedContainer(child: Text((transaction as IncomeTransaction).category)),
+            _expandedContainer(child: Text(transaction.category!)),
             _expandedContainer(child: Text(transaction.accountOrigin)),
             _expandedContainer(
               child: Row(
@@ -102,7 +102,7 @@ class _CalendarDayDialogState extends State<CalendarDayDialog> {
       case TransactionType.Expense:
         return _transactionRow(
           children: [
-            _expandedContainer(child: Text((transaction as ExpenseTransaction).category)),
+            _expandedContainer(child: Text(transaction.category!)),
             _expandedContainer(child: Text(transaction.accountOrigin)),
             _expandedContainer(
               child: Row(
@@ -128,7 +128,7 @@ class _CalendarDayDialogState extends State<CalendarDayDialog> {
             _expandedContainer(child: Text(S.current.transfer)),
             _expandedContainer(
                 child: Text(
-                    '${transaction.accountOrigin} \u{2192} ${(transaction as TransferTransaction).accountDestination}')),
+                    '${transaction.accountOrigin} \u{2192} ${transaction.accountDestination}')),
             _expandedContainer(
               child: Text(
                 widget.currencySymbol + ' ' + transaction.amount.toStringAsFixed(2),

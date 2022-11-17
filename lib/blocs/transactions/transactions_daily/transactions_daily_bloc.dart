@@ -107,6 +107,10 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
         add(TransactionsDailyLocaleChanged());
       }
     });
+
+
+    add(TransactionsDailyDisplayRequested(
+        sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: dailyData));
   }
 
   Stream<TransactionsDailyState> _mapTransactionDailyUserChangedToState(String id) async* {

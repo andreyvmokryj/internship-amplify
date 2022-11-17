@@ -173,14 +173,14 @@ class DailyTransactionItem extends StatelessWidget {
 
     switch (transaction.transactionType) {
       case TransactionType.Income:
-        result = (transaction as IncomeTransaction).category;
+        result = transaction.category!;
         break;
       case TransactionType.Expense:
-        result = (transaction as ExpenseTransaction).category;
+        result = transaction.category!;
         break;
       case TransactionType.Transfer:
         result =
-            '${(transaction as TransferTransaction).accountOrigin} > ${(transaction as TransferTransaction).accountDestination}';
+            '${transaction.accountOrigin} > ${transaction.accountDestination}';
         break;
     }
 
