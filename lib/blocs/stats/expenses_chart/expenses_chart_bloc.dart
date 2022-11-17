@@ -8,8 +8,9 @@ import 'package:radency_internship_project_2/generated/l10n.dart';
 import 'package:radency_internship_project_2/local_models/chart_models/chart_category_details.dart';
 import 'package:radency_internship_project_2/local_models/chart_models/chart_section.dart';
 import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
-import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
 import 'package:radency_internship_project_2/local_models/user.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
+import 'package:radency_internship_project_2/models/ModelProvider.dart';
 import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
 import 'package:radency_internship_project_2/utils/colours.dart';
@@ -167,7 +168,7 @@ class ExpensesChartBloc extends Bloc<ExpensesChartEvent, ExpensesChartState> {
 
     // Splitting into categories
     transactions.forEach((transaction) {
-      if (transaction is ExpenseTransaction) {
+      if (transaction.transactionType == TransactionType.Expense) {
         int categoryIndex =
             categories.indexWhere((categoryExpenses) => categoryExpenses.categoryName == transaction.category);
 

@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
 
+
 part 'income_transaction.g.dart';
 
 @JsonSerializable()
@@ -16,7 +17,7 @@ class IncomeTransaction extends AppTransaction {
   String? subcurrency;
 
   IncomeTransaction({
-    this.id,
+    this.id ,
     required this.date,
     required this.accountOrigin,
     required this.category,

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
@@ -8,7 +9,11 @@ import 'package:uuid/uuid.dart';
 
 part 'expense_transaction.g.dart';
 
-enum ExpenseCreationType { IMPORT, AI, MANUAL }
+enum ExpenseCreationType {
+  IMPORT,
+  AI,
+  MANUAL
+}
 
 @JsonSerializable()
 class ExpenseTransaction extends AppTransaction {
@@ -51,6 +56,21 @@ class ExpenseTransaction extends AppTransaction {
     currency: currency,
     subcurrency: subcurrency,
   );
+
+  // ExpenseTransaction({
+  //   required this.date,
+  //   required this.accountOrigin,
+  //   required this.category,
+  //   required this.amount,
+  //   required this.note,
+  //   required this.currency,
+  //   required this.id,
+  //   //this.sharedContact,
+  //   this.subcurrency,
+  //   this.locationLatitude,
+  //   this.locationLongitude,
+  //   required this.creationType,
+  // });
 
   factory ExpenseTransaction.fromJson(Map<String, dynamic> json, String id) {
     return _$ExpenseTransactionFromJson(json)..id = id;

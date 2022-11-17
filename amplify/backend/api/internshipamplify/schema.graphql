@@ -9,7 +9,7 @@ type User @model @auth(rules: [{allow: public}]) {
 
 type AppTransaction @model @auth(rules: [{allow: public}]) {
   id: ID!
-  transactionType: String!
+  transactionType: TransactionType!
   date: AWSDateTime!
   accountOrigin: String!
   amount: Float!
@@ -17,10 +17,22 @@ type AppTransaction @model @auth(rules: [{allow: public}]) {
   currency: String!
   subcurrency: String
   category: String
-  creationType: String
+  creationType: ExpenseCreationType
   locationLatitude: Float
   locationLongitude: Float
   accountDestination: String
   fees: Float
   userID: ID! @index(name: "byUser")
+}
+
+enum TransactionType {
+  Expense
+  Income
+  Transfer
+}
+
+enum ExpenseCreationType {
+  IMPORT
+  AI
+  MANUAL
 }

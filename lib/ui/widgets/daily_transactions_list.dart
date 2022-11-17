@@ -6,8 +6,10 @@ import 'package:radency_internship_project_2/blocs/transactions/transactions_dai
 import 'package:radency_internship_project_2/generated/l10n.dart';
 import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/income_transaction.dart';
-import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
+// import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transfer_transaction.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
+import 'package:radency_internship_project_2/models/TransactionType.dart';
 import 'package:radency_internship_project_2/ui/shared_components/centered_text_container.dart';
 import 'package:radency_internship_project_2/ui/widgets/transactions_view/widgets/data_loading_widget.dart';
 import 'package:radency_internship_project_2/utils/strings.dart';
@@ -71,7 +73,7 @@ class _StickyExpensesDaily extends StatelessWidget {
 
     return SliverStickyHeader(
       header: DailyExpensesHeader(
-        dateTime: items[0].date,
+        dateTime: items[0].date.getDateTimeInUtc(),
         incomeTotal: totalIncome,
         outcomeTotal: totalOutcome,
       ),

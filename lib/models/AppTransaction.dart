@@ -19,6 +19,7 @@
 
 // ignore_for_file: public_member_api_docs, annotate_overrides, dead_code, dead_codepublic_member_api_docs, depend_on_referenced_packages, file_names, library_private_types_in_public_api, no_leading_underscores_for_library_prefixes, no_leading_underscores_for_local_identifiers, non_constant_identifier_names, null_check_on_nullable_type_parameter, prefer_adjacent_string_concatenation, prefer_const_constructors, prefer_if_null_operators, prefer_interpolation_to_compose_strings, slash_for_doc_comments, sort_child_properties_last, unnecessary_const, unnecessary_constructor_name, unnecessary_late, unnecessary_new, unnecessary_null_aware_assignments, unnecessary_nullable_for_final_variable_declarations, unnecessary_string_interpolations, use_build_context_synchronously
 
+import 'ModelProvider.dart';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:flutter/foundation.dart';
 
@@ -28,7 +29,7 @@ import 'package:flutter/foundation.dart';
 class AppTransaction extends Model {
   static const classType = const _AppTransactionModelType();
   final String id;
-  final String? _transactionType;
+  final TransactionType _transactionType;
   final TemporalDateTime? _date;
   final String? _accountOrigin;
   final double? _amount;
@@ -36,7 +37,7 @@ class AppTransaction extends Model {
   final String? _currency;
   final String? _subcurrency;
   final String? _category;
-  final String? _creationType;
+  final ExpenseCreationType? _creationType;
   final double? _locationLatitude;
   final double? _locationLongitude;
   final String? _accountDestination;
@@ -53,7 +54,7 @@ class AppTransaction extends Model {
     return id;
   }
   
-  String get transactionType {
+  TransactionType get transactionType {
     try {
       return _transactionType!;
     } catch(e) {
@@ -130,7 +131,7 @@ class AppTransaction extends Model {
     return _category;
   }
   
-  String? get creationType {
+  ExpenseCreationType? get creationType {
     return _creationType;
   }
   
@@ -173,7 +174,7 @@ class AppTransaction extends Model {
   
   const AppTransaction._internal({required this.id, required transactionType, required date, required accountOrigin, required amount, note, required currency, subcurrency, category, creationType, locationLatitude, locationLongitude, accountDestination, fees, required userID, createdAt, updatedAt}): _transactionType = transactionType, _date = date, _accountOrigin = accountOrigin, _amount = amount, _note = note, _currency = currency, _subcurrency = subcurrency, _category = category, _creationType = creationType, _locationLatitude = locationLatitude, _locationLongitude = locationLongitude, _accountDestination = accountDestination, _fees = fees, _userID = userID, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory AppTransaction({String? id, required String transactionType, required TemporalDateTime date, required String accountOrigin, required double amount, String? note, required String currency, String? subcurrency, String? category, String? creationType, double? locationLatitude, double? locationLongitude, String? accountDestination, double? fees, required String userID}) {
+  factory AppTransaction({String? id, required TransactionType transactionType, required TemporalDateTime date, required String accountOrigin, required double amount, String? note, required String currency, String? subcurrency, String? category, ExpenseCreationType? creationType, double? locationLatitude, double? locationLongitude, String? accountDestination, double? fees, String? userID}) {
     return AppTransaction._internal(
       id: id == null ? UUID.getUUID() : id,
       transactionType: transactionType,
@@ -226,7 +227,7 @@ class AppTransaction extends Model {
     
     buffer.write("AppTransaction {");
     buffer.write("id=" + "$id" + ", ");
-    buffer.write("transactionType=" + "$_transactionType" + ", ");
+    buffer.write("transactionType=" + (_transactionType != null ? enumToString(_transactionType)! : "null") + ", ");
     buffer.write("date=" + (_date != null ? _date!.format() : "null") + ", ");
     buffer.write("accountOrigin=" + "$_accountOrigin" + ", ");
     buffer.write("amount=" + (_amount != null ? _amount!.toString() : "null") + ", ");
@@ -234,7 +235,7 @@ class AppTransaction extends Model {
     buffer.write("currency=" + "$_currency" + ", ");
     buffer.write("subcurrency=" + "$_subcurrency" + ", ");
     buffer.write("category=" + "$_category" + ", ");
-    buffer.write("creationType=" + "$_creationType" + ", ");
+    buffer.write("creationType=" + (_creationType != null ? enumToString(_creationType)! : "null") + ", ");
     buffer.write("locationLatitude=" + (_locationLatitude != null ? _locationLatitude!.toString() : "null") + ", ");
     buffer.write("locationLongitude=" + (_locationLongitude != null ? _locationLongitude!.toString() : "null") + ", ");
     buffer.write("accountDestination=" + "$_accountDestination" + ", ");
@@ -247,7 +248,7 @@ class AppTransaction extends Model {
     return buffer.toString();
   }
   
-  AppTransaction copyWith({String? id, String? transactionType, TemporalDateTime? date, String? accountOrigin, double? amount, String? note, String? currency, String? subcurrency, String? category, String? creationType, double? locationLatitude, double? locationLongitude, String? accountDestination, double? fees, String? userID}) {
+  AppTransaction copyWith({String? id, TransactionType? transactionType, TemporalDateTime? date, String? accountOrigin, double? amount, String? note, String? currency, String? subcurrency, String? category, ExpenseCreationType? creationType, double? locationLatitude, double? locationLongitude, String? accountDestination, double? fees, String? userID}) {
     return AppTransaction._internal(
       id: id ?? this.id,
       transactionType: transactionType ?? this.transactionType,
@@ -268,7 +269,7 @@ class AppTransaction extends Model {
   
   AppTransaction.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
-      _transactionType = json['transactionType'],
+      _transactionType = enumFromString<TransactionType>(json['transactionType'], TransactionType.values)!,
       _date = json['date'] != null ? TemporalDateTime.fromString(json['date']) : null,
       _accountOrigin = json['accountOrigin'],
       _amount = (json['amount'] as num?)?.toDouble(),
@@ -276,7 +277,7 @@ class AppTransaction extends Model {
       _currency = json['currency'],
       _subcurrency = json['subcurrency'],
       _category = json['category'],
-      _creationType = json['creationType'],
+      _creationType = enumFromString<ExpenseCreationType>(json['creationType'], ExpenseCreationType.values),
       _locationLatitude = (json['locationLatitude'] as num?)?.toDouble(),
       _locationLongitude = (json['locationLongitude'] as num?)?.toDouble(),
       _accountDestination = json['accountDestination'],
@@ -286,7 +287,7 @@ class AppTransaction extends Model {
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'transactionType': _transactionType, 'date': _date?.format(), 'accountOrigin': _accountOrigin, 'amount': _amount, 'note': _note, 'currency': _currency, 'subcurrency': _subcurrency, 'category': _category, 'creationType': _creationType, 'locationLatitude': _locationLatitude, 'locationLongitude': _locationLongitude, 'accountDestination': _accountDestination, 'fees': _fees, 'userID': _userID, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'transactionType': enumToString(_transactionType), 'date': _date?.format(), 'accountOrigin': _accountOrigin, 'amount': _amount, 'note': _note, 'currency': _currency, 'subcurrency': _subcurrency, 'category': _category, 'creationType': enumToString(_creationType), 'locationLatitude': _locationLatitude, 'locationLongitude': _locationLongitude, 'accountDestination': _accountDestination, 'fees': _fees, 'userID': _userID, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
@@ -332,7 +333,7 @@ class AppTransaction extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: AppTransaction.TRANSACTIONTYPE,
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: ModelFieldType(ModelFieldTypeEnum.enumeration)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
@@ -380,7 +381,7 @@ class AppTransaction extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: AppTransaction.CREATIONTYPE,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: ModelFieldType(ModelFieldTypeEnum.enumeration)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(

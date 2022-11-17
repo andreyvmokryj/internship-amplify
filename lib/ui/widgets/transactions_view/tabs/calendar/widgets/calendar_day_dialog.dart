@@ -6,8 +6,9 @@ import 'package:radency_internship_project_2/generated/l10n.dart';
 import 'package:radency_internship_project_2/local_models/calendar_day.dart';
 import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/income_transaction.dart';
-import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transfer_transaction.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
+import 'package:radency_internship_project_2/models/TransactionType.dart';
 import 'package:radency_internship_project_2/ui/widgets/daily_transactions_list.dart';
 import 'package:radency_internship_project_2/utils/text_styles.dart';
 

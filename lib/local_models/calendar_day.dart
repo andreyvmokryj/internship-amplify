@@ -1,4 +1,4 @@
-import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
 
 class CalendarDay {
   DateTime dateTime;

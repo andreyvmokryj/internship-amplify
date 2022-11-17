@@ -4,9 +4,11 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/income_transaction.dart';
-import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
+// import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/week_details.dart';
 import 'package:radency_internship_project_2/local_models/user.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
+import 'package:radency_internship_project_2/models/TransactionType.dart';
 import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
 import 'package:radency_internship_project_2/utils/date_helper.dart';
@@ -150,12 +152,12 @@ class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsW
     }
 
     data.forEach((transaction) {
-      int transactionWeekInCurrentSet = transaction.date.difference(firstDay).inDays ~/ 7;
+      int transactionWeekInCurrentSet = transaction.date.getDateTimeInUtc().difference(firstDay).inDays ~/ 7;
 
-      if (transaction is ExpenseTransaction) {
+      if (transaction.transactionType == TransactionType.Expense) {
         list.where((weekSummary) => weekSummary.weekNumberInSet == transactionWeekInCurrentSet).first.expenses +=
             transaction.amount;
-      } else if (transaction is IncomeTransaction) {
+      } else if (transaction.transactionType == TransactionType.Income) {
         list.where((weekSummary) => weekSummary.weekNumberInSet == transactionWeekInCurrentSet).first.income +=
             transaction.amount;
       }

@@ -8,9 +8,10 @@ import 'package:radency_internship_project_2/generated/l10n.dart';
 import 'package:radency_internship_project_2/local_models/budget/category_budget.dart';
 import 'package:radency_internship_project_2/local_models/budget/monthly_category_expense.dart';
 import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
-import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transactions_helper.dart';
 import 'package:radency_internship_project_2/local_models/user.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
+import 'package:radency_internship_project_2/models/ModelProvider.dart';
 import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
 import 'package:radency_internship_project_2/providers/firebase_realtime_database_provider.dart';
 import 'package:radency_internship_project_2/repositories/budgets_repository.dart';
@@ -260,7 +261,7 @@ class BudgetOverviewBloc extends Bloc<BudgetOverviewEvent, BudgetOverviewState> 
     });
 
     transactions.forEach((transaction) {
-      if (transaction is ExpenseTransaction) {
+      if (transaction.transactionType == TransactionType.Expense) {
         int categoryIndex = list.indexWhere((categoryExpenses) => categoryExpenses.category == transaction.category);
 
         // TODO: check for category id instead of name when (if) implemented

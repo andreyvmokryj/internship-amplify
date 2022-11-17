@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
-import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
 import 'package:bloc/bloc.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
 import 'package:radency_internship_project_2/utils/mocked_expenses.dart';
 
 part 'search_transactions_event.dart';

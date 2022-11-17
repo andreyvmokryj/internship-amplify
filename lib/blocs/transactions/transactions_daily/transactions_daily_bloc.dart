@@ -5,9 +5,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
-import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
+// import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transactions_helper.dart';
 import 'package:radency_internship_project_2/local_models/user.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
 import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
 import 'package:radency_internship_project_2/providers/firebase_realtime_database_provider.dart';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
@@ -212,10 +213,10 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
     SplayTreeMap<int, List<AppTransaction>> map = SplayTreeMap();
 
     list.forEach((element) {
-      if (!map.containsKey(element.date.day)) {
-        map[element.date.day] = [element];
+      if (!map.containsKey(element.date.getDateTimeInUtc().day)) {
+        map[element.date.getDateTimeInUtc().day] = [element];
       } else {
-        map[element.date.day]!.add(element);
+        map[element.date.getDateTimeInUtc().day]!.add(element);
       }
     });
 

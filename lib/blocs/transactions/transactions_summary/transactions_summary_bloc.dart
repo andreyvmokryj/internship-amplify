@@ -7,8 +7,10 @@ import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/income_transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/summary_details.dart';
-import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
+// import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
 import 'package:radency_internship_project_2/local_models/user.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
+import 'package:radency_internship_project_2/models/TransactionType.dart';
 import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
 import 'package:radency_internship_project_2/utils/date_helper.dart';
@@ -150,20 +152,20 @@ class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, Transaction
     }
 
     transactions.forEach((transaction) {
-      if (transaction is ExpenseTransaction) {
+      if (transaction.transactionType == TransactionType.Expense) {
         bool categoryExists = summaryDetails.accountsExpensesDetails.containsKey(transaction.category);
 
         if (!categoryExists) {
-          summaryDetails.accountsExpensesDetails[transaction.category] = 0.0;
+          summaryDetails.accountsExpensesDetails[transaction.category!] = 0.0;
         }
 
-        summaryDetails.accountsExpensesDetails[transaction.category] =
+        summaryDetails.accountsExpensesDetails[transaction.category!] =
             summaryDetails.accountsExpensesDetails[transaction.category] ?? 0 + transaction.amount;
 
         summaryDetails.expenses += transaction.amount;
       }
 
-      if (transaction is IncomeTransaction) {
+      if (transaction.transactionType == TransactionType.Income) {
         summaryDetails.income += transaction.amount;
       }
     });

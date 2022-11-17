@@ -25,7 +25,7 @@ class TransactionsRepository extends IRepository<AppTransaction> {
     //   Map<String, dynamic> transactionMap = TransactionsHelper().convertTransactionToJson(transaction: transaction);
     //   await reference.push().set(transactionMap);
     // });
-    await Amplify.DataStore.save(transaction);
+    await Amplify.DataStore.save(transaction.copyWith(userID: uid));
   }
 
   @override
@@ -80,6 +80,8 @@ class TransactionsRepository extends IRepository<AppTransaction> {
     List<AppTransaction> list = [];
 
     String uid = await amplifyAuthenticationService.getUserID();
+    TemporalDateTime _start = TemporalDateTime(start);
+    TemporalDateTime _end = TemporalDateTime(end);
     // DatabaseReference reference = await firebaseRealtimeDatabaseProvider.transactionsReference(uid);
     //
     // DataSnapshot snapshot =
@@ -97,7 +99,7 @@ class TransactionsRepository extends IRepository<AppTransaction> {
     final snapshot = await Amplify.DataStore.query(
         AppTransaction.classType,
         where: AppTransaction.USERID.eq(uid)
-            .and(AppTransaction.DATE.between(start, end))
+            .and(AppTransaction.DATE.between(_start, _end))
     );
 
     return snapshot;

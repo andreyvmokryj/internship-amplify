@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +13,9 @@ import 'package:radency_internship_project_2/blocs/transactions/add_transaction/
 import 'package:radency_internship_project_2/blocs/transactions/add_transaction/transaction_location_map/transaction_location_map_bloc.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
 import 'package:radency_internship_project_2/local_models/location.dart';
-import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
+import 'package:radency_internship_project_2/models/ExpenseCreationType.dart';
+import 'package:radency_internship_project_2/models/ModelProvider.dart';
 import 'package:radency_internship_project_2/ui/shared_components/modals/amount/amount_currency_prefix.dart';
 import 'package:radency_internship_project_2/ui/shared_components/elevated_buttons/colored_elevated_button.dart';
 import 'package:radency_internship_project_2/ui/shared_components/field_title.dart';
@@ -428,17 +431,32 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
             if (_validateForms()) {
               BlocProvider.of<AddTransactionBloc>(context).add(AddTransaction(
                   isAddingCompleted: true,
-                  transaction: ExpenseTransaction(
+                  // transaction: ExpenseTransaction(
+                  //     currency: state.currency,
+                  //     note: _noteValue ?? "",
+                  //     accountOrigin: _accountValue ?? "",
+                  //     date: _selectedDateTime,
+                  //     category: _categoryValue ?? "",
+                  //     amount: _amountValue ?? 0,
+                  //     //sharedContact: _sharedContact,
+                  //     locationLatitude: _locationValue?.latitude,
+                  //     locationLongitude: _locationValue?.longitude,
+                  //     creationType: ExpenseCreationType.MANUAL
+                  // )
+                  transaction: AppTransaction(
+                      transactionType: TransactionType.Expense,
                       currency: state.currency,
                       note: _noteValue ?? "",
                       accountOrigin: _accountValue ?? "",
-                      date: _selectedDateTime,
+                      date: TemporalDateTime(_selectedDateTime),
                       category: _categoryValue ?? "",
                       amount: _amountValue ?? 0,
                       //sharedContact: _sharedContact,
                       locationLatitude: _locationValue?.latitude,
                       locationLongitude: _locationValue?.longitude,
-                      creationType: ExpenseCreationType.MANUAL)));
+                      creationType: ExpenseCreationType.MANUAL
+                  )
+              ));
             }
           });
     });
@@ -456,10 +474,11 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
             if (_validateForms()) {
               BlocProvider.of<AddTransactionBloc>(context).add(AddTransaction(
                   isAddingCompleted: false,
-                  transaction: ExpenseTransaction(
+                  transaction: AppTransaction(
+                    transactionType: TransactionType.Expense,
                     note: _noteValue ?? "",
                     accountOrigin: _accountValue ?? "",
-                    date: _selectedDateTime,
+                    date: TemporalDateTime(_selectedDateTime),
                     category: _categoryValue ?? "",
                     amount: _amountValue ?? 0,
                     //sharedContact: _sharedContact,

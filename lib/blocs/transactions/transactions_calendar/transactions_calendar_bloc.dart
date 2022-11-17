@@ -6,10 +6,12 @@ import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/local_models/calendar_day.dart';
 import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/income_transaction.dart';
-import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
+// import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transactions_helper.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transfer_transaction.dart';
 import 'package:radency_internship_project_2/local_models/user.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
+import 'package:radency_internship_project_2/models/ModelProvider.dart';
 import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
 import 'package:radency_internship_project_2/utils/date_helper.dart';
@@ -269,16 +271,16 @@ class TransactionsCalendarBloc extends Bloc<TransactionsCalendarEvent, Transacti
 
       if (observedDay.month == currentMonth) {
         transactions.forEach((element) {
-          if (element.date.month == observedDay.month && element.date.day == observedDay.day) {
+          if (element.date.getDateTimeInUtc().month == observedDay.month && element.date.getDateTimeInUtc().day == observedDay.day) {
             dayTransactions.add(element);
 
-            if (element is ExpenseTransaction) {
+            if (element.transactionType == TransactionType.Expense) {
               expensesAmount = expensesAmount + element.amount;
               expensesSummary = expensesSummary + element.amount;
-            } else if (element is IncomeTransaction) {
+            } else if (element.transactionType == TransactionType.Income) {
               incomeAmount = incomeAmount + element.amount;
               incomeSummary = incomeSummary + element.amount;
-            } else if (element is TransferTransaction) {
+            } else if (element.transactionType == TransactionType.Transfer) {
               transferAmount = transferAmount + element.amount;
             }
           }

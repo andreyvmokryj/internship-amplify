@@ -10,8 +10,8 @@ import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/blocs/settings/styles/styles_bloc.dart';
-import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
-import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
+import 'package:radency_internship_project_2/models/ModelProvider.dart';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
 import 'package:radency_internship_project_2/utils/date_helper.dart';
 import 'package:radency_internship_project_2/utils/geolocator_utils.dart';
@@ -39,7 +39,7 @@ class ExpensesMapBloc extends Bloc<ExpensesMapEvent, ExpensesMapState> {
   DateTime? _observedDate;
   String _sliderCurrentTimeIntervalString = '';
   StreamSubscription? expenseMapTimeIntervalSubscription;
-  ClusterManager<ExpenseTransaction>? _manager;
+  ClusterManager<AppTransaction>? _manager;
 
   @override
   Future<void> close() {
@@ -99,7 +99,7 @@ class ExpensesMapBloc extends Bloc<ExpensesMapEvent, ExpensesMapState> {
       }
     });
 
-    _manager = ClusterManager<ExpenseTransaction>(
+    _manager = ClusterManager<AppTransaction>(
       [ClusterItem(LatLng(37.42796133580664, -122.085749655962))],
       _updateMarkers,
       markerBuilder: _markerBuilder,
@@ -131,10 +131,10 @@ class ExpensesMapBloc extends Bloc<ExpensesMapEvent, ExpensesMapState> {
   }
 
   Stream<ExpensesMapState> _mapTransactionDailyDisplayRequestedToState(List<AppTransaction> transactions) async* {
-    List<ClusterItem<ExpenseTransaction>> list = [];
+    List<ClusterItem<AppTransaction>> list = [];
 
     transactions.forEach((transaction) {
-      if (transaction is ExpenseTransaction) {
+      if (transaction.transactionType == TransactionType.Expense) {
         if (transaction.locationLatitude != null && transaction.locationLongitude != null) {
           list.add(ClusterItem(LatLng(transaction.locationLatitude!, transaction.locationLongitude!), item: transaction));
         }
@@ -171,7 +171,7 @@ class ExpensesMapBloc extends Bloc<ExpensesMapEvent, ExpensesMapState> {
     add(ExpensesMapFetchRequested(dateForFetch: _observedDate!));
   }
 
-  Future<Marker> Function(Cluster<ExpenseTransaction>) get _markerBuilder => (cluster) async {
+  Future<Marker> Function(Cluster<AppTransaction>) get _markerBuilder => (cluster) async {
         return Marker(
           markerId: MarkerId(cluster.getId()),
           position: cluster.location,
@@ -244,11 +244,11 @@ class ExpensesMapBloc extends Bloc<ExpensesMapEvent, ExpensesMapState> {
     add(ExpensesMapMarkersUpdated(markers: markers));
   }
 
-  double _getExpensesClusterSum(Cluster<ExpenseTransaction> cluster) {
+  double _getExpensesClusterSum(Cluster<AppTransaction> cluster) {
     double sum = 0;
 
     cluster.items.forEach((element) {
-      if (element is ExpenseTransaction) sum += element.amount;
+      if (element != null && element.transactionType == TransactionType.Expense) sum += element.amount;
     });
 
     return sum;

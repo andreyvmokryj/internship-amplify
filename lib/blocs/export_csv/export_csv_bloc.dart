@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:csv/csv.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
 import 'package:share/share.dart';
 import 'dart:core';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
-import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transactions_helper.dart';
 
 part 'export_csv_event.dart';
@@ -30,8 +30,8 @@ class CsvExportBloc extends Bloc<CsvExportEvent, CsvExportState> {
     List<AppTransaction> data = await transactionsRepository.getAllData();
     List<List<String>> list = [];
     data.forEach((transaction) {
-      List<String> convertedTransaction = TransactionsHelper().toStringInList(transaction);
-      list.add(convertedTransaction);
+      // List<String> convertedTransaction = TransactionsHelper().toStringInList(transaction);
+      // list.add(convertedTransaction);
     });
     String filePath = await getCsvFilePath();
     String csv = createCsvString(list);

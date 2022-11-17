@@ -21,9 +21,9 @@ class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
 
     if (image != null) {
       print("ImagePickerBloc.getImageFromCamera: photo processed");
-      impostorTransactions.forEach((element) {
-        transactionsRepository.add(element);
-      });
+      // impostorTransactions.forEach((element) {
+      //   transactionsRepository.add(element);
+      // });
       return LoadedImage(File(image.path));
     } else {
       return LoadedImage(null);

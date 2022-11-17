@@ -5,8 +5,10 @@ import 'package:equatable/equatable.dart';
 import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/income_transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/month_details.dart';
-import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
+// import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
 import 'package:radency_internship_project_2/local_models/user.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
+import 'package:radency_internship_project_2/models/TransactionType.dart';
 import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
 import 'package:radency_internship_project_2/utils/date_helper.dart';
@@ -125,11 +127,11 @@ class TransactionsMonthlyBloc extends Bloc<TransactionsMonthlyEvent, Transaction
     }
 
     data.forEach((transaction) {
-      if (transaction is ExpenseTransaction) {
-        list.where((monthSummary) => monthSummary.monthNumber == transaction.date.month).first.expenses +=
+      if (transaction.transactionType == TransactionType.Expense) {
+        list.where((monthSummary) => monthSummary.monthNumber == transaction.date.getDateTimeInUtc().month).first.expenses +=
             transaction.amount;
-      } else if (transaction is IncomeTransaction) {
-        list.where((monthSummary) => monthSummary.monthNumber == transaction.date.month).first.income +=
+      } else if (transaction.transactionType == TransactionType.Income) {
+        list.where((monthSummary) => monthSummary.monthNumber == transaction.date.getDateTimeInUtc().month).first.income +=
             transaction.amount;
       }
     });

@@ -1,3 +1,4 @@
+import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,6 +6,8 @@ import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/blocs/transactions/add_transaction/add_transaction_bloc.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transfer_transaction.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
+import 'package:radency_internship_project_2/models/ModelProvider.dart';
 import 'package:radency_internship_project_2/ui/shared_components/modals/amount/amount_currency_prefix.dart';
 import 'package:radency_internship_project_2/ui/shared_components/elevated_buttons/colored_elevated_button.dart';
 import 'package:radency_internship_project_2/ui/shared_components/field_title.dart';
@@ -397,12 +400,13 @@ class _AddTransferFormState extends State<AddTransferForm> {
             if (_validateForms()) {
               BlocProvider.of<AddTransactionBloc>(context).add(AddTransaction(
                   isAddingCompleted: true,
-                  transaction: TransferTransaction(
+                  transaction: AppTransaction(
+                      transactionType: TransactionType.Transfer,
                       accountOrigin: _fromValue ?? "",
                       accountDestination: _toValue ?? "",
                       note: _noteValue ?? "",
                       fees: _feesValue ?? 0,
-                      date: _selectedDateTime,
+                      date: TemporalDateTime(_selectedDateTime),
                       amount: _amountValue ?? 0,
                       currency: state.currency)));
             }
@@ -422,10 +426,11 @@ class _AddTransferFormState extends State<AddTransferForm> {
             if (_validateForms()) {
               BlocProvider.of<AddTransactionBloc>(context).add(AddTransaction(
                   isAddingCompleted: false,
-                  transaction: TransferTransaction(
+                  transaction: AppTransaction(
+                      transactionType: TransactionType.Transfer,
                       note: _noteValue ?? "",
                       accountOrigin: _fromValue ?? "",
-                      date: _selectedDateTime,
+                      date: TemporalDateTime(_selectedDateTime),
                       accountDestination: _toValue ?? "",
                       amount: _amountValue ?? 0,
                       fees: _feesValue ?? 0,
