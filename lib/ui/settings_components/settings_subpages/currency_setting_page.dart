@@ -5,7 +5,6 @@ import 'package:radency_internship_project_2/ui/shared_components/design_scaffol
 
 import '../../../blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
-import '../../../temp_data/currencies.dart';
 
 class CurrencySettingPage extends StatefulWidget {
   CurrensyPageState createState() => CurrensyPageState();

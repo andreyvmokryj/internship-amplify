@@ -4,16 +4,10 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
-import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
-import 'package:radency_internship_project_2/local_models/transactions/income_transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/summary_details.dart';
-// import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
-import 'package:radency_internship_project_2/local_models/user.dart';
 import 'package:radency_internship_project_2/models/AppTransaction.dart';
 import 'package:radency_internship_project_2/models/TransactionType.dart';
-import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
 import 'package:radency_internship_project_2/utils/date_helper.dart';
 
@@ -24,12 +18,10 @@ part 'transactions_summary_state.dart';
 class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, TransactionsSummaryState> {
   TransactionsSummaryBloc({
     required this.settingsBloc,
-    // required this.firebaseAuthenticationService,
     required this.transactionsRepository,
   }) : super(TransactionsSummaryInitial());
 
   final TransactionsRepository transactionsRepository;
-  // final FirebaseAuthenticationService firebaseAuthenticationService;
   final SettingsBloc settingsBloc;
 
   StreamSubscription? settingsSubscription;
@@ -75,7 +67,6 @@ class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, Transaction
 
   Stream<TransactionsSummaryState> _mapTransactionsSummaryInitializeToState() async* {
     _observedDate = DateTime.now();
-    // add(TransactionsSummaryFetchRequested(dateForFetch: _observedDate!));
 
     if (settingsBloc.state is LoadedSettingsState) locale = settingsBloc.state.language;
     settingsBloc.stream.listen((newSettingsState) {
@@ -122,7 +113,6 @@ class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, Transaction
         .getTransactionsByTimePeriod(
             start: DateHelper().getFirstDayOfMonth(dateForFetch),
             end: DateHelper().getLastDayOfMonth(dateForFetch)))
-        // .asStream()
         .listen((event) {
       transactions = event.items;
       add(TransactionSummaryDisplayRequested(

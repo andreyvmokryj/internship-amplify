@@ -4,10 +4,6 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/blocs/transactions/transactions_daily/transactions_daily_bloc.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
-import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
-import 'package:radency_internship_project_2/local_models/transactions/income_transaction.dart';
-// import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
-import 'package:radency_internship_project_2/local_models/transactions/transfer_transaction.dart';
 import 'package:radency_internship_project_2/models/AppTransaction.dart';
 import 'package:radency_internship_project_2/models/TransactionType.dart';
 import 'package:radency_internship_project_2/ui/shared_components/centered_text_container.dart';
@@ -81,8 +77,8 @@ class _StickyExpensesDaily extends StatelessWidget {
         delegate: SliverChildBuilderDelegate(
           (context, i) => Dismissible(
             onDismissed: (direction) =>
-                context.read<TransactionsDailyBloc>().add(TransactionDailyDelete(transactionId: items[i].id!)),
-            key: Key(items[i].id!),
+                context.read<TransactionsDailyBloc>().add(TransactionDailyDelete(transactionId: items[i].id)),
+            key: Key(items[i].id),
             child: ListTile(
               title: DailyTransactionItem(transaction: items[i]),
             ),

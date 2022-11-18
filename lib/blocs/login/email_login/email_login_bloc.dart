@@ -12,6 +12,7 @@ part 'email_login_event.dart';
 
 part 'email_login_state.dart';
 
+// Discontinued
 class EmailLoginBloc extends Bloc<EmailLoginEvent, EmailLoginState> {
   EmailLoginBloc(this._authenticationService, this._biometricCredentialsService)
       : super(EmailLoginState());
@@ -89,9 +90,6 @@ class EmailLoginBloc extends Bloc<EmailLoginEvent, EmailLoginState> {
         if (shouldPairWithBiometrics) {
           await _biometricCredentialsService.saveBiometricCredentials(email: email, password: password);
         }
-      // } on FirebaseAuthException catch (exception) {
-      //   // TODO: localize FB-related errors
-      //   yield state.showMessage(message: exception.message ?? "");
       } catch (e) {
         yield state.showMessage(message: e.toString());
       }

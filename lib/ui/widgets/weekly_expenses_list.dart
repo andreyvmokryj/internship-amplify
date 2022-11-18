@@ -8,7 +8,6 @@ import 'package:radency_internship_project_2/ui/shared_components/empty_data_ref
 import 'package:radency_internship_project_2/ui/widgets/common_transactions_list.dart';
 import 'package:radency_internship_project_2/utils/strings.dart';
 
-
 class WeeklySummaryList extends StatelessWidget {
   const WeeklySummaryList({Key? key}) : super(key: key);
 

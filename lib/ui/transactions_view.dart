@@ -5,10 +5,9 @@ import 'package:radency_internship_project_2/blocs/transactions/transactions_sli
 import 'package:radency_internship_project_2/generated/l10n.dart';
 import 'package:radency_internship_project_2/ui/shared_components/design_scaffold.dart';
 import 'package:radency_internship_project_2/ui/shared_components/design_transactions_header.dart';
+import 'package:radency_internship_project_2/ui/widgets/bottom_nav_bar.dart';
 import 'package:radency_internship_project_2/ui/widgets/transactions_view/transactions_content.dart';
 import 'package:radency_internship_project_2/utils/routes.dart';
-
-import 'widgets/bottom_nav_bar.dart';
 
 class TransactionsView extends StatefulWidget {
   @override
@@ -61,14 +60,8 @@ class _TransactionsViewState extends State<TransactionsView>  with SingleTickerP
               },
             ),
             SignOutButton(),
-            // IconButton(
-            //   key: const Key('homePage_logout_iconButton'),
-            //   icon: const Icon(Icons.exit_to_app),
-            //   onPressed: () => context.read<AuthenticationBloc>().add(AuthenticationLogoutRequested()),
-            // )
           ],
         ),
-        // floatingActionButton: floatingAddButton(context),
         header: DesignTransactionHeader(
           tabBarController: tabBarController,
         ),

@@ -4,8 +4,6 @@ import 'package:radency_internship_project_2/blocs/transactions/transactions_mon
 import 'package:radency_internship_project_2/ui/widgets/monthly_transactions_list.dart';
 import 'package:radency_internship_project_2/ui/widgets/transactions_view/widgets/data_loading_widget.dart';
 
-
-
 class MonthlyTab extends StatefulWidget {
   MonthlyTab();
 

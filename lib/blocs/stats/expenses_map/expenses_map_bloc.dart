@@ -124,7 +124,6 @@ class ExpensesMapBloc extends Bloc<ExpensesMapEvent, ExpensesMapState> {
     expenseMapTimeIntervalSubscription =(await transactionsRepository
         .getTransactionsByTimePeriod(
             start: DateHelper().getFirstDayOfMonth(dateForFetch), end: DateHelper().getLastDayOfMonth(dateForFetch)))
-        // .asStream()
         .listen((event) {
       add(ExpensesMapDisplayRequested(transactions: event.items, data: _sliderCurrentTimeIntervalString));
     });

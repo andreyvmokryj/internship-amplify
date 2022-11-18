@@ -4,14 +4,9 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
-import 'package:radency_internship_project_2/local_models/transactions/income_transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/month_details.dart';
-// import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
-import 'package:radency_internship_project_2/local_models/user.dart';
 import 'package:radency_internship_project_2/models/AppTransaction.dart';
 import 'package:radency_internship_project_2/models/TransactionType.dart';
-import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
 import 'package:radency_internship_project_2/utils/date_helper.dart';
 
@@ -22,10 +17,8 @@ part 'transactions_monthly_state.dart';
 class TransactionsMonthlyBloc extends Bloc<TransactionsMonthlyEvent, TransactionsMonthlyState> {
   TransactionsMonthlyBloc({
     required this.transactionsRepository,
-    // required this.firebaseAuthenticationService,
   }) : super(TransactionsMonthlyInitial());
 
-  // final FirebaseAuthenticationService firebaseAuthenticationService;
   final TransactionsRepository transactionsRepository;
 
   DateTime? _observedDate;
@@ -74,7 +67,6 @@ class TransactionsMonthlyBloc extends Bloc<TransactionsMonthlyEvent, Transaction
           start: DateHelper().getFirstDayOfYear(dateForFetch),
           end: DateHelper().getLastDayOfYear(dateForFetch),
         ))
-        // .asStream()
         .listen((event) {
       observedYearTransactions = event.items;
       add(TransactionMonthlyDisplayRequested(

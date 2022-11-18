@@ -8,11 +8,8 @@ import 'package:radency_internship_project_2/blocs/transactions/add_transaction/
 import 'package:radency_internship_project_2/generated/l10n.dart';
 import 'package:radency_internship_project_2/local_models/chart_models/chart_category_details.dart';
 import 'package:radency_internship_project_2/local_models/chart_models/chart_section.dart';
-import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
-import 'package:radency_internship_project_2/local_models/user.dart';
 import 'package:radency_internship_project_2/models/AppTransaction.dart';
 import 'package:radency_internship_project_2/models/ModelProvider.dart';
-import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
 import 'package:radency_internship_project_2/utils/colours.dart';
 import 'package:radency_internship_project_2/utils/date_helper.dart';
@@ -27,11 +24,9 @@ class ExpensesChartBloc extends Bloc<ExpensesChartEvent, ExpensesChartState> {
   ExpensesChartBloc({
     required this.settingsBloc,
     required this.transactionsRepository,
-    // required this.firebaseAuthenticationService,
   }) : super(ExpensesChartInitial());
 
   final TransactionsRepository transactionsRepository;
-  // final FirebaseAuthenticationService firebaseAuthenticationService;
 
   SettingsBloc settingsBloc;
   StreamSubscription? settingsSubscription;
@@ -122,7 +117,6 @@ class ExpensesChartBloc extends Bloc<ExpensesChartEvent, ExpensesChartState> {
           start: DateHelper().getFirstDayOfMonth(dateForFetch),
           end: DateHelper().getLastDayOfMonth(dateForFetch),
         ))
-        // .asStream()
         .listen((event) {
       transactions = event.items;
       add(ExpensesChartDisplayRequested(

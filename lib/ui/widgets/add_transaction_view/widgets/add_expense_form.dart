@@ -431,18 +431,6 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
             if (_validateForms()) {
               BlocProvider.of<AddTransactionBloc>(context).add(AddTransaction(
                   isAddingCompleted: true,
-                  // transaction: ExpenseTransaction(
-                  //     currency: state.currency,
-                  //     note: _noteValue ?? "",
-                  //     accountOrigin: _accountValue ?? "",
-                  //     date: _selectedDateTime,
-                  //     category: _categoryValue ?? "",
-                  //     amount: _amountValue ?? 0,
-                  //     //sharedContact: _sharedContact,
-                  //     locationLatitude: _locationValue?.latitude,
-                  //     locationLongitude: _locationValue?.longitude,
-                  //     creationType: ExpenseCreationType.MANUAL
-                  // )
                   transaction: AppTransaction(
                       transactionType: TransactionType.Expense,
                       currency: state.currency,
@@ -451,7 +439,6 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
                       date: TemporalDateTime(_selectedDateTime),
                       category: _categoryValue ?? "",
                       amount: _amountValue ?? 0,
-                      //sharedContact: _sharedContact,
                       locationLatitude: _locationValue?.latitude,
                       locationLongitude: _locationValue?.longitude,
                       creationType: ExpenseCreationType.MANUAL
@@ -481,7 +468,6 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
                     date: TemporalDateTime(_selectedDateTime),
                     category: _categoryValue ?? "",
                     amount: _amountValue ?? 0,
-                    //sharedContact: _sharedContact,
                     currency: state.currency,
                     locationLatitude: _locationValue?.latitude,
                     locationLongitude: _locationValue?.longitude,

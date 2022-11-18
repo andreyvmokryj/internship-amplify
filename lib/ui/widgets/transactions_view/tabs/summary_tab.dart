@@ -13,7 +13,6 @@ import 'package:radency_internship_project_2/ui/shared_components/elevated_butto
 import 'package:radency_internship_project_2/ui/shared_components/empty_data_refresh_container.dart';
 import 'package:radency_internship_project_2/ui/shared_components/summary_container.dart';
 import 'package:radency_internship_project_2/ui/widgets/transactions_view/widgets/data_loading_widget.dart';
-import 'package:radency_internship_project_2/utils/mocked_expenses.dart';
 import 'package:radency_internship_project_2/utils/strings.dart';
 import 'package:radency_internship_project_2/utils/text_styles.dart';
 
@@ -78,7 +77,6 @@ class _SummaryTabState extends State<SummaryTab> {
                   child: BlocBuilder<CsvExportBloc, CsvExportState>(
                     builder: (BuildContext context, csvState) {
                       var csvExportBloc = BlocProvider.of<CsvExportBloc>(context);
-                      var data = MockedExpensesItems().generateDailyData();
 
                       return ColoredElevatedButton(
                           onPressed: () => csvExportBloc.add(ExportDataToCsv()),
@@ -127,7 +125,6 @@ class _SummaryTabState extends State<SummaryTab> {
         } else {
           return Column(
             children: [
-              //_accountsTitle(),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Container(

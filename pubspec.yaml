@@ -36,10 +36,6 @@ dependencies:
   currency_picker: 2.0.4
   equatable: 2.0.0
 #  file_picker_cross: 4.6.0
-#  firebase_analytics: 10.0.5
-#  firebase_auth: 4.1.2
-#  firebase_core: 2.2.0
-#  firebase_database: 10.0.5
   flutter_bloc: 7.0.0
   flutter_icons: ^1.1.0
   flutter_reorderable_list: 1.2.0
@@ -66,7 +62,6 @@ dependencies:
   permission_handler: 8.0.0+2
   collection: 1.16.0
   pinput: 2.2.16
-#  meta: 1.8.0
 
   # Amplify
   amplify_flutter: ^1.0.0-next.1

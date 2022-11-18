@@ -6,7 +6,6 @@ import 'package:radency_internship_project_2/blocs/accounts/account_bloc.dart';
 import 'package:radency_internship_project_2/blocs/export_csv/export_csv_bloc.dart';
 import 'package:radency_internship_project_2/blocs/forex/forex_bloc.dart';
 import 'package:radency_internship_project_2/blocs/image_picker/image_picker_bloc.dart';
-import 'package:radency_internship_project_2/blocs/import_csv/import_csv_bloc.dart';
 import 'package:radency_internship_project_2/blocs/navigation/navigation_bloc.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/blocs/settings/styles/styles_bloc.dart';
@@ -18,8 +17,6 @@ import 'package:radency_internship_project_2/blocs/transactions/transactions_cal
 import 'package:radency_internship_project_2/blocs/transactions/transactions_summary/transactions_summary_bloc.dart';
 import 'package:radency_internship_project_2/providers/amplify_auth_service.dart';
 import 'package:radency_internship_project_2/providers/biometric_credentials_service.dart';
-import 'package:radency_internship_project_2/providers/firebase_functions_provider.dart';
-import 'package:radency_internship_project_2/providers/firebase_realtime_database_provider.dart';
 import 'package:radency_internship_project_2/repositories/budgets_repository.dart';
 import 'package:radency_internship_project_2/repositories/settings_repository/settings_repository.dart';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
@@ -40,55 +37,43 @@ import 'package:radency_internship_project_2/ui/widgets/stats_view/tabs/budget_o
 import 'package:radency_internship_project_2/ui/widgets/stats_view/tabs/budget_overview/category_budget_setup_view.dart';
 import 'blocs/settings/category/category_bloc.dart';
 import 'blocs/settings/category/category_slider/category_slider_bloc.dart';
-import 'blocs/settings/settings_bloc.dart';
 import 'blocs/stats/budget_overview/budget_overview_bloc.dart';
 import 'blocs/stats/expenses_chart/expenses_chart_bloc.dart';
 import 'blocs/stats/expenses_map/expenses_map_bloc.dart';
 import 'blocs/transactions/search_transactions/search_transactions_bloc.dart';
-import 'blocs/transactions/transactions_calendar/transactions_calendar_bloc.dart';
 import 'blocs/transactions/transactions_daily/transactions_daily_bloc.dart';
 import 'blocs/transactions/transactions_monthly/transactions_monthly_bloc.dart';
 import 'blocs/transactions/transactions_slider/transactions_slider_bloc.dart';
 import 'blocs/transactions/transactions_weekly/transactions_weekly_bloc.dart';
 import 'blocs/user_profile/user_profile_bloc.dart';
 import 'generated/l10n.dart';
-import 'providers/firebase_auth_service.dart';
 import 'ui/home_page.dart';
 import 'ui/settings_components/settings_subpages/currency_setting_page.dart';
 import 'ui/settings_page.dart';
-import 'ui/splash.dart';
 import 'utils/routes.dart';
 import 'utils/styles.dart';
 
 class App extends StatelessWidget {
   const App({
     Key? key,
-    // required this.authenticationService,
     required this.amplifyAuthenticationService,
     required this.budgetsRepository,
     required this.biometricCredentialsService,
-    // required this.firebaseRealtimeDatabaseProvider,
     required this.transactionsRepository,
-    required this.firebaseFunctionsProvider,
   })  : super(key: key);
 
   final AmplifyAuthenticationService amplifyAuthenticationService;
-  // final FirebaseAuthenticationService authenticationService;
   final BudgetsRepository budgetsRepository;
   final BiometricCredentialsService biometricCredentialsService;
-  // final FirebaseRealtimeDatabaseProvider firebaseRealtimeDatabaseProvider;
   final TransactionsRepository transactionsRepository;
-  final FirebaseFunctionsProvider firebaseFunctionsProvider;
 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
         providers: [
-          // RepositoryProvider.value(value: authenticationService),
           RepositoryProvider.value(value: amplifyAuthenticationService),
           RepositoryProvider.value(value: biometricCredentialsService),
           RepositoryProvider.value(value: budgetsRepository),
-          // RepositoryProvider.value(value: firebaseRealtimeDatabaseProvider),
           RepositoryProvider.value(value: transactionsRepository),
         ],
         child: MultiBlocProvider(
@@ -96,15 +81,8 @@ class App extends StatelessWidget {
             BlocProvider(
               create: (context) => SettingsBloc(SettingsRepository())..add(InitialSettingsEvent()),
             ),
-            // BlocProvider(
-            //   create: (context) => AuthenticationBloc(
-            //     authenticationService: amplifyAuthenticationService,
-            //   ),
-            // ),
             BlocProvider(
-              create: (context) => UserProfileBloc(
-                // authenticationService: authenticationService,
-              ),
+              create: (context) => UserProfileBloc(),
             ),
             BlocProvider(
               create: (context) => StylesBloc(),
@@ -124,25 +102,20 @@ class App extends StatelessWidget {
             BlocProvider(
               create: (context) => TransactionLocationMapBloc(),
             ),
-            // BlocProvider(create: (_) => ImportCsvBloc(transactionsRepository: transactionsRepository)),
             BlocProvider(create: (_) => CsvExportBloc(transactionsRepository: transactionsRepository)),
             BlocProvider(
               create: (context) => TransactionsDailyBloc(
                 settingsBloc: BlocProvider.of<SettingsBloc>(context),
                 transactionsRepository: transactionsRepository,
-                // firebaseAuthenticationService: authenticationService,
-                // firebaseRealtimeDatabaseProvider: firebaseRealtimeDatabaseProvider,
               )..add(TransactionsDailyInitialize()),
             ),
             BlocProvider(
               create: (context) => TransactionsWeeklyBloc(
-                  // firebaseAuthenticationService: authenticationService,
                   transactionsRepository: transactionsRepository)
                 ..add(TransactionsWeeklyInitialize()),
             ),
             BlocProvider(
               create: (context) => TransactionsMonthlyBloc(
-                // firebaseAuthenticationService: authenticationService,
                 transactionsRepository: transactionsRepository,
               )..add(TransactionsMonthlyInitialize()),
             ),
@@ -150,21 +123,16 @@ class App extends StatelessWidget {
               create: (context) => TransactionsSummaryBloc(
                 settingsBloc: BlocProvider.of<SettingsBloc>(context),
                 transactionsRepository: transactionsRepository,
-                // firebaseAuthenticationService: authenticationService,
               )..add(TransactionsSummaryInitialize()),
             ),
             BlocProvider(
               create: (context) => TransactionsCalendarBloc(
                 settingsBloc: BlocProvider.of<SettingsBloc>(context),
                 transactionsRepository: transactionsRepository,
-                // firebaseAuthenticationService: authenticationService,
-                // firebaseRealtimeDatabaseProvider: firebaseRealtimeDatabaseProvider,
               )..add(TransactionsCalendarInitialize()),
             ),
             BlocProvider(
               create: (context) => BudgetOverviewBloc(
-                // firebaseRealtimeDatabaseProvider: firebaseRealtimeDatabaseProvider,
-                // firebaseAuthenticationService: authenticationService,
                 settingsBloc: BlocProvider.of<SettingsBloc>(context),
                 budgetsRepository: budgetsRepository,
                 transactionsRepository: transactionsRepository,
@@ -182,7 +150,6 @@ class App extends StatelessWidget {
               create: (context) => ExpensesChartBloc(
                 settingsBloc: BlocProvider.of<SettingsBloc>(context),
                 transactionsRepository: transactionsRepository,
-                // firebaseAuthenticationService: authenticationService,
               )..add(ExpensesChartInitialize()),
             ),
             BlocProvider<TransactionsSliderBloc>(
@@ -264,35 +231,6 @@ class _AppViewState extends State<AppView> {
             Routes.emailVerificationResendPage: (context) => EmailVerificationResendScreen(),
             Routes.searchExpensesPage: (context) => SearchExpensesPage(),
           },
-          // initialRoute: Routes.homePage,
-          // builder: (context, child) {
-          //   return BlocListener<AuthenticationBloc, AuthenticationState>(
-          //     listener: (context, state) {
-          //       switch (state.status) {
-          //         case AuthenticationStatus.authenticated:
-          //           print("_AppViewState.build: AuthenticationStatus.authenticated ${state.user.emailVerified}");
-          //           if (state.user.emailVerified) {
-          //             _navigator.pushNamedAndRemoveUntil(Routes.homePage, (route) => false);
-          //           } else {
-          //             _navigator.pushNamedAndRemoveUntil(Routes.emailVerificationResendPage, (route) => false);
-          //           }
-          //           break;
-          //         case AuthenticationStatus.unauthenticated:
-          //           bool onboardingCompleted = settingsState.onboardingCompleted ?? false;
-          //           if (onboardingCompleted == true) {
-          //             _navigator.pushNamedAndRemoveUntil(Routes.loginPage, (route) => false);
-          //           } else {
-          //             _navigator.pushNamedAndRemoveUntil(Routes.onboardingPage, (route) => false);
-          //           }
-          //           break;
-          //         default:
-          //           _navigator.pushNamedAndRemoveUntil(Routes.splashScreen, (route) => false);
-          //           break;
-          //       }
-          //     },
-          //     child: child,
-          //   );
-          // },
           builder: Authenticator.builder(),
         );
       });

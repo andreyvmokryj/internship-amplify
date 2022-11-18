@@ -4,14 +4,9 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
-import 'package:radency_internship_project_2/local_models/transactions/income_transaction.dart';
-// import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/week_details.dart';
-import 'package:radency_internship_project_2/local_models/user.dart';
 import 'package:radency_internship_project_2/models/AppTransaction.dart';
 import 'package:radency_internship_project_2/models/TransactionType.dart';
-import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
 import 'package:radency_internship_project_2/utils/date_helper.dart';
 
@@ -22,12 +17,10 @@ part 'transactions_weekly_state.dart';
 class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsWeeklyState> {
   TransactionsWeeklyBloc({
     required this.transactionsRepository,
-    // required this.firebaseAuthenticationService
   })
       : super(TransactionsWeeklyInitial());
 
   final TransactionsRepository transactionsRepository;
-  // final FirebaseAuthenticationService firebaseAuthenticationService;
 
   /// In accordance with ISO 8601
   /// a week starts with Monday, which has the value 1.
@@ -84,7 +77,6 @@ class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsW
           start: _getFirstDayOfCurrentRange(dateTime: _observedDate),
           end: _getLastDayOfCurrentRange(dateTime: _observedDate),
         ))
-        // .asStream()
         .listen((event) {
       observedMonthTransactions = event.items;
 

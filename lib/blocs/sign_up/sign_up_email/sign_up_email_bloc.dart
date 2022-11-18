@@ -9,6 +9,7 @@ import 'package:radency_internship_project_2/providers/biometric_credentials_ser
 part 'sign_up_email_event.dart';
 part 'sign_up_email_state.dart';
 
+// Discontinued
 class SignUpEmailBloc extends Bloc<SignUpEmailEvent, SignUpEmailState> {
   SignUpEmailBloc(this._authenticationService, this._biometricCredentialsService)
       : super(SignUpEmailState());
@@ -67,9 +68,6 @@ class SignUpEmailBloc extends Bloc<SignUpEmailEvent, SignUpEmailState> {
         if (biometricsPairingStatus) {
           await _biometricCredentialsService.saveBiometricCredentials(email: email, password: password);
         }
-      // } on FirebaseAuthException catch (exception) {
-      //   // TODO: localize FB-related errors
-      //   yield state.showError(errorMessage: exception.message ?? "");
       } catch (e) {
         yield state.showError(errorMessage: e.toString());
       }

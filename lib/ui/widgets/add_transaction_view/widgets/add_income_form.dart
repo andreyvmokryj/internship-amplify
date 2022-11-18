@@ -1,12 +1,10 @@
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/blocs/transactions/add_transaction/add_transaction_bloc.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
-import 'package:radency_internship_project_2/local_models/transactions/income_transaction.dart';
 import 'package:radency_internship_project_2/models/AppTransaction.dart';
 import 'package:radency_internship_project_2/models/TransactionType.dart';
 import 'package:radency_internship_project_2/ui/shared_components/modals/amount/amount_modal.dart';
@@ -433,11 +431,6 @@ String getUpdatedAmount(TextEditingController controller, var value) {
 
   return amount;
 }
-
-// String getContactInitials(Contact contact) {
-//   String lastName = contact.familyName ?? "";
-//   return contact.displayName.trim()[0] + (lastName != "" ? lastName[0] : "");
-// }
 
 void focusOnField(Map focusMap, AddTransactionFields field){
   AddTransactionFields.values.forEach((element) {

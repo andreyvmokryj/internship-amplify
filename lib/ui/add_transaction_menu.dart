@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radency_internship_project_2/blocs/image_picker/image_picker_bloc.dart';
-import 'package:radency_internship_project_2/blocs/import_csv/import_csv_bloc.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
 import 'package:radency_internship_project_2/utils/routes.dart';
 import 'package:radency_internship_project_2/utils/text_styles.dart';
@@ -29,7 +28,6 @@ class AddTransactionMenu extends StatelessWidget {
   }
 
   List<Widget> createMenuItems(imageBloc, context) {
-    // ImportCsvBloc importCsvBloc = BlocProvider.of<ImportCsvBloc>(context);
     return [
       menuItem(onPressed: () {}, title: S.current.addTransaction, textStyle: addTransactionMenuTitleTextStyle()),
       menuItem(
@@ -51,12 +49,6 @@ class AddTransactionMenu extends StatelessWidget {
             imageBloc.add(ImageFromCamera());
           },
           title: S.current.camera),
-      // menuItem(
-      //     onPressed: () {
-      //       Navigator.pop(context);
-      //       importCsvBloc.add(ImportCsvFile());
-      //     },
-      //     title: S.current.importCsv),
     ];
   }
 
