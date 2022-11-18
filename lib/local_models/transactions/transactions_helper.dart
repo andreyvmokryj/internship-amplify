@@ -1,44 +1,45 @@
-import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
-import 'package:radency_internship_project_2/local_models/transactions/income_transaction.dart';
-import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
-import 'package:radency_internship_project_2/local_models/transactions/transfer_transaction.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
+import 'package:radency_internship_project_2/models/TransactionType.dart';
 import 'package:radency_internship_project_2/utils/strings.dart';
 
 class TransactionsHelper {
   Map<String, dynamic> convertTransactionToJson({required AppTransaction transaction}) {
     Map<String, dynamic> transactionMap;
 
-    switch (transaction.transactionType) {
-      case TransactionType.Income:
-        transactionMap = (transaction as IncomeTransaction).toJson();
-        break;
-      case TransactionType.Expense:
-        transactionMap = (transaction as ExpenseTransaction).toJson();
-        break;
-      case TransactionType.Transfer:
-        transactionMap = (transaction as TransferTransaction).toJson();
-        break;
-    }
+    // switch (transaction.transactionType) {
+    //   case TransactionType.Income:
+    //     transactionMap = (transaction as IncomeTransaction).toJson();
+    //     break;
+    //   case TransactionType.Expense:
+    //     transactionMap = (transaction as ExpenseTransaction).toJson();
+    //     break;
+    //   case TransactionType.Transfer:
+    //     transactionMap = (transaction as TransferTransaction).toJson();
+    //     break;
+    // }
 
+    transactionMap = transaction.toJson();
     return transactionMap;
   }
 
   AppTransaction convertJsonToTransaction({required Map<String, dynamic> json, required String key}) {
     AppTransaction transaction;
 
-    TransactionType transactionType = enumFromString<TransactionType>(TransactionType.values, json[TYPE_KEY])!;
+    // TransactionType transactionType = enumFromString<TransactionType>(TransactionType.values, json[TYPE_KEY])!;
+    //
+    // switch (transactionType) {
+    //   case TransactionType.Income:
+    //     transaction = IncomeTransaction.fromJson(json, key);
+    //     break;
+    //   case TransactionType.Expense:
+    //     transaction = ExpenseTransaction.fromJson(json, key);
+    //     break;
+    //   case TransactionType.Transfer:
+    //     transaction = TransferTransaction.fromJson(json, key);
+    //     break;
+    // }
 
-    switch (transactionType) {
-      case TransactionType.Income:
-        transaction = IncomeTransaction.fromJson(json, key);
-        break;
-      case TransactionType.Expense:
-        transaction = ExpenseTransaction.fromJson(json, key);
-        break;
-      case TransactionType.Transfer:
-        transaction = TransferTransaction.fromJson(json, key);
-        break;
-    }
+    transaction = AppTransaction.fromJson(json);
 
     return transaction;
   }

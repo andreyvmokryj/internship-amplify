@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:csv/csv.dart';
 import 'package:bloc/bloc.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
-import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
 import 'package:radency_internship_project_2/local_models/transactions/transactions_helper.dart';
 
 part 'import_csv_event.dart';

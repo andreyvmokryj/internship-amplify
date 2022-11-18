@@ -30,8 +30,8 @@ class CsvExportBloc extends Bloc<CsvExportEvent, CsvExportState> {
     List<AppTransaction> data = await transactionsRepository.getAllData();
     List<List<String>> list = [];
     data.forEach((transaction) {
-      // List<String> convertedTransaction = TransactionsHelper().toStringInList(transaction);
-      // list.add(convertedTransaction);
+      List<String> convertedTransaction = TransactionsHelper().toStringInList(transaction);
+      list.add(convertedTransaction);
     });
     String filePath = await getCsvFilePath();
     String csv = createCsvString(list);
@@ -60,7 +60,13 @@ class CsvExportBloc extends Bloc<CsvExportEvent, CsvExportState> {
   }
 
   Future<String> getCsvFilePath() async{
-    Directory? dir = await getExternalStorageDirectory();
+    Directory? dir;
+    if (Platform.isAndroid) {
+      dir = await getExternalStorageDirectory();
+    }
+    if (Platform.isIOS) {
+      dir = await getApplicationDocumentsDirectory();
+    }
     String path = dir!.path;
     var timestamp = DateTime.now();
     var milliseconds = timestamp.millisecondsSinceEpoch;
