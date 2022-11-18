@@ -152,12 +152,12 @@ class TransactionsCalendarBloc extends Bloc<TransactionsCalendarEvent, Transacti
     _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate!);
     yield TransactionsCalendarLoading(sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString);
 
-    calendarTransactionsSubscription = transactionsRepository
+    calendarTransactionsSubscription = (await transactionsRepository
         .getTransactionsByTimePeriod(
-            start: DateHelper().getFirstDayOfMonth(_observedDate!), end: DateHelper().getLastDayOfMonth(_observedDate!))
-        .asStream()
+            start: DateHelper().getFirstDayOfMonth(_observedDate!), end: DateHelper().getLastDayOfMonth(_observedDate!)))
+        // .asStream()
         .listen((event) {
-      transactionsList = event;
+      transactionsList = event.items;
       calendarData = _convertTransactionsToCalendarData(transactionsList, _observedDate!);
       add(TransactionsCalendarDisplayRequested(
         daysData: calendarData,

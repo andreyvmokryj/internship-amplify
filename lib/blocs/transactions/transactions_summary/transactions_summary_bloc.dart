@@ -116,13 +116,13 @@ class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, Transaction
 
     _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate!);
     yield TransactionsSummaryLoading(sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString);
-    summaryTransactionsSubscription = transactionsRepository
+    summaryTransactionsSubscription = (await transactionsRepository
         .getTransactionsByTimePeriod(
             start: DateHelper().getFirstDayOfMonth(dateForFetch),
-            end: DateHelper().getLastDayOfMonth(dateForFetch))
-        .asStream()
+            end: DateHelper().getLastDayOfMonth(dateForFetch)))
+        // .asStream()
         .listen((event) {
-      transactions = event;
+      transactions = event.items;
       add(TransactionSummaryDisplayRequested(
           sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: transactions));
     });

@@ -76,7 +76,7 @@ class TransactionsRepository extends IRepository<AppTransaction> {
     }
   }
 
-  Future<List<AppTransaction>> getTransactionsByTimePeriod({required DateTime start, required DateTime end}) async {
+  Future<Stream<QuerySnapshot<AppTransaction>>> getTransactionsByTimePeriod({required DateTime start, required DateTime end}) async {
     List<AppTransaction> list = [];
 
     String uid = await amplifyAuthenticationService.getUserID();
@@ -96,7 +96,7 @@ class TransactionsRepository extends IRepository<AppTransaction> {
     //     list.add(transaction);
     //   });
     // }
-    final snapshot = await Amplify.DataStore.query(
+    final snapshot = Amplify.DataStore.observeQuery(
         AppTransaction.classType,
         where: AppTransaction.USERID.eq(uid)
             .and(AppTransaction.DATE.between(_start, _end))

@@ -79,14 +79,14 @@ class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsW
 
     yield TransactionsWeeklyLoading(sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString);
 
-    _weeklyTransactionsSubscription = transactionsRepository
+    _weeklyTransactionsSubscription = (await transactionsRepository
         .getTransactionsByTimePeriod(
           start: _getFirstDayOfCurrentRange(dateTime: _observedDate),
           end: _getLastDayOfCurrentRange(dateTime: _observedDate),
-        )
-        .asStream()
+        ))
+        // .asStream()
         .listen((event) {
-      observedMonthTransactions = event;
+      observedMonthTransactions = event.items;
 
       add(TransactionWeeklyDisplayRequested(
           transactions: observedMonthTransactions, sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString));

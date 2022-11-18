@@ -109,9 +109,7 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
       }
     });
 
-
-    add(TransactionsDailyDisplayRequested(
-        sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString, transactions: dailyData));
+    add(TransactionsDailyFetchRequested(dateForFetch: _observedDate!));
   }
 
   Stream<TransactionsDailyState> _mapTransactionDailyUserChangedToState(String id) async* {
@@ -145,12 +143,12 @@ class TransactionsDailyBloc extends Bloc<TransactionsDailyEvent, TransactionsDai
 
     _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate!);
     yield TransactionsDailyLoading(sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString);
-    dailyTransactionsSubscription = transactionsRepository
+    dailyTransactionsSubscription = (await transactionsRepository
         .getTransactionsByTimePeriod(
-            start: DateHelper().getFirstDayOfMonth(_observedDate!), end: DateHelper().getLastDayOfMonth(_observedDate!))
-        .asStream()
+            start: DateHelper().getFirstDayOfMonth(_observedDate!), end: DateHelper().getLastDayOfMonth(_observedDate!)))
+        // .asStream()
         .listen((event) {
-      dailyData = event;
+      dailyData = event.items;
       add(TransactionsDailyDisplayRequested(
           transactions: dailyData, sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString));
     });
