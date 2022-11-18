@@ -29,7 +29,7 @@ class AddTransactionMenu extends StatelessWidget {
   }
 
   List<Widget> createMenuItems(imageBloc, context) {
-    ImportCsvBloc importCsvBloc = BlocProvider.of<ImportCsvBloc>(context);
+    // ImportCsvBloc importCsvBloc = BlocProvider.of<ImportCsvBloc>(context);
     return [
       menuItem(onPressed: () {}, title: S.current.addTransaction, textStyle: addTransactionMenuTitleTextStyle()),
       menuItem(
@@ -51,12 +51,12 @@ class AddTransactionMenu extends StatelessWidget {
             imageBloc.add(ImageFromCamera());
           },
           title: S.current.camera),
-      menuItem(
-          onPressed: () {
-            Navigator.pop(context);
-            importCsvBloc.add(ImportCsvFile());
-          },
-          title: S.current.importCsv),
+      // menuItem(
+      //     onPressed: () {
+      //       Navigator.pop(context);
+      //       importCsvBloc.add(ImportCsvFile());
+      //     },
+      //     title: S.current.importCsv),
     ];
   }
 

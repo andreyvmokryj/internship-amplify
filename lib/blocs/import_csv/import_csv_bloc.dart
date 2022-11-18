@@ -8,6 +8,7 @@ import 'package:radency_internship_project_2/local_models/transactions/transacti
 part 'import_csv_event.dart';
 part 'import_csv_state.dart';
 
+/// Discontinued
 class ImportCsvBloc extends Bloc<ImportCsvEvent, ImportCsvState> {
   ImportCsvBloc({required this.transactionsRepository}) : super(ImportCsvInitial(expensesData: null));
 

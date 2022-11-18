@@ -124,7 +124,7 @@ class App extends StatelessWidget {
             BlocProvider(
               create: (context) => TransactionLocationMapBloc(),
             ),
-            BlocProvider(create: (_) => ImportCsvBloc(transactionsRepository: transactionsRepository)),
+            // BlocProvider(create: (_) => ImportCsvBloc(transactionsRepository: transactionsRepository)),
             BlocProvider(create: (_) => CsvExportBloc(transactionsRepository: transactionsRepository)),
             BlocProvider(
               create: (context) => TransactionsDailyBloc(
