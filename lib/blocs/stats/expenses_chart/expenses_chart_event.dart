@@ -22,7 +22,7 @@ class ExpensesChartGetNextMonthPressed extends ExpensesChartEvent {
 class ExpensesChartFetchRequested extends ExpensesChartEvent {
   final DateTime dateForFetch;
 
-  ExpensesChartFetchRequested({@required this.dateForFetch});
+  ExpensesChartFetchRequested({required this.dateForFetch});
 
   @override
   List<Object> get props => [dateForFetch];
@@ -32,7 +32,7 @@ class ExpensesChartDisplayRequested extends ExpensesChartEvent {
   final String sliderCurrentTimeIntervalString;
   final List<AppTransaction> transactions;
 
-  ExpensesChartDisplayRequested({@required this.transactions, @required this.sliderCurrentTimeIntervalString});
+  ExpensesChartDisplayRequested({required this.transactions, required this.sliderCurrentTimeIntervalString});
 
   @override
   List<Object> get props => [transactions, sliderCurrentTimeIntervalString];
@@ -46,7 +46,7 @@ class ExpensesChartLocaleChanged extends ExpensesChartEvent {
 class ExpensesChartUserChanged extends ExpensesChartEvent {
   final String id;
 
-  ExpensesChartUserChanged({@required this.id});
+  ExpensesChartUserChanged({required this.id});
 
   @override
   List<Object> get props => [id];

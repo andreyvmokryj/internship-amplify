@@ -2,22 +2,19 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:meta/meta.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
+import 'package:radency_internship_project_2/providers/amplify_auth_service.dart';
 import 'package:radency_internship_project_2/providers/biometric_credentials_service.dart';
-import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
 
 part 'sign_up_email_event.dart';
-
 part 'sign_up_email_state.dart';
 
+// Discontinued
 class SignUpEmailBloc extends Bloc<SignUpEmailEvent, SignUpEmailState> {
   SignUpEmailBloc(this._authenticationService, this._biometricCredentialsService)
-      : assert(_authenticationService != null),
-        super(SignUpEmailState());
+      : super(SignUpEmailState());
 
-  final FirebaseAuthenticationService _authenticationService;
+  final AmplifyAuthenticationService _authenticationService;
   final BiometricCredentialsService _biometricCredentialsService;
 
   bool areBiometricsEnrolled = false;
@@ -33,6 +30,8 @@ class SignUpEmailBloc extends Bloc<SignUpEmailEvent, SignUpEmailState> {
       );
     } else if (event is SignUpEmailInitialize) {
       yield* _mapSignUpEmailInitializeToState();
+    } else if (event is SignUpEmailConfirm) {
+      yield* _mapSignUpEmailConfirmToState(event);
     }
   }
 
@@ -42,11 +41,15 @@ class SignUpEmailBloc extends Bloc<SignUpEmailEvent, SignUpEmailState> {
     yield state.setInitializationState(isInitialized: true, biometricAuthAvailable: areBiometricsEnrolled);
   }
 
+  Stream<SignUpEmailState> _mapSignUpEmailConfirmToState(SignUpEmailConfirm event) async* {
+    // await _authenticationService.confirmSignUp(email: email, code: event.code);
+  }
+
   Stream<SignUpEmailState> _mapSignUpEmailSubmittedToState({
-    @required String email,
-    @required String password,
-    @required String username,
-    @required bool biometricsPairingStatus,
+    required String email,
+    required String password,
+    required String username,
+    required bool biometricsPairingStatus,
   }) async* {
     yield state.setDetailsProcessing();
 
@@ -65,9 +68,6 @@ class SignUpEmailBloc extends Bloc<SignUpEmailEvent, SignUpEmailState> {
         if (biometricsPairingStatus) {
           await _biometricCredentialsService.saveBiometricCredentials(email: email, password: password);
         }
-      } on FirebaseAuthException catch (exception) {
-        // TODO: localize FB-related errors
-        yield state.showError(errorMessage: exception.message);
       } catch (e) {
         yield state.showError(errorMessage: e.toString());
       }

@@ -8,7 +8,7 @@ class BaseMultiChoiceModal extends StatelessWidget{
   final onOKCallback;
   final onCancelCallback;
 
-  const BaseMultiChoiceModal({Key key, this.title, this.child, this.onOKCallback, this.onCancelCallback}) : super(key: key);
+  const BaseMultiChoiceModal({Key? key, required this.title, required this.child, this.onOKCallback, this.onCancelCallback}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

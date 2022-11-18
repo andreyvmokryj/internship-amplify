@@ -2,9 +2,9 @@ part of 'forex_bloc.dart';
 
 class ForexState extends Equatable{
   final DateTime dateTime;
-  final Map<String, double> forex;
+  final Map<String, double>? forex;
 
-  ForexState({this.dateTime, this.forex});
+  ForexState({required this.dateTime, this.forex});
 
   @override
   List<Object> get props => [dateTime];
@@ -13,7 +13,7 @@ class ForexState extends Equatable{
 class ForexStateLoading extends ForexState{
   final DateTime dateTime;
 
-  ForexStateLoading({this.dateTime}):super(
+  ForexStateLoading({required this.dateTime}):super(
     dateTime: dateTime,
   );
 }

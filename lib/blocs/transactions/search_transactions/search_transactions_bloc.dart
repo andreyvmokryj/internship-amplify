@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
-import 'package:radency_internship_project_2/models/transactions/transaction.dart';
 import 'package:bloc/bloc.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
 import 'package:radency_internship_project_2/utils/mocked_expenses.dart';
 
 part 'search_transactions_event.dart';
@@ -11,10 +11,10 @@ part 'search_transactions_state.dart';
 class SearchTransactionsBloc extends Bloc<SearchTransactionsEvent, SearchTransactionsState>{
   SearchTransactionsBloc() : super(SearchTransactionsInitial());
 
-  StreamSubscription searchTransactionsSubscription;
+  StreamSubscription? searchTransactionsSubscription;
 
   @override
-  Future<Function> close() {
+  Future<void> close() {
     searchTransactionsSubscription?.cancel();
     return super.close();
   }

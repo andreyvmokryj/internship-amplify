@@ -1,14 +1,12 @@
 import 'dart:async';
 
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
-import 'package:radency_internship_project_2/models/transactions/expense_transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/income_transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/week_details.dart';
-import 'package:radency_internship_project_2/models/user.dart';
-import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
+import 'package:radency_internship_project_2/local_models/transactions/week_details.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
+import 'package:radency_internship_project_2/models/TransactionType.dart';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
 import 'package:radency_internship_project_2/utils/date_helper.dart';
 
@@ -17,11 +15,12 @@ part 'transactions_weekly_event.dart';
 part 'transactions_weekly_state.dart';
 
 class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsWeeklyState> {
-  TransactionsWeeklyBloc({@required this.transactionsRepository, @required this.firebaseAuthenticationService})
+  TransactionsWeeklyBloc({
+    required this.transactionsRepository,
+  })
       : super(TransactionsWeeklyInitial());
 
   final TransactionsRepository transactionsRepository;
-  final FirebaseAuthenticationService firebaseAuthenticationService;
 
   /// In accordance with ISO 8601
   /// a week starts with Monday, which has the value 1.
@@ -30,11 +29,11 @@ class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsW
 
   List<AppTransaction> observedMonthTransactions = [];
 
-  DateTime _observedDate;
+  DateTime _observedDate = DateTime.now();
   String _sliderCurrentTimeIntervalString = '';
 
-  StreamSubscription _weeklyTransactionsSubscription;
-  StreamSubscription<UserEntity> _onUserChangedSubscription;
+  StreamSubscription? _weeklyTransactionsSubscription;
+  StreamSubscription<AuthHubEvent>? _onUserChangedSubscription;
 
   @override
   Future<void> close() {
@@ -63,7 +62,7 @@ class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsW
   }
 
   Stream<TransactionsWeeklyState> _mapTransactionsWeeklyFetchRequestedToState({
-    @required DateTime dateForFetch,
+    required DateTime dateForFetch,
   }) async* {
     _weeklyTransactionsSubscription?.cancel();
 
@@ -73,14 +72,13 @@ class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsW
 
     yield TransactionsWeeklyLoading(sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString);
 
-    _weeklyTransactionsSubscription = transactionsRepository
+    _weeklyTransactionsSubscription = (await transactionsRepository
         .getTransactionsByTimePeriod(
           start: _getFirstDayOfCurrentRange(dateTime: _observedDate),
           end: _getLastDayOfCurrentRange(dateTime: _observedDate),
-        )
-        .asStream()
+        ))
         .listen((event) {
-      observedMonthTransactions = event;
+      observedMonthTransactions = event.items;
 
       add(TransactionWeeklyDisplayRequested(
           transactions: observedMonthTransactions, sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString));
@@ -95,8 +93,8 @@ class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsW
   }
 
   Stream<TransactionsWeeklyState> _mapTransactionsWeeklyInitializeToState() async* {
-    _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
-      if (user == UserEntity.empty) {
+    _onUserChangedSubscription = Amplify.Hub.listen(HubChannel.Auth, (hubEvent) {
+      if (hubEvent.payload == null) {
         observedMonthTransactions.clear();
         add(TransactionWeeklyDisplayRequested(
             sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString,
@@ -148,12 +146,12 @@ class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsW
     }
 
     data.forEach((transaction) {
-      int transactionWeekInCurrentSet = transaction.date.difference(firstDay).inDays ~/ 7;
+      int transactionWeekInCurrentSet = transaction.date.getDateTimeInUtc().difference(firstDay).inDays ~/ 7;
 
-      if (transaction is ExpenseTransaction) {
+      if (transaction.transactionType == TransactionType.Expense) {
         list.where((weekSummary) => weekSummary.weekNumberInSet == transactionWeekInCurrentSet).first.expenses +=
             transaction.amount;
-      } else if (transaction is IncomeTransaction) {
+      } else if (transaction.transactionType == TransactionType.Income) {
         list.where((weekSummary) => weekSummary.weekNumberInSet == transactionWeekInCurrentSet).first.income +=
             transaction.amount;
       }
@@ -164,7 +162,7 @@ class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsW
     return list;
   }
 
-  DateTime _getFirstDayOfCurrentRange({@required DateTime dateTime}) {
+  DateTime _getFirstDayOfCurrentRange({required DateTime dateTime}) {
     DateTime startOfFirstWeekForCurrentMonth = DateTime(dateTime.year, dateTime.month, 1);
     while (startOfFirstWeekForCurrentMonth.weekday != startOfWeek) {
       startOfFirstWeekForCurrentMonth = DateTime(startOfFirstWeekForCurrentMonth.year,
@@ -174,7 +172,7 @@ class TransactionsWeeklyBloc extends Bloc<TransactionsWeeklyEvent, TransactionsW
     return startOfFirstWeekForCurrentMonth;
   }
 
-  DateTime _getLastDayOfCurrentRange({@required DateTime dateTime}) {
+  DateTime _getLastDayOfCurrentRange({required DateTime dateTime}) {
     DateTime endOfLastWeekForCurrentMonth = DateTime(dateTime.year, dateTime.month + 1, 0);
     while (endOfLastWeekForCurrentMonth.weekday != endOfWeek) {
       endOfLastWeekForCurrentMonth = DateTime(

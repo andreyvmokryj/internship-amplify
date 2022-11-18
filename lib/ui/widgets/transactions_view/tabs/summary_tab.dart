@@ -7,13 +7,12 @@ import 'package:radency_internship_project_2/blocs/export_csv/export_csv_bloc.da
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/blocs/transactions/transactions_summary/transactions_summary_bloc.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
-import 'package:radency_internship_project_2/models/transactions/summary_details.dart';
+import 'package:radency_internship_project_2/local_models/transactions/summary_details.dart';
 import 'package:radency_internship_project_2/ui/shared_components/centered_text_container.dart';
 import 'package:radency_internship_project_2/ui/shared_components/elevated_buttons/colored_elevated_button.dart';
 import 'package:radency_internship_project_2/ui/shared_components/empty_data_refresh_container.dart';
 import 'package:radency_internship_project_2/ui/shared_components/summary_container.dart';
 import 'package:radency_internship_project_2/ui/widgets/transactions_view/widgets/data_loading_widget.dart';
-import 'package:radency_internship_project_2/utils/mocked_expenses.dart';
 import 'package:radency_internship_project_2/utils/strings.dart';
 import 'package:radency_internship_project_2/utils/text_styles.dart';
 
@@ -78,7 +77,6 @@ class _SummaryTabState extends State<SummaryTab> {
                   child: BlocBuilder<CsvExportBloc, CsvExportState>(
                     builder: (BuildContext context, csvState) {
                       var csvExportBloc = BlocProvider.of<CsvExportBloc>(context);
-                      var data = MockedExpensesItems().generateDailyData();
 
                       return ColoredElevatedButton(
                           onPressed: () => csvExportBloc.add(ExportDataToCsv()),
@@ -127,7 +125,6 @@ class _SummaryTabState extends State<SummaryTab> {
         } else {
           return Column(
             children: [
-              //_accountsTitle(),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Container(

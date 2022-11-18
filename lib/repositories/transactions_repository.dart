@@ -1,99 +1,71 @@
-import 'package:firebase_database/firebase_database.dart';
-import 'package:meta/meta.dart';
-import 'package:radency_internship_project_2/models/transactions/transaction.dart' as mtr;
-import 'package:radency_internship_project_2/models/transactions/transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/transactions_helper.dart';
-import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
-import 'package:radency_internship_project_2/providers/firebase_realtime_database_provider.dart';
+import 'package:amplify_datastore/amplify_datastore.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:collection/collection.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
+import 'package:radency_internship_project_2/providers/amplify_auth_service.dart';
 import 'package:radency_internship_project_2/repositories/repository.dart';
 
-class TransactionsRepository extends IRepository<mtr.AppTransaction> {
-  TransactionsRepository(
-      {@required this.firebaseRealtimeDatabaseProvider, @required this.firebaseAuthenticationService});
+class TransactionsRepository extends IRepository<AppTransaction> {
+  TransactionsRepository({
+    required this.amplifyAuthenticationService
+  });
 
-  final FirebaseRealtimeDatabaseProvider firebaseRealtimeDatabaseProvider;
-  final FirebaseAuthenticationService firebaseAuthenticationService;
+  final AmplifyAuthenticationService amplifyAuthenticationService;
 
   @override
-  Future<void> add(mtr.AppTransaction transaction) async {
-    String uid = await firebaseAuthenticationService.getUserID();
-    await firebaseRealtimeDatabaseProvider.transactionsReference(uid).then((reference) async {
-      Map<String, dynamic> transactionMap = TransactionsHelper().convertTransactionToJson(transaction: transaction);
-      await reference.push().set(transactionMap);
-    });
+  Future<void> add(AppTransaction transaction) async {
+    String uid = await amplifyAuthenticationService.getUserID();
+    await Amplify.DataStore.save(transaction.copyWith(userID: uid));
   }
 
   @override
-  Future<void> delete({@required String transactionID}) async {
-    String uid = await firebaseAuthenticationService.getUserID();
-    await firebaseRealtimeDatabaseProvider.transactionsReference(uid).then((reference) async {
-      await reference.child(transactionID).remove();
-    });
-  }
-
-  @override
-  Future<mtr.AppTransaction> find({@required String transactionID}) async {
-    mtr.AppTransaction transaction;
-
-    String uid = await firebaseAuthenticationService.getUserID();
-    await firebaseRealtimeDatabaseProvider.transactionsReference(uid).then((reference) async {
-      await reference.child(transactionID).once().then((snapshot) async {
-        if (snapshot.snapshot.value != null) {
-          transaction = TransactionsHelper()
-              .convertJsonToTransaction(json: Map<String, dynamic>.from(snapshot.snapshot.value), key: snapshot.snapshot.key);
-        }
-      });
-    });
-
-    return transaction;
-  }
-
-  @override
-  Future<void> update({mtr.AppTransaction transaction}) async {
-    String uid = await firebaseAuthenticationService.getUserID();
-    DatabaseReference reference = await firebaseRealtimeDatabaseProvider.transactionsReference(uid);
-
-    Map<String, dynamic> transactionMap = TransactionsHelper().convertTransactionToJson(transaction: transaction);
-
-    reference.child(transaction.id).update(transactionMap);
-  }
-
-  Future<List<mtr.AppTransaction>> getTransactionsByTimePeriod({@required DateTime start, @required DateTime end}) async {
-    List<mtr.AppTransaction> list = [];
-
-    String uid = await firebaseAuthenticationService.getUserID();
-    DatabaseReference reference = await firebaseRealtimeDatabaseProvider.transactionsReference(uid);
-
-    DataSnapshot snapshot =
-    (await reference.orderByChild(DATE_KEY).startAt(start.toIso8601String()).endAt(end.toIso8601String()).once()).snapshot;
-
-    if (snapshot.value != null) {
-      Map<dynamic, dynamic> values = snapshot.value;
-      values.forEach((key, value) {
-        mtr.AppTransaction transaction =
-            TransactionsHelper().convertJsonToTransaction(json: Map<String, dynamic>.from(value), key: key);
-
-        list.add(transaction);
-      });
+  Future<void> delete({String? transactionID}) async {
+    String uid = await amplifyAuthenticationService.getUserID();
+    final snapshot = await find(transactionID: transactionID);
+    if (snapshot != null && snapshot.userID == uid) {
+      await Amplify.DataStore.delete(snapshot);
     }
-
-    return list;
   }
 
-  Future<List<mtr.AppTransaction>> getAllData() async {
-    List<mtr.AppTransaction> list = [];
+  @override
+  Future<AppTransaction?> find({String? transactionID}) async {
+    String uid = await amplifyAuthenticationService.getUserID();
+    final snapshot = await Amplify.DataStore.query(
+      AppTransaction.classType,
+      where: AppTransaction.ID.eq(transactionID)
+          .and(AppTransaction.USERID.eq(uid))
+    );
 
-    String uid = await firebaseAuthenticationService.getUserID();
-    DatabaseReference reference = await firebaseRealtimeDatabaseProvider.transactionsReference(uid);
+    return snapshot.firstOrNull;
+  }
 
-    DataSnapshot snapshot = (await reference.once()).snapshot;
-    var values = snapshot.value as Map;
-    values.forEach((key, value) {
-      mtr.AppTransaction transaction =
-            TransactionsHelper().convertJsonToTransaction(json: Map<String, dynamic>.from(value), key: key);
+  @override
+  Future<void> update({AppTransaction? transaction}) async {
+    String uid = await amplifyAuthenticationService.getUserID();
+    if (transaction!.userID == uid) {
+      await Amplify.DataStore.save(transaction);
+    }
+  }
 
-        list.add(transaction);
-      });
-    return list;
+  Future<Stream<QuerySnapshot<AppTransaction>>> getTransactionsByTimePeriod({required DateTime start, required DateTime end}) async {
+    String uid = await amplifyAuthenticationService.getUserID();
+    TemporalDateTime _start = TemporalDateTime(start);
+    TemporalDateTime _end = TemporalDateTime(end);
+    final snapshot = Amplify.DataStore.observeQuery(
+        AppTransaction.classType,
+        where: AppTransaction.USERID.eq(uid)
+            .and(AppTransaction.DATE.between(_start, _end))
+    );
+
+    return snapshot;
+  }
+
+  Future<List<AppTransaction>> getAllData() async {
+    String uid = await amplifyAuthenticationService.getUserID();
+    final snapshot = await Amplify.DataStore.query(
+      AppTransaction.classType,
+      where: AppTransaction.USERID.eq(uid)
+    );
+    return snapshot;
   }
 }

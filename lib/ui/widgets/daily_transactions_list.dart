@@ -4,10 +4,8 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/blocs/transactions/transactions_daily/transactions_daily_bloc.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
-import 'package:radency_internship_project_2/models/transactions/expense_transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/income_transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/transfer_transaction.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
+import 'package:radency_internship_project_2/models/TransactionType.dart';
 import 'package:radency_internship_project_2/ui/shared_components/centered_text_container.dart';
 import 'package:radency_internship_project_2/ui/widgets/transactions_view/widgets/data_loading_widget.dart';
 import 'package:radency_internship_project_2/utils/strings.dart';
@@ -17,7 +15,7 @@ import 'package:radency_internship_project_2/utils/time.dart';
 import 'common_transactions_list.dart';
 
 class DailyTransactionList extends StatelessWidget {
-  const DailyTransactionList({Key key}) : super(key: key);
+  const DailyTransactionList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +50,7 @@ class DailyTransactionList extends StatelessWidget {
 }
 
 class _StickyExpensesDaily extends StatelessWidget {
-  const _StickyExpensesDaily({Key key, this.items}) : super(key: key);
+  const _StickyExpensesDaily({Key? key, required this.items}) : super(key: key);
 
   final List<AppTransaction> items;
 
@@ -71,7 +69,7 @@ class _StickyExpensesDaily extends StatelessWidget {
 
     return SliverStickyHeader(
       header: DailyExpensesHeader(
-        dateTime: items[0].date,
+        dateTime: items[0].date.getDateTimeInUtc(),
         incomeTotal: totalIncome,
         outcomeTotal: totalOutcome,
       ),
@@ -94,8 +92,8 @@ class _StickyExpensesDaily extends StatelessWidget {
 
 class DailyTransactionItem extends StatelessWidget {
   const DailyTransactionItem({
-    Key key,
-    this.transaction,
+    Key? key,
+    required this.transaction,
   }) : super(key: key);
 
   final AppTransaction transaction;
@@ -171,14 +169,14 @@ class DailyTransactionItem extends StatelessWidget {
 
     switch (transaction.transactionType) {
       case TransactionType.Income:
-        result = (transaction as IncomeTransaction).category;
+        result = transaction.category!;
         break;
       case TransactionType.Expense:
-        result = (transaction as ExpenseTransaction).category;
+        result = transaction.category!;
         break;
       case TransactionType.Transfer:
         result =
-            '${(transaction as TransferTransaction).accountOrigin} > ${(transaction as TransferTransaction).accountDestination}';
+            '${transaction.accountOrigin} > ${transaction.accountDestination}';
         break;
     }
 
@@ -188,8 +186,8 @@ class DailyTransactionItem extends StatelessWidget {
 
 class DailyExpensesHeader extends StatelessWidget {
   const DailyExpensesHeader({
-    Key key,
-    this.dateTime,
+    Key? key,
+    required this.dateTime,
     this.incomeTotal = 0.0,
     this.outcomeTotal = 0.0,
   }) : super(key: key);

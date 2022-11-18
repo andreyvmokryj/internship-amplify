@@ -19,7 +19,7 @@ enum TransactionsSliderMode {
 class TransactionsSliderBloc extends Bloc<TransactionsSliderEvent, TransactionsSliderState> {
   TransactionsSliderBloc() : super(TransactionsSliderInitial());
 
-  TransactionsSliderMode _currentTransactionsSliderMode;
+  TransactionsSliderMode? _currentTransactionsSliderMode;
 
   @override
   Stream<TransactionsSliderState> mapEventToState(
@@ -34,10 +34,10 @@ class TransactionsSliderBloc extends Bloc<TransactionsSliderEvent, TransactionsS
 
   Stream<TransactionsSliderState> _mapTransactionsSliderInitializeToState() async* {
     _currentTransactionsSliderMode = TransactionsSliderMode.daily;
-    yield TransactionsSliderLoaded(transactionsSliderMode: _currentTransactionsSliderMode);
+    yield TransactionsSliderLoaded(transactionsSliderMode: _currentTransactionsSliderMode!);
   }
 
-  Stream<TransactionsSliderState> _mapTransactionsSliderModeChangedToState({@required int tabIndex}) async* {
+  Stream<TransactionsSliderState> _mapTransactionsSliderModeChangedToState({required int tabIndex}) async* {
     switch (tabIndex) {
       case 0:
         _currentTransactionsSliderMode = TransactionsSliderMode.daily;
@@ -56,6 +56,6 @@ class TransactionsSliderBloc extends Bloc<TransactionsSliderEvent, TransactionsS
         break;
     }
 
-    yield TransactionsSliderLoaded(transactionsSliderMode: _currentTransactionsSliderMode);
+    yield TransactionsSliderLoaded(transactionsSliderMode: _currentTransactionsSliderMode!);
   }
 }

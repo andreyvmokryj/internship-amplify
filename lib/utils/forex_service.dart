@@ -19,7 +19,7 @@ class ForexService{
         map[key] = value;
       });
 
-      double priceInUAH = map[mainCurrencyCode];
+      double priceInUAH = map[mainCurrencyCode]!;
       map.forEach((key, value) {
         map[key] = value / priceInUAH;
       });

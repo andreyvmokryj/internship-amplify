@@ -3,14 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/blocs/transactions/transactions_weekly/transactions_weekly_bloc.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
-import 'package:radency_internship_project_2/models/transactions/week_details.dart';
+import 'package:radency_internship_project_2/local_models/transactions/week_details.dart';
 import 'package:radency_internship_project_2/ui/shared_components/empty_data_refresh_container.dart';
 import 'package:radency_internship_project_2/ui/widgets/common_transactions_list.dart';
 import 'package:radency_internship_project_2/utils/strings.dart';
 
-
 class WeeklySummaryList extends StatelessWidget {
-  const WeeklySummaryList({Key key}) : super(key: key);
+  const WeeklySummaryList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +42,8 @@ class WeeklySummaryList extends StatelessWidget {
 
 class WeeklyDetailsItem extends StatelessWidget {
   const WeeklyDetailsItem({
-    Key key,
-    this.itemEntity,
+    Key? key,
+    required this.itemEntity,
   }) : super(key: key);
 
   final WeekDetails itemEntity;

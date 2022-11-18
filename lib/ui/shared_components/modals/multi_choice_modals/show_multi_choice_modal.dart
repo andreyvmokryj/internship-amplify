@@ -6,7 +6,7 @@ import 'package:radency_internship_project_2/ui/shared_components/modals/multi_c
 
 enum MultiChoiceModalType{Account, Category}
 
-Future<List> showMultiChoiceModal({BuildContext context, MultiChoiceModalType type}) {
+Future<List?>? showMultiChoiceModal({required BuildContext context, required MultiChoiceModalType type}) {
   var modal;
   switch (type) {
     case MultiChoiceModalType.Account:
@@ -23,4 +23,6 @@ Future<List> showMultiChoiceModal({BuildContext context, MultiChoiceModalType ty
       builder: (context) => modal,
     );
   }
+
+  return null;
 }

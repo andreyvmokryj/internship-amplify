@@ -38,12 +38,12 @@ class AssetGenImage extends AssetImage {
 
 class Asset {
   Asset._();
-  static AssetGenImage coolKidsHighTech = 
-      const AssetGenImage('assets/images/cool_kids_high_tech.png');
-  static AssetGenImage coolKidsLongDistanceRelationship = 
-      const AssetGenImage('assets/images/cool_kids_long_distance_relationship.png');
+  static AssetGenImage wallet = 
+      const AssetGenImage('assets/images/Wallet.png');
   static AssetGenImage coolKidsStudy = 
       const AssetGenImage('assets/images/cool_kids_study.png');
-  static AssetGenImage wallet = 
-      const AssetGenImage('assets/images/Wallet.jpg');
+  static AssetGenImage coolKidsLongDistanceRelationship = 
+      const AssetGenImage('assets/images/cool_kids_long_distance_relationship.png');
+  static AssetGenImage coolKidsHighTech = 
+      const AssetGenImage('assets/images/cool_kids_high_tech.png');
 }

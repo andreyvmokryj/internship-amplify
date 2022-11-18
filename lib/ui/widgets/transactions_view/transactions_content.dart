@@ -8,7 +8,7 @@ import 'package:radency_internship_project_2/ui/widgets/transactions_view/tabs/w
 class TransactionsContent extends StatefulWidget {
   final TabController tabBarController;
 
-  const TransactionsContent({Key key, this.tabBarController}) : super(key: key);
+  const TransactionsContent({Key? key, required this.tabBarController}) : super(key: key);
 
   @override
   _TransactionsContentState createState() => _TransactionsContentState();

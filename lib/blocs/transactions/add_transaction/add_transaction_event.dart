@@ -13,7 +13,7 @@ class AddTransaction extends AddTransactionEvent {
   final AppTransaction transaction;
   final bool isAddingCompleted;
 
-  AddTransaction({@required this.transaction, @required this.isAddingCompleted});
+  AddTransaction({required this.transaction, required this.isAddingCompleted});
 
   @override
   List<Object> get props => [transaction, isAddingCompleted];

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,8 +12,10 @@ import 'package:radency_internship_project_2/blocs/transactions/add_transaction/
 import 'package:radency_internship_project_2/blocs/transactions/add_transaction/transaction_location/transaction_location_bloc.dart';
 import 'package:radency_internship_project_2/blocs/transactions/add_transaction/transaction_location_map/transaction_location_map_bloc.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
-import 'package:radency_internship_project_2/models/location.dart';
-import 'package:radency_internship_project_2/models/transactions/expense_transaction.dart';
+import 'package:radency_internship_project_2/local_models/location.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
+import 'package:radency_internship_project_2/models/ExpenseCreationType.dart';
+import 'package:radency_internship_project_2/models/ModelProvider.dart';
 import 'package:radency_internship_project_2/ui/shared_components/modals/amount/amount_currency_prefix.dart';
 import 'package:radency_internship_project_2/ui/shared_components/elevated_buttons/colored_elevated_button.dart';
 import 'package:radency_internship_project_2/ui/shared_components/field_title.dart';
@@ -37,13 +40,13 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
   static final GlobalKey<FormState> _amountValueFormKey = GlobalKey<FormState>();
   static final GlobalKey<FormState> _noteValueFormKey = GlobalKey<FormState>();
 
-  DateTime _selectedDateTime;
-  String _accountValue;
-  String _categoryValue;
-  double _amountValue;
-  String _noteValue;
-  ExpenseLocation _locationValue;
-  Contact _sharedContact;
+  late DateTime _selectedDateTime;
+  String? _accountValue;
+  String? _categoryValue;
+  double? _amountValue;
+  String? _noteValue;
+  ExpenseLocation? _locationValue;
+  Contact? _sharedContact;
 
   TextEditingController _dateFieldController = TextEditingController();
   TextEditingController _accountFieldController = TextEditingController();
@@ -126,7 +129,7 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
           flex: _textFieldFlex,
           child: TextFormField(
             style: addTransactionFormInputTextStyle(),
-            decoration: addTransactionFormFieldDecoration(context, focused: _focusMap[AddTransactionFields.Date]),
+            decoration: addTransactionFormFieldDecoration(context, focused: _focusMap[AddTransactionFields.Date] ?? false),
             controller: _dateFieldController,
             readOnly: true,
             showCursor: false,
@@ -156,7 +159,7 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
             key: _accountValueFormKey,
             child: TextFormField(
               style: addTransactionFormInputTextStyle(),
-              decoration: addTransactionFormFieldDecoration(context, focused: _focusMap[AddTransactionFields.Account]),
+              decoration: addTransactionFormFieldDecoration(context, focused: _focusMap[AddTransactionFields.Account] ?? false),
               controller: _accountFieldController,
               readOnly: true,
               showCursor: false,
@@ -164,14 +167,14 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
                 setState(() {
                   focusOnField(_focusMap, AddTransactionFields.Account);
                 });
-                _accountFieldController.text = await showSingleChoiceModal(context: context, values: accounts, type: SingleChoiceModalType.Account, onAddCallback: null);
+                _accountFieldController.text = (await showSingleChoiceModal(context: context, values: accounts, type: SingleChoiceModalType.Account, onAddCallback: null)) ?? "";
                 setState(() {
-                  _accountValueFormKey.currentState.validate();
+                  _accountValueFormKey.currentState?.validate();
                 });
               },
               onSaved: (value) => _accountValue = value,
               validator: (val) {
-                if (val.isEmpty) {
+                if (val == null || val.isEmpty) {
                   return S.current.addTransactionAccountFieldValidationEmpty;
                 }
 
@@ -198,7 +201,7 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
             key: _categoryValueFormKey,
             child: TextFormField(
               style: addTransactionFormInputTextStyle(),
-              decoration: addTransactionFormFieldDecoration(context,  focused: _focusMap[AddTransactionFields.Category]),
+              decoration: addTransactionFormFieldDecoration(context,  focused: _focusMap[AddTransactionFields.Category] ?? false),
               controller: _categoryFieldController,
               readOnly: true,
               showCursor: false,
@@ -206,14 +209,14 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
                 setState(() {
                   focusOnField(_focusMap, AddTransactionFields.Category);
                 });
-                _categoryFieldController.text = await showSingleChoiceModal(context: context, values: categories, type: SingleChoiceModalType.Category, onAddCallback: null);
+                _categoryFieldController.text = await showSingleChoiceModal(context: context, values: categories, type: SingleChoiceModalType.Category, onAddCallback: null) ?? "";
                 setState(() {
-                  _categoryValueFormKey.currentState.validate();
+                  _categoryValueFormKey.currentState?.validate();
                 });
               },
               onSaved: (value) => _categoryValue = value,
               validator: (val) {
-                if (val.isEmpty) {
+                if (val == null || val.isEmpty) {
                   return S.current.addTransactionCategoryFieldValidationEmpty;
                 }
 
@@ -240,7 +243,7 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
             key: _amountValueFormKey,
             child: TextFormField(
               style: addTransactionFormInputTextStyle(),
-              decoration: addTransactionFormFieldDecoration(context, prefixIcon: AmountCurrencyPrefix(),  focused: _focusMap[AddTransactionFields.Amount]),
+              decoration: addTransactionFormFieldDecoration(context, prefixIcon: AmountCurrencyPrefix(),  focused: _focusMap[AddTransactionFields.Amount] ?? false),
               readOnly: true,
               showCursor: true,
               controller: _amountFieldController,
@@ -248,7 +251,7 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
                 FilteringTextInputFormatter.allow(RegExp(numberWithDecimalRegExp)),
               ],
               validator: (val) {
-                if (!RegExp(moneyAmountRegExp).hasMatch(val)) {
+                if (val == null || !RegExp(moneyAmountRegExp).hasMatch(val)) {
                   return S.current.addTransactionAmountFieldValidationEmpty;
                 }
 
@@ -260,10 +263,10 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
                 });
                 await showSingleChoiceModal(context: context, type: SingleChoiceModalType.Amount, updateAmountCallback: updateAmountCallback);
                 setState(() {
-                  _amountValueFormKey.currentState.validate();
+                  _amountValueFormKey.currentState?.validate();
                 });
               },
-              onSaved: (value) => _amountValue = double.tryParse(value),
+              onSaved: (value) => _amountValue = double.tryParse(value ?? ""),
             ),
           ),
         )
@@ -301,9 +304,9 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
   }
 
   Widget _sharedWithField() {
-    ImageProvider _photoProvider;
+    ImageProvider? _photoProvider;
     try {
-      _photoProvider = MemoryImage(_sharedContact.avatar);
+      _photoProvider = MemoryImage(_sharedContact!.avatar!);
     } catch (_) {}
 
     return Row(
@@ -345,7 +348,7 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
                             ),
                           )
                         : null,
-                    focused: _focusMap[AddTransactionFields.Shared]
+                    focused: _focusMap[AddTransactionFields.Shared] ?? false,
                   ),
                   onTap: _selectSharedContact,
                   readOnly: true,
@@ -381,7 +384,7 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
               child: TextFormField(
                 controller: _locationFieldController,
                 style: addTransactionFormInputTextStyle(),
-                decoration: addTransactionFormFieldDecoration(_context, hintText: S.current.addTransactionLocationFieldHint, focused: _focusMap[AddTransactionFields.Location]),
+                decoration: addTransactionFormFieldDecoration(_context, hintText: S.current.addTransactionLocationFieldHint, focused: _focusMap[AddTransactionFields.Location] ?? false),
                 readOnly: true,
                 showCursor: false,
                 onTap: () async {
@@ -428,17 +431,19 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
             if (_validateForms()) {
               BlocProvider.of<AddTransactionBloc>(context).add(AddTransaction(
                   isAddingCompleted: true,
-                  transaction: ExpenseTransaction(
+                  transaction: AppTransaction(
+                      transactionType: TransactionType.Expense,
                       currency: state.currency,
-                      note: _noteValue,
-                      accountOrigin: _accountValue,
-                      date: _selectedDateTime,
-                      category: _categoryValue,
-                      amount: _amountValue,
-                      //sharedContact: _sharedContact,
+                      note: _noteValue ?? "",
+                      accountOrigin: _accountValue ?? "",
+                      date: TemporalDateTime(_selectedDateTime),
+                      category: _categoryValue ?? "",
+                      amount: _amountValue ?? 0,
                       locationLatitude: _locationValue?.latitude,
                       locationLongitude: _locationValue?.longitude,
-                      creationType: ExpenseCreationType.MANUAL)));
+                      creationType: ExpenseCreationType.MANUAL
+                  )
+              ));
             }
           });
     });
@@ -456,16 +461,16 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
             if (_validateForms()) {
               BlocProvider.of<AddTransactionBloc>(context).add(AddTransaction(
                   isAddingCompleted: false,
-                  transaction: ExpenseTransaction(
-                    note: _noteValue,
-                    accountOrigin: _accountValue,
-                    date: _selectedDateTime,
-                    category: _categoryValue,
-                    amount: _amountValue,
-                    //sharedContact: _sharedContact,
+                  transaction: AppTransaction(
+                    transactionType: TransactionType.Expense,
+                    note: _noteValue ?? "",
+                    accountOrigin: _accountValue ?? "",
+                    date: TemporalDateTime(_selectedDateTime),
+                    category: _categoryValue ?? "",
+                    amount: _amountValue ?? 0,
                     currency: state.currency,
-                    locationLatitude: _locationValue.latitude,
-                    locationLongitude: _locationValue.longitude,
+                    locationLatitude: _locationValue?.latitude,
+                    locationLongitude: _locationValue?.longitude,
                     creationType: ExpenseCreationType.MANUAL,
                   )));
             }
@@ -474,7 +479,7 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
   }
 
   Future _selectNewDate() async {
-    DateTime result = await showDatePicker(
+    DateTime? result = await showDatePicker(
         context: context, initialDate: DateTime.now(), firstDate: DateTime(1960), lastDate: DateTime.now());
     if (result != null) {
       setState(() {
@@ -491,14 +496,14 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
     });
     final contactsPermission = await Permission.contacts.request();
     if(Platform.isIOS || contactsPermission.isGranted) {
-      final Contact contact = await ContactsService.openDeviceContactPicker();
+      final Contact? contact = await ContactsService.openDeviceContactPicker();
       if (Platform.isAndroid) {
-        contact.avatar = await ContactsService.getAvatar(contact);
+        contact?.avatar = await ContactsService.getAvatar(contact);
       }
       if (contact != null) {
         setState(() {
           _sharedContact = contact;
-          _sharedFieldController.text = contact.displayName;
+          _sharedFieldController.text = contact.displayName ?? "";
         });
       }
     }
@@ -540,8 +545,8 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
   }
 
   Future _selectLocation(
-      {@required BuildContext context, @required String languageCode, @required bool isLocationSelected}) async {
-    ExpenseLocation _newLocation;
+      {required BuildContext context, required String languageCode, required bool isLocationSelected}) async {
+    ExpenseLocation? _newLocation;
 
     _newLocation = await _getLocationFromModalBottomSheet(
         xContext: context, languageCode: languageCode, isLocationSelected: isLocationSelected);
@@ -552,12 +557,12 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
       showSnackBarMessage(context, S.current.addTransactionSnackBarLocationSelectCancelled);
     } else {
       _locationValue = _newLocation;
-      _locationFieldController.text = _locationValue.address;
+      _locationFieldController.text = _locationValue!.address;
     }
   }
 
-  Future<ExpenseLocation> _getLocationFromModalBottomSheet(
-      {@required BuildContext xContext, @required String languageCode, @required bool isLocationSelected}) {
+  Future<ExpenseLocation?> _getLocationFromModalBottomSheet(
+      {required BuildContext xContext, required String languageCode, required bool isLocationSelected}) {
     final transactionLocationBloc = BlocProvider.of<TransactionLocationBloc>(xContext);
 
     return showModalBottomSheet(
@@ -624,36 +629,36 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
     );
   }
 
-  Widget _locationMenuItem({@required Widget leading, @required Widget title, @required Function onSelect}) {
+  Widget _locationMenuItem({required Widget leading, required Widget title, required Function onSelect}) {
     return GestureDetector(
       child: ListTile(
         leading: leading,
         title: title,
       ),
-      onTap: onSelect,
+      onTap: onSelect.call(),
     );
   }
 
   void _saveForms() {
-    _accountValueFormKey.currentState.save();
-    _categoryValueFormKey.currentState.save();
-    _amountValueFormKey.currentState.save();
-    _noteValueFormKey.currentState.save();
+    _accountValueFormKey.currentState?.save();
+    _categoryValueFormKey.currentState?.save();
+    _amountValueFormKey.currentState?.save();
+    _noteValueFormKey.currentState?.save();
   }
 
   bool _validateForms() {
     bool result = true;
 
-    if (!_accountValueFormKey.currentState.validate()) {
+    if (!(_accountValueFormKey.currentState?.validate() ?? false)) {
       result = false;
     }
-    if (!_categoryValueFormKey.currentState.validate()) {
+    if (!(_categoryValueFormKey.currentState?.validate() ?? false)) {
       result = false;
     }
-    if (!_amountValueFormKey.currentState.validate()) {
+    if (!(_amountValueFormKey.currentState?.validate() ?? false)) {
       result = false;
     }
-    if (!_noteValueFormKey.currentState.validate()) {
+    if (!(_noteValueFormKey.currentState?.validate() ?? false)) {
       result = false;
     }
 
@@ -661,7 +666,7 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
   }
 }
 
-String getContactInitials(Contact contact) {
-  String lastName = contact.familyName ?? "";
-  return contact.displayName.trim()[0] + (lastName != "" ? lastName[0] : "");
+String getContactInitials(Contact? contact) {
+  String lastName = contact?.familyName ?? "";
+  return (contact?.displayName ?? "").trim()[0] + (lastName != "" ? lastName[0] : "");
 }

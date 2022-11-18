@@ -9,7 +9,7 @@ class CsvExportStateInitial extends CsvExportState{
 }
 
 class CsvExportLoadedState extends CsvExportState {
-  CsvExportLoadedState({this.file});
+  CsvExportLoadedState({required this.file});
 
   File file;
 }

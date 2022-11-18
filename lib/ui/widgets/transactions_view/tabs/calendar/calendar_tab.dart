@@ -5,7 +5,7 @@ import 'package:radency_internship_project_2/ui/widgets/transactions_view/tabs/c
 import 'package:radency_internship_project_2/ui/widgets/transactions_view/widgets/data_loading_widget.dart';
 
 class CalendarTab extends StatefulWidget {
-  const CalendarTab({Key key}) : super(key: key);
+  const CalendarTab({Key? key}) : super(key: key);
 
   @override
   _CalendarTabState createState() => _CalendarTabState();

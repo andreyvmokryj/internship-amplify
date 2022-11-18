@@ -12,7 +12,7 @@ class TransactionsMonthlyInitial extends TransactionsMonthlyState {}
 class TransactionsMonthlyLoading extends TransactionsMonthlyState {
   final String sliderCurrentTimeIntervalString;
 
-  TransactionsMonthlyLoading({@required this.sliderCurrentTimeIntervalString});
+  TransactionsMonthlyLoading({required this.sliderCurrentTimeIntervalString});
 
   @override
   List<Object> get props => [sliderCurrentTimeIntervalString];
@@ -22,7 +22,7 @@ class TransactionsMonthlyLoaded extends TransactionsMonthlyState {
   final String sliderCurrentTimeIntervalString;
   final List<MonthDetails> yearSummary;
 
-  TransactionsMonthlyLoaded({this.yearSummary, @required this.sliderCurrentTimeIntervalString});
+  TransactionsMonthlyLoaded({required this.yearSummary, required this.sliderCurrentTimeIntervalString});
 
   @override
   List<Object> get props => [yearSummary, sliderCurrentTimeIntervalString];

@@ -2,6 +2,7 @@ import 'package:currency_picker/currency_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
+import 'package:collection/collection.dart';
 
 final String emailRegExp =
     r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,"
@@ -10,7 +11,7 @@ final String emailRegExp =
 final String phoneNumberRegExp = r'^(?:[+])?[0-9]{9,16}$';
 
 final _moneyFormat = NumberFormat("#,###0.00");
-String getMoneyFormatted(double value, {String separator, String comma}){
+String getMoneyFormatted(double value, {String? separator, String? comma}){
   return _moneyFormat.format(value).replaceAll(",", " ").replaceAll(".", ",");
 }
 
@@ -65,7 +66,7 @@ String getMonthByNumber(BuildContext context, int num) {
 }
 
 String getCurrencySymbol(String currencyCode) {
-  return CurrencyService().findByCode(currencyCode).symbol;
+  return CurrencyService().findByCode(currencyCode)?.symbol ?? '';
 }
 
 final String numberWithDecimalRegExp = r'[0-9.]';
@@ -77,11 +78,11 @@ final String moneyAmountRegExp = r'^[0-9]+(\.[0-9]{1,2})?$';
 String capitalizeFirstLetter(String s) {
   if (s.trim().isEmpty) return '';
 
-  return '${s[0]?.toUpperCase()}${s.substring(1)}';
+  return '${s[0].toUpperCase()}${s.substring(1)}';
 }
 
 String capitalizeFirstLetterOfEachWord(String s) => s.split(" ").map((str) => capitalizeFirstLetter(str)).join(" ");
 
-T enumFromString<T>(List<T> values, String value) {
-  return values.firstWhere((v) => v.toString().split('.')[1].toUpperCase() == value.toUpperCase(), orElse: () => null);
+T? enumFromString<T>(List<T> values, String value) {
+  return values.firstWhereOrNull((v) => v.toString().split('.')[1].toUpperCase() == value.toUpperCase());
 }

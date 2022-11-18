@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/blocs/transactions/transactions_monthly/transactions_monthly_bloc.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
-import 'package:radency_internship_project_2/models/transactions/month_details.dart';
+import 'package:radency_internship_project_2/local_models/transactions/month_details.dart';
 import 'package:radency_internship_project_2/ui/shared_components/empty_data_refresh_container.dart';
 import 'package:radency_internship_project_2/ui/widgets/common_transactions_list.dart';
 import 'package:radency_internship_project_2/utils/strings.dart';
 
 class MonthlyTransactionsList extends StatelessWidget {
-  const MonthlyTransactionsList({Key key}) : super(key: key);
+  const MonthlyTransactionsList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +44,8 @@ class MonthlyTransactionsList extends StatelessWidget {
 
 class MonthlyDetailsItem extends StatelessWidget {
   const MonthlyDetailsItem({
-    Key key,
-    this.itemEntity,
+    Key? key,
+    required this.itemEntity,
   }) : super(key: key);
 
   final MonthDetails itemEntity;

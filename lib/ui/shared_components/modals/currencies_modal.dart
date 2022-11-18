@@ -6,7 +6,6 @@ import 'package:radency_internship_project_2/blocs/forex/forex_bloc.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/blocs/sub_currency/sub_currency_bloc.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
-import 'package:radency_internship_project_2/utils/forex_service.dart';
 import 'package:radency_internship_project_2/utils/styles.dart';
 
 class CurrenciesModal extends StatelessWidget{
@@ -60,7 +59,7 @@ class CurrenciesModal extends StatelessWidget{
                 return SingleChildScrollView(
                   child: Column(
                     children: currencies.expand((element) {
-                      String exchangeRate = forexState.forex[element.code].toStringAsFixed(7);
+                      String exchangeRate = (forexState.forex![element.code] ?? 0).toStringAsFixed(7);
 
                       return [
                         ListTile(

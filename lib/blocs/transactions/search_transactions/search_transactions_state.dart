@@ -12,7 +12,7 @@ class SearchTransactionsLoading extends SearchTransactionsState{}
 class SearchTransactionsLoaded extends SearchTransactionsState{
   final List<AppTransaction> transactions;
 
-  SearchTransactionsLoaded({this.transactions});
+  SearchTransactionsLoaded({required this.transactions});
 
   @override
   List<Object> get props => [...transactions];

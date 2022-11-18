@@ -22,7 +22,7 @@ class BudgetOverviewGetNextMonthPressed extends BudgetOverviewEvent {
 class BudgetOverviewFetchRequested extends BudgetOverviewEvent {
   final DateTime dateForFetch;
 
-  BudgetOverviewFetchRequested({@required this.dateForFetch});
+  BudgetOverviewFetchRequested({required this.dateForFetch});
 
   @override
   List<Object> get props => [dateForFetch];
@@ -39,7 +39,7 @@ class BudgetOverviewDisplayRequested extends BudgetOverviewEvent {
 class BudgetOverviewCategoryBudgetSaved extends BudgetOverviewEvent {
   final CategoryBudget categoryBudget;
 
-  BudgetOverviewCategoryBudgetSaved({@required this.categoryBudget});
+  BudgetOverviewCategoryBudgetSaved({required this.categoryBudget});
 
   @override
   List<Object> get props => [categoryBudget];
@@ -55,7 +55,7 @@ class BudgetOverviewUserChanged extends BudgetOverviewEvent {
 
   final String userId;
 
-  BudgetOverviewUserChanged({@required this.userId});
+  BudgetOverviewUserChanged({required this.userId});
 
   @override
   List<Object> get props => [userId];

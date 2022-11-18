@@ -1,10 +1,12 @@
+import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/blocs/transactions/add_transaction/add_transaction_bloc.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
-import 'package:radency_internship_project_2/models/transactions/transfer_transaction.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
+import 'package:radency_internship_project_2/models/ModelProvider.dart';
 import 'package:radency_internship_project_2/ui/shared_components/modals/amount/amount_currency_prefix.dart';
 import 'package:radency_internship_project_2/ui/shared_components/elevated_buttons/colored_elevated_button.dart';
 import 'package:radency_internship_project_2/ui/shared_components/field_title.dart';
@@ -29,12 +31,12 @@ class _AddTransferFormState extends State<AddTransferForm> {
   static final GlobalKey<FormState> _feesValueFormKey = GlobalKey<FormState>();
   static final GlobalKey<FormState> _noteValueFormKey = GlobalKey<FormState>();
 
-  DateTime _selectedDateTime;
-  String _fromValue;
-  String _toValue;
-  double _amountValue;
-  double _feesValue;
-  String _noteValue;
+  late DateTime _selectedDateTime;
+  String? _fromValue;
+  String? _toValue;
+  double? _amountValue;
+  double? _feesValue;
+  String? _noteValue;
 
   TextEditingController _dateFieldController = TextEditingController();
   TextEditingController _fromFieldController = TextEditingController();
@@ -116,7 +118,7 @@ class _AddTransferFormState extends State<AddTransferForm> {
         Flexible(
           flex: _textFieldFlex,
           child: TextFormField(
-            decoration: addTransactionFormFieldDecoration(context, focused: focusMap[AddTransactionFields.Date]),
+            decoration: addTransactionFormFieldDecoration(context, focused: focusMap[AddTransactionFields.Date] ?? false),
             style: addTransactionFormInputTextStyle(),
             controller: _dateFieldController,
             readOnly: true,
@@ -146,7 +148,7 @@ class _AddTransferFormState extends State<AddTransferForm> {
           child: Form(
             key: _fromValueFormKey,
             child: TextFormField(
-              decoration: addTransactionFormFieldDecoration(context, focused: focusMap[AddTransactionFields.Account]),
+              decoration: addTransactionFormFieldDecoration(context, focused: focusMap[AddTransactionFields.Account] ?? false),
               style: addTransactionFormInputTextStyle(),
               controller: _fromFieldController,
               readOnly: true,
@@ -155,14 +157,14 @@ class _AddTransferFormState extends State<AddTransferForm> {
                 setState(() {
                   focusOnField(focusMap, AddTransactionFields.Account);
                 });
-                _fromFieldController.text = await showSingleChoiceModal(context: context, type: SingleChoiceModalType.Account, values: accounts, onAddCallback: null);
+                _fromFieldController.text = await showSingleChoiceModal(context: context, type: SingleChoiceModalType.Account, values: accounts, onAddCallback: null) ?? "";
                 setState(() {
-                  _fromValueFormKey.currentState.validate();
+                  _fromValueFormKey.currentState!.validate();
                 });
               },
               onSaved: (value) => _fromValue = value,
               validator: (val) {
-                if (val.isEmpty) {
+                if ((val ?? "").isEmpty) {
                   return S.current.addTransactionAccountFieldValidationEmpty;
                 }
 
@@ -188,7 +190,7 @@ class _AddTransferFormState extends State<AddTransferForm> {
           child: Form(
             key: _toValueFormKey,
             child: TextFormField(
-              decoration: addTransactionFormFieldDecoration(context, focused: focusMap[AddTransactionFields.AccountTo]),
+              decoration: addTransactionFormFieldDecoration(context, focused: focusMap[AddTransactionFields.AccountTo] ?? false),
               style: addTransactionFormInputTextStyle(),
               controller: _toFieldController,
               readOnly: true,
@@ -197,14 +199,14 @@ class _AddTransferFormState extends State<AddTransferForm> {
                 setState(() {
                   focusOnField(focusMap, AddTransactionFields.AccountTo);
                 });
-                _toFieldController.text = await showSingleChoiceModal(context: context, values: accounts, type: SingleChoiceModalType.Account, onAddCallback: null);
+                _toFieldController.text = await showSingleChoiceModal(context: context, values: accounts, type: SingleChoiceModalType.Account, onAddCallback: null) ?? "";
                 setState(() {
-                  _toValueFormKey.currentState.validate();
+                  _toValueFormKey.currentState!.validate();
                 });
               },
               onSaved: (value) => _toValue = value,
               validator: (val) {
-                if (val.isEmpty) {
+                if ((val ?? "").isEmpty) {
                   return S.current.addTransactionAccountFieldValidationEmpty;
                 }
 
@@ -234,7 +236,7 @@ class _AddTransferFormState extends State<AddTransferForm> {
                   key: _amountValueFormKey,
                   child: TextFormField(
                     style: addTransactionFormInputTextStyle(),
-                    decoration: addTransactionFormFieldDecoration(context, prefixIcon: AmountCurrencyPrefix(), focused: focusMap[AddTransactionFields.Amount]),
+                    decoration: addTransactionFormFieldDecoration(context, prefixIcon: AmountCurrencyPrefix(), focused: focusMap[AddTransactionFields.Amount] ?? false),
                     controller: _amountFieldController,
                     readOnly: true,
                     showCursor: false,
@@ -242,7 +244,7 @@ class _AddTransferFormState extends State<AddTransferForm> {
                       FilteringTextInputFormatter.allow(RegExp(numberWithDecimalRegExp)),
                     ],
                     validator: (val) {
-                      if (!RegExp(moneyAmountRegExp).hasMatch(val)) {
+                      if (!RegExp(moneyAmountRegExp).hasMatch(val ?? "")) {
                         return S.current.addTransactionAmountFieldValidationEmpty;
                       }
 
@@ -254,10 +256,10 @@ class _AddTransferFormState extends State<AddTransferForm> {
                       });
                       await showSingleChoiceModal(context: context, type: SingleChoiceModalType.Amount, updateAmountCallback: updateAmountCallback);
                       setState(() {
-                        _amountValueFormKey.currentState.validate();
+                        _amountValueFormKey.currentState?.validate();
                       });
                     },
-                    onSaved: (value) => _amountValue = double.tryParse(value) ?? 0,
+                    onSaved: (value) => _amountValue = double.tryParse(value ?? "") ?? 0,
                   ),
                 ),
               ),
@@ -298,7 +300,7 @@ class _AddTransferFormState extends State<AddTransferForm> {
                   child: Form(
                     key: _feesValueFormKey,
                     child: TextFormField(
-                      decoration: addTransactionFormFieldDecoration(context, prefixIcon: AmountCurrencyPrefix(), focused: focusMap[AddTransactionFields.Fees]),
+                      decoration: addTransactionFormFieldDecoration(context, prefixIcon: AmountCurrencyPrefix(), focused: focusMap[AddTransactionFields.Fees] ?? false),
                       style: addTransactionFormInputTextStyle(),
                       controller: _feesFieldController,
                       readOnly: true,
@@ -312,7 +314,7 @@ class _AddTransferFormState extends State<AddTransferForm> {
                           return null;
                         }
 
-                        if (!RegExp(moneyAmountRegExp).hasMatch(val)) {
+                        if (!RegExp(moneyAmountRegExp).hasMatch(val ?? "")) {
                           return S.current.addTransactionAmountFieldValidationEmpty;
                         }
 
@@ -329,11 +331,11 @@ class _AddTransferFormState extends State<AddTransferForm> {
                           title: S.current.addTransactionFeesFieldTitle
                         );
                         setState(() {
-                          _feesValueFormKey.currentState.validate();
+                          _feesValueFormKey.currentState?.validate();
                         });
                       },
                       onSaved: (value) {
-                        _areFeesVisible ? _feesValue = double.tryParse(value) ?? 0 : _feesValue = 0;
+                        _areFeesVisible ? _feesValue = double.tryParse(value ?? "") ?? 0 : _feesValue = 0;
                       },
                     ),
                   ),
@@ -397,13 +399,14 @@ class _AddTransferFormState extends State<AddTransferForm> {
             if (_validateForms()) {
               BlocProvider.of<AddTransactionBloc>(context).add(AddTransaction(
                   isAddingCompleted: true,
-                  transaction: TransferTransaction(
-                      accountOrigin: _fromValue,
-                      accountDestination: _toValue,
-                      note: _noteValue,
-                      fees: _feesValue,
-                      date: _selectedDateTime,
-                      amount: _amountValue,
+                  transaction: AppTransaction(
+                      transactionType: TransactionType.Transfer,
+                      accountOrigin: _fromValue ?? "",
+                      accountDestination: _toValue ?? "",
+                      note: _noteValue ?? "",
+                      fees: _feesValue ?? 0,
+                      date: TemporalDateTime(_selectedDateTime),
+                      amount: _amountValue ?? 0,
                       currency: state.currency)));
             }
           });
@@ -422,13 +425,14 @@ class _AddTransferFormState extends State<AddTransferForm> {
             if (_validateForms()) {
               BlocProvider.of<AddTransactionBloc>(context).add(AddTransaction(
                   isAddingCompleted: false,
-                  transaction: TransferTransaction(
-                      note: _noteValue,
-                      accountOrigin: _fromValue,
-                      date: _selectedDateTime,
-                      accountDestination: _toValue,
-                      amount: _amountValue,
-                      fees: _feesValue,
+                  transaction: AppTransaction(
+                      transactionType: TransactionType.Transfer,
+                      note: _noteValue ?? "",
+                      accountOrigin: _fromValue ?? "",
+                      date: TemporalDateTime(_selectedDateTime),
+                      accountDestination: _toValue ?? "",
+                      amount: _amountValue ?? 0,
+                      fees: _feesValue ?? 0,
                       currency: state.currency)));
             }
           });
@@ -444,7 +448,7 @@ class _AddTransferFormState extends State<AddTransferForm> {
   }
 
   Future _selectNewDate() async {
-    DateTime result = await showDatePicker(
+    DateTime? result = await showDatePicker(
         context: context, initialDate: DateTime.now(), firstDate: DateTime(1960), lastDate: DateTime.now());
     if (result != null) {
       setState(() {
@@ -487,31 +491,31 @@ class _AddTransferFormState extends State<AddTransferForm> {
   }
 
   void _saveForms() {
-    _toValueFormKey.currentState.save();
-    _fromValueFormKey.currentState.save();
-    _amountValueFormKey.currentState.save();
-    _noteValueFormKey.currentState.save();
+    _toValueFormKey.currentState!.save();
+    _fromValueFormKey.currentState!.save();
+    _amountValueFormKey.currentState!.save();
+    _noteValueFormKey.currentState!.save();
     if (_areFeesVisible) {
-      _feesValueFormKey.currentState.save();
+      _feesValueFormKey.currentState!.save();
     }
   }
 
   bool _validateForms() {
     bool result = true;
 
-    if (!_fromValueFormKey.currentState.validate()) {
+    if (!_fromValueFormKey.currentState!.validate()) {
       result = false;
     }
-    if (!_toValueFormKey.currentState.validate()) {
+    if (!_toValueFormKey.currentState!.validate()) {
       result = false;
     }
-    if (!_amountValueFormKey.currentState.validate()) {
+    if (!_amountValueFormKey.currentState!.validate()) {
       result = false;
     }
-    if (!_noteValueFormKey.currentState.validate()) {
+    if (!_noteValueFormKey.currentState!.validate()) {
       result = false;
     }
-    if (_areFeesVisible && !_feesValueFormKey.currentState.validate()) {
+    if (_areFeesVisible && !_feesValueFormKey.currentState!.validate()) {
       result = false;
     }
 

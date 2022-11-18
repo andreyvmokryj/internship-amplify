@@ -6,7 +6,7 @@ import 'package:radency_internship_project_2/utils/styles.dart';
 class DesignTransactionHeader extends StatefulWidget{
   final tabBarController;
 
-  const DesignTransactionHeader({Key key, this.tabBarController}) : super(key: key);
+  const DesignTransactionHeader({Key? key, this.tabBarController}) : super(key: key);
 
   @override
   _DesignTransactionHeaderState createState() => _DesignTransactionHeaderState();

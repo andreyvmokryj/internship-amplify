@@ -22,7 +22,7 @@ class TransactionsCalendarGetNextMonthPressed extends TransactionsCalendarEvent 
 class TransactionsCalendarFetchRequested extends TransactionsCalendarEvent {
   final DateTime dateForFetch;
 
-  TransactionsCalendarFetchRequested({@required this.dateForFetch});
+  TransactionsCalendarFetchRequested({required this.dateForFetch});
 
   @override
   List<Object> get props => [dateForFetch];
@@ -35,10 +35,10 @@ class TransactionsCalendarDisplayRequested extends TransactionsCalendarEvent {
   final double incomeSummary;
 
   TransactionsCalendarDisplayRequested({
-    this.daysData,
-    @required this.sliderCurrentTimeIntervalString,
-    @required this.incomeSummary,
-    @required this.expensesSummary,
+    required this.daysData,
+    required this.sliderCurrentTimeIntervalString,
+    required this.incomeSummary,
+    required this.expensesSummary,
   });
 
   @override
@@ -54,7 +54,7 @@ class TransactionsCalendarUserChanged extends TransactionsCalendarEvent {
 
   final String id;
 
-  TransactionsCalendarUserChanged({@required this.id});
+  TransactionsCalendarUserChanged({required this.id});
 
   @override
   List<Object> get props => [id];

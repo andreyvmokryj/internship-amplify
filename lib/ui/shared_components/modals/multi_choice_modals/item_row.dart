@@ -5,7 +5,7 @@ class ItemRow extends StatelessWidget{
   final String title;
   final onTap;
 
-  const ItemRow({Key key, this.selected, this.title, this.onTap}) : super(key: key);
+  const ItemRow({Key? key, required this.selected, required this.title, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

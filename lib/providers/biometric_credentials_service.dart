@@ -22,7 +22,7 @@ class BiometricCredentialsService {
 
   // Fingerprint is used by default
 
-  Future<void> saveBiometricCredentials({@required String email, @required String password}) async {
+  Future<void> saveBiometricCredentials({required String email, required String password}) async {
     Box box = await HiveProvider().openCredentialsBox();
 
     await box.put(EMAIL_KEY, email);
@@ -45,7 +45,7 @@ class BiometricCredentialsService {
     return status;
   }
 
-  Future<String> getCredentials({@required String credentialType}) async {
+  Future<String> getCredentials({required String credentialType}) async {
     Box box = await HiveProvider().openCredentialsBox();
 
     String value = await box.get(credentialType, defaultValue: null);
@@ -63,7 +63,7 @@ class BiometricCredentialsService {
     }
   }
 
-  Future<bool> authenticate({@required String reason}) async {
+  Future<bool> authenticate({required String reason}) async {
     return localAuth.authenticate(localizedReason: reason, biometricOnly: true);
   }
 }

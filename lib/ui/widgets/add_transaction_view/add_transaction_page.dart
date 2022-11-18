@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radency_internship_project_2/blocs/transactions/add_transaction/transaction_type/transaction_type_bloc.dart';
-import 'package:radency_internship_project_2/models/transactions/transaction.dart';
+import 'package:radency_internship_project_2/models/TransactionType.dart';
 import 'package:radency_internship_project_2/ui/shared_components/design_scaffold.dart';
 import 'package:radency_internship_project_2/ui/widgets/add_transaction_view/widgets/expenses_types_view.dart';
 import 'package:radency_internship_project_2/utils/styles.dart';
@@ -19,7 +19,7 @@ class AddTransactionPage extends StatelessWidget {
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
     return AppBar(
       title: BlocBuilder<TransactionTypeBloc, TransactionTypeState>(
         builder: (context, state) {

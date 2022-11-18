@@ -8,7 +8,7 @@ import 'package:radency_internship_project_2/ui/shared_components/modals/single_
 
 enum SingleChoiceModalType{Account, Category, Amount}
 
-Future<String> showSingleChoiceModal({BuildContext context, @required SingleChoiceModalType type, List<String> values, onAddCallback, updateAmountCallback, String title, bool showSubcurrencies = true}) {
+Future<String?>? showSingleChoiceModal({required BuildContext context, required SingleChoiceModalType type, List<String> values = const [], onAddCallback, updateAmountCallback, String title = "", bool showSubcurrencies = true}) {
   var modal;
   switch (type) {
     case SingleChoiceModalType.Account:
@@ -40,4 +40,5 @@ Future<String> showSingleChoiceModal({BuildContext context, @required SingleChoi
       builder: (context) => modal,
     );
   }
+  return null;
 }

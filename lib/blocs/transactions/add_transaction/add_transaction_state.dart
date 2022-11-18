@@ -15,7 +15,7 @@ class AddTransactionLoaded extends AddTransactionState {
   final List<String> accounts;
 
 
-  AddTransactionLoaded({@required this.incomeCategories, @required this.expenseCategories, @required this.accounts});
+  AddTransactionLoaded({required this.incomeCategories, required this.expenseCategories, required this.accounts});
 
   @override
   List<Object> get props => [incomeCategories, expenseCategories, accounts];

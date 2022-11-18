@@ -16,24 +16,24 @@ class ExpensesMapState extends Equatable {
   final bool isFocusing;
   final String sliderCurrentTimeIntervalString;
   final bool shouldAnimateToPosition;
-  final LatLng animateTargetPosition;
-  final CameraPosition initialCameraPosition;
-  final Set<Marker> markers;
-  final String message;
+  final LatLng? animateTargetPosition;
+  final CameraPosition? initialCameraPosition;
+  final Set<Marker>? markers;
+  final String? message;
 
   @override
   List<Object> get props => [
         isMapInitialized,
         sliderCurrentTimeIntervalString,
         isFocusing,
-        animateTargetPosition,
-        initialCameraPosition,
-        markers,
+        animateTargetPosition ?? "",
+        initialCameraPosition ?? "",
+        markers ?? "",
         shouldAnimateToPosition,
-        message,
+        message ?? "",
       ];
 
-  ExpensesMapState initial({@required CameraPosition cameraPosition}) {
+  ExpensesMapState initial({required CameraPosition cameraPosition}) {
     return copyWith(initialCameraPosition: cameraPosition, isMapInitialized: true, markers: <Marker>{});
   }
 
@@ -45,15 +45,15 @@ class ExpensesMapState extends Equatable {
     return copyWith(isFocusing: false);
   }
 
-  ExpensesMapState animateToPosition({@required LatLng latLng}) {
+  ExpensesMapState animateToPosition({required LatLng latLng}) {
     return copyWith(animateTargetPosition: latLng, shouldAnimateToPosition: true);
   }
 
-  ExpensesMapState setSliderTitle({@required String sliderCurrentTimeIntervalString, bool clearMarkers}) {
+  ExpensesMapState setSliderTitle({required String sliderCurrentTimeIntervalString, bool clearMarkers = false}) {
     return copyWith(sliderCurrentTimeIntervalString: sliderCurrentTimeIntervalString, markers: <Marker>{});
   }
 
-  ExpensesMapState showMarkers({@required Set<Marker> markers}) {
+  ExpensesMapState showMarkers({required Set<Marker> markers}) {
     return copyWith(markers: markers);
   }
 
@@ -66,14 +66,14 @@ class ExpensesMapState extends Equatable {
   }
 
   ExpensesMapState copyWith({
-    bool isMapInitialized,
-    CameraPosition initialCameraPosition,
-    bool isFocusing,
-    bool shouldAnimateToPosition,
-    LatLng animateTargetPosition,
-    String sliderCurrentTimeIntervalString,
-    Set<Marker> markers,
-    String message,
+    bool? isMapInitialized,
+    CameraPosition? initialCameraPosition,
+    bool? isFocusing,
+    bool? shouldAnimateToPosition,
+    LatLng? animateTargetPosition,
+    String? sliderCurrentTimeIntervalString,
+    Set<Marker>? markers,
+    String? message,
   }) {
     return ExpensesMapState(
         sliderCurrentTimeIntervalString: sliderCurrentTimeIntervalString ?? this.sliderCurrentTimeIntervalString,

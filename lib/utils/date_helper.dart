@@ -7,7 +7,7 @@ class DateHelper {
     return DateFormat('dd.MM.yyyy').format(dateTime);
   }
 
-  String dateToNbuString(DateTime dateTime, {String locale}) {
+  String dateToNbuString(DateTime dateTime, {String? locale}) {
     return DateFormat('ddMMyyyy').format(dateTime);
   }
 
@@ -19,7 +19,7 @@ class DateHelper {
     return DateFormat('y').format(dateTime);
   }
 
-  String monthNameAndYearFromDateTimeString(DateTime dateTime, {String locale}) {
+  String monthNameAndYearFromDateTimeString(DateTime dateTime, {String? locale}) {
     return capitalizeFirstLetterOfEachWord(DateFormat('LLLL y', locale).format(dateTime));
   }
 
@@ -40,7 +40,7 @@ class DateHelper {
     return DateTime(dateTime.year, 13, 1).subtract(Duration(seconds: 1));
   }
 
-  String getWeeksRangeString({@required DateTime firstDay, @required DateTime lastDay, bool oneWeekMode = false}) {
+  String getWeeksRangeString({required DateTime firstDay, required DateTime lastDay, bool oneWeekMode = false}) {
     String range = '';
 
     range = '${appendZeroToSingleDigit(firstDay.day)}.'

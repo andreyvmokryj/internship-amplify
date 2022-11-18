@@ -23,7 +23,7 @@ class TransactionsWeeklyGetNextMonthPressed extends TransactionsWeeklyEvent {
 class TransactionsWeeklyFetchRequested extends TransactionsWeeklyEvent {
   final DateTime dateForFetch;
 
-  TransactionsWeeklyFetchRequested({@required this.dateForFetch});
+  TransactionsWeeklyFetchRequested({required this.dateForFetch});
 
   @override
   List<Object> get props => [dateForFetch];
@@ -33,7 +33,7 @@ class TransactionWeeklyDisplayRequested extends TransactionsWeeklyEvent {
   final String sliderCurrentTimeIntervalString;
   final List<AppTransaction> transactions;
 
-  TransactionWeeklyDisplayRequested({this.transactions, @required this.sliderCurrentTimeIntervalString});
+  TransactionWeeklyDisplayRequested({this.transactions = const [], required this.sliderCurrentTimeIntervalString});
 
   @override
   List<Object> get props => [transactions, sliderCurrentTimeIntervalString];

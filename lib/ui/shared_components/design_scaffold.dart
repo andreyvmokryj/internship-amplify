@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class DesignScaffold extends StatelessWidget {
-  final Widget appBar;
-  final Widget header;
-  final Widget body;
-  final Widget floatingActionButton;
-  final Widget bottomNavigationBar;
+  final PreferredSizeWidget? appBar;
+  final Widget? header;
+  final Widget? body;
+  final Widget? floatingActionButton;
+  final Widget? bottomNavigationBar;
 
-  const DesignScaffold({Key key, this.appBar, this.header, this.body, this.floatingActionButton, this.bottomNavigationBar}) : super(key: key);
+  const DesignScaffold({Key? key, this.appBar, this.header, this.body, this.floatingActionButton, this.bottomNavigationBar}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,14 +1,12 @@
 import 'dart:async';
 
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
-import 'package:radency_internship_project_2/models/transactions/expense_transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/income_transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/month_details.dart';
-import 'package:radency_internship_project_2/models/transactions/transaction.dart';
-import 'package:radency_internship_project_2/models/user.dart';
-import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
+import 'package:radency_internship_project_2/local_models/transactions/month_details.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
+import 'package:radency_internship_project_2/models/TransactionType.dart';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
 import 'package:radency_internship_project_2/utils/date_helper.dart';
 
@@ -18,21 +16,19 @@ part 'transactions_monthly_state.dart';
 
 class TransactionsMonthlyBloc extends Bloc<TransactionsMonthlyEvent, TransactionsMonthlyState> {
   TransactionsMonthlyBloc({
-    @required this.transactionsRepository,
-    @required this.firebaseAuthenticationService,
+    required this.transactionsRepository,
   }) : super(TransactionsMonthlyInitial());
 
-  final FirebaseAuthenticationService firebaseAuthenticationService;
   final TransactionsRepository transactionsRepository;
 
-  DateTime _observedDate;
+  DateTime? _observedDate;
   String _sliderCurrentTimeIntervalString = '';
 
   List<AppTransaction> observedYearTransactions = [];
   List<MonthDetails> yearSummary = [];
 
-  StreamSubscription<UserEntity> _onUserChangedSubscription;
-  StreamSubscription monthlyTransactionsSubscription;
+  StreamSubscription<AuthHubEvent>? _onUserChangedSubscription;
+  StreamSubscription? monthlyTransactionsSubscription;
 
   @override
   Future<void> close() {
@@ -56,24 +52,23 @@ class TransactionsMonthlyBloc extends Bloc<TransactionsMonthlyEvent, Transaction
     } else if (event is TransactionMonthlyDisplayRequested) {
       yield* _mapTransactionMonthlyDisplayRequestedToState(event.yearTransactions);
     } else if (event is TransactionMonthlyRefreshPressed) {
-      add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate));
+      add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate!));
     }
   }
 
   Stream<TransactionsMonthlyState> _mapTransactionsMonthlyFetchRequestedToState(
-      {@required DateTime dateForFetch}) async* {
+      {required DateTime dateForFetch}) async* {
     monthlyTransactionsSubscription?.cancel();
 
-    _sliderCurrentTimeIntervalString = DateHelper().yearFromDateTimeString(_observedDate);
+    _sliderCurrentTimeIntervalString = DateHelper().yearFromDateTimeString(_observedDate!);
     yield TransactionsMonthlyLoading(sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString);
-    monthlyTransactionsSubscription = transactionsRepository
+    monthlyTransactionsSubscription = (await transactionsRepository
         .getTransactionsByTimePeriod(
           start: DateHelper().getFirstDayOfYear(dateForFetch),
           end: DateHelper().getLastDayOfYear(dateForFetch),
-        )
-        .asStream()
+        ))
         .listen((event) {
-      observedYearTransactions = event;
+      observedYearTransactions = event.items;
       add(TransactionMonthlyDisplayRequested(
           yearTransactions: observedYearTransactions,
           sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString));
@@ -88,32 +83,32 @@ class TransactionsMonthlyBloc extends Bloc<TransactionsMonthlyEvent, Transaction
   }
 
   Stream<TransactionsMonthlyState> _mapTransactionsMonthlyInitializeToState() async* {
-    _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
-      if (user == UserEntity.empty) {
+    _onUserChangedSubscription = Amplify.Hub.listen(HubChannel.Auth, (hubEvent) {
+      if (hubEvent.payload == null) {
         observedYearTransactions.clear();
         add(TransactionMonthlyDisplayRequested(
             sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString,
             yearTransactions: observedYearTransactions));
       } else {
         _observedDate = DateTime.now();
-        add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate));
+        add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate!));
       }
     });
 
     _observedDate = DateTime.now();
-    add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate));
+    add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate!));
   }
 
   Stream<TransactionsMonthlyState> _mapTransactionsMonthlyGetPreviousYearPressedToState() async* {
-    _observedDate = DateTime(_observedDate.year - 1);
-    add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate));
+    _observedDate = DateTime(_observedDate!.year - 1);
+    add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate!));
   }
 
   Stream<TransactionsMonthlyState> _mapTransactionsMonthlyGetNextYearPressedToState() async* {
     _observedDate = DateTime(
-      _observedDate.year + 1,
+      _observedDate!.year + 1,
     );
-    add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate));
+    add(TransactionsMonthlyFetchRequested(dateForFetch: _observedDate!));
   }
 
   List<MonthDetails> _getSummaryFromTransactionsList(List<AppTransaction> data) {
@@ -126,11 +121,11 @@ class TransactionsMonthlyBloc extends Bloc<TransactionsMonthlyEvent, Transaction
     }
 
     data.forEach((transaction) {
-      if (transaction is ExpenseTransaction) {
-        list.where((monthSummary) => monthSummary.monthNumber == transaction.date.month).first.expenses +=
+      if (transaction.transactionType == TransactionType.Expense) {
+        list.where((monthSummary) => monthSummary.monthNumber == transaction.date.getDateTimeInUtc().month).first.expenses +=
             transaction.amount;
-      } else if (transaction is IncomeTransaction) {
-        list.where((monthSummary) => monthSummary.monthNumber == transaction.date.month).first.income +=
+      } else if (transaction.transactionType == TransactionType.Income) {
+        list.where((monthSummary) => monthSummary.monthNumber == transaction.date.getDateTimeInUtc().month).first.income +=
             transaction.amount;
       }
     });

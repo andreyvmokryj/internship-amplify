@@ -4,7 +4,7 @@ import 'package:radency_internship_project_2/ui/shared_components/centered_text_
 import 'package:radency_internship_project_2/ui/shared_components/elevated_buttons/stylized_elevated_button.dart';
 
 class EmptyDataRefreshContainer extends StatelessWidget {
-  const EmptyDataRefreshContainer({Key key, @required this.refreshCallback, @required this.message}) : super(key: key);
+  const EmptyDataRefreshContainer({Key? key, required this.refreshCallback, required this.message}) : super(key: key);
 
   final String message;
   final Function refreshCallback;

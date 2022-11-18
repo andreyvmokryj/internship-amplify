@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:radency_internship_project_2/blocs/authentication/authentication_bloc.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
 import 'package:radency_internship_project_2/ui/shared_components/elevated_buttons/colored_elevated_button.dart';
 
 class EmailVerificationResendScreen extends StatefulWidget {
-  const EmailVerificationResendScreen({Key key}) : super(key: key);
+  const EmailVerificationResendScreen({Key? key}) : super(key: key);
 
   @override
   _EmailVerificationResendScreenState createState() => _EmailVerificationResendScreenState();
@@ -23,7 +22,8 @@ class _EmailVerificationResendScreenState extends State<EmailVerificationResendS
             IconButton(
               key: const Key('homePage_logout_iconButton'),
               icon: const Icon(Icons.exit_to_app),
-              onPressed: () => context.read<AuthenticationBloc>().add(AuthenticationLogoutRequested()),
+              // onPressed: () => context.read<AuthenticationBloc>().add(AuthenticationLogoutRequested()),
+              onPressed: () {},
             )
           ]),
       body: body(),
@@ -51,7 +51,7 @@ class _EmailVerificationResendScreenState extends State<EmailVerificationResendS
               textAlign: TextAlign.center,
             ),
             onPressed: () {
-              context.read<AuthenticationBloc>().add(AuthenticationEmailResendRequested());
+              // context.read<AuthenticationBloc>().add(AuthenticationEmailResendRequested());
             },
           ),
         ],

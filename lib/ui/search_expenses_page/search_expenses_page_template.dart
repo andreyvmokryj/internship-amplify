@@ -4,9 +4,7 @@ import 'package:radency_internship_project_2/blocs/accounts/account_bloc.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/blocs/transactions/search_transactions/search_transactions_bloc.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
-import 'package:radency_internship_project_2/models/transactions/expense_transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/income_transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/transfer_transaction.dart';
+import 'package:radency_internship_project_2/models/ModelProvider.dart';
 import 'package:radency_internship_project_2/ui/search_expenses_page/filters_view.dart';
 import 'package:radency_internship_project_2/ui/search_expenses_page/summary_row_widget.dart';
 import 'package:radency_internship_project_2/ui/search_expenses_page/transaction_widget.dart';
@@ -69,13 +67,13 @@ class _SearchExpensesPageState extends State<SearchExpensesPage> {
 
                   final transactions = state.transactions;
                   transactions.forEach((element) {
-                    if(element is IncomeTransaction){
+                    if(element.transactionType == TransactionType.Income){
                       income += element.amount;
                     }
-                    if(element is ExpenseTransaction){
+                    if(element.transactionType == TransactionType.Expense){
                       outcome += element.amount;
                     }
-                    if(element is TransferTransaction){
+                    if(element.transactionType == TransactionType.Transfer){
                       transfer += element.amount;
                       outcome += element.fees ?? 0;
                     }

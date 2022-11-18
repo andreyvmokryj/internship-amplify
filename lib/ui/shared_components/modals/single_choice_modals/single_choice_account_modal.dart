@@ -6,11 +6,11 @@ class SingleChoiceAccountModal extends StatelessWidget{
   final List<String> accounts;
   final onAddCallback;
 
-  const SingleChoiceAccountModal({Key key, this.accounts, this.onAddCallback}) : super(key: key);
+  const SingleChoiceAccountModal({Key? key, required this.accounts, this.onAddCallback}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> contents = accounts.map((element) => TextButton(
+    List<ButtonStyleButton> contents = accounts.map((element) => TextButton(
       onPressed: (){
         Navigator.of(context).pop(element);
       },

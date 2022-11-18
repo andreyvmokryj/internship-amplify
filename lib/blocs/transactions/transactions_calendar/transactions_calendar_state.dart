@@ -12,7 +12,7 @@ class TransactionsCalendarInitial extends TransactionsCalendarState {}
 class TransactionsCalendarLoading extends TransactionsCalendarState {
   final String sliderCurrentTimeIntervalString;
 
-  TransactionsCalendarLoading({@required this.sliderCurrentTimeIntervalString});
+  TransactionsCalendarLoading({required this.sliderCurrentTimeIntervalString});
 
   @override
   List<Object> get props => [sliderCurrentTimeIntervalString];
@@ -25,10 +25,10 @@ class TransactionsCalendarLoaded extends TransactionsCalendarState {
   final double incomeSummary;
 
   TransactionsCalendarLoaded({
-    this.daysData,
-    @required this.sliderCurrentTimeIntervalString,
-    @required this.expensesSummary,
-    @required this.incomeSummary,
+    required this.daysData,
+    required this.sliderCurrentTimeIntervalString,
+    required this.expensesSummary,
+    required this.incomeSummary,
   });
 
   @override

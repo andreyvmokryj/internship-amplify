@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive/hive.dart';
-import 'package:radency_internship_project_2/models/budget/category_budget.dart';
+import 'package:radency_internship_project_2/local_models/budget/category_budget.dart';
 
 import 'hive_types.dart';
 
@@ -48,7 +48,7 @@ class HiveProvider {
   }
 
   Future<Box> openCredentialsBox() async {
-    var encryptionKey = base64Url.decode(await secureStorage.read(key: 'key'));
+    var encryptionKey = base64Url.decode(await secureStorage.read(key: 'key') ?? "");
     Box box;
     if (!Hive.isBoxOpen(credentialsBoxKey)) {
       box = await Hive.openBox(credentialsBoxKey, encryptionCipher: HiveAesCipher(encryptionKey));

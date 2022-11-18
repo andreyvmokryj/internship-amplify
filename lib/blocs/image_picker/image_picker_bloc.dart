@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:radency_internship_project_2/blocs/image_picker/impostor_bill_data.dart';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
@@ -12,7 +11,7 @@ part 'image_picker_event.dart';
 part 'image_picker_state.dart';
 
 class ImagePickerBloc extends Bloc<ImagePickerEvent, ImagePickerState> {
-  ImagePickerBloc({@required this.transactionsRepository}) : super(ImagePickerInitial(null));
+  ImagePickerBloc({required this.transactionsRepository}) : super(ImagePickerInitial(null));
 
   final TransactionsRepository transactionsRepository;
 

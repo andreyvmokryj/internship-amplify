@@ -19,7 +19,7 @@ class NewCategoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CategoryBloc, CategoryState>(builder: (context, state) {
-      final NewCategoryPageArguments args = ModalRoute.of(context).settings.arguments as NewCategoryPageArguments;
+      final NewCategoryPageArguments args = ModalRoute.of(context)!.settings.arguments as NewCategoryPageArguments;
       final categoriesType = args.categoriesType;
       List<CategoryItemData> categoryItems;
 
@@ -27,10 +27,10 @@ class NewCategoryPage extends StatelessWidget {
 
       if (categoriesType == incomeList) {
         categoryItems = state.incomeCategories;
-        nextItemId = state.nextIncomeCategoryId;
+        nextItemId = state.nextIncomeCategoryId ?? 0;
       } else {
         categoryItems = state.expensesCategories;
-        nextItemId = state.nextExpenseCategoryId;
+        nextItemId = state.nextExpenseCategoryId ?? 0;
       }
 
       return Scaffold(

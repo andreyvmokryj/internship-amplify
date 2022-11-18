@@ -4,13 +4,11 @@ import 'package:radency_internship_project_2/utils/styles.dart';
 class StylizedElevatedButton extends StatelessWidget {
   final Widget child;
   final Color backgroundColor;
-  final Color foregroundColor;
-  final Function onPressed;
+  final Color? foregroundColor;
+  final Function? onPressed;
 
   StylizedElevatedButton(
-      {@required this.child, this.backgroundColor = Colors.white, @required this.onPressed, this.foregroundColor})
-      : assert(child != null),
-        assert(backgroundColor != null);
+      {required this.child, this.backgroundColor = Colors.white, required this.onPressed, this.foregroundColor});
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +17,9 @@ class StylizedElevatedButton extends StatelessWidget {
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.resolveWith((states) => getColor(states, backgroundColor)),
           foregroundColor: MaterialStateProperty.all<Color>(
-              foregroundColor == null ? Theme.of(context).accentColor : foregroundColor),
+              foregroundColor ?? Theme.of(context).colorScheme.secondary),
           textStyle: MaterialStateProperty.all<TextStyle>(addTransactionElevatedButtonTitleStyle(
-              context, foregroundColor == null ? Theme.of(context).accentColor : foregroundColor)),
+              context, foregroundColor ?? Theme.of(context).colorScheme.secondary)),
           // side: MaterialStateProperty.all<BorderSide>(
           //   BorderSide(width: 1, color: foregroundColor == null ? Theme.of(context).accentColor : foregroundColor),
           // ),
@@ -31,7 +29,9 @@ class StylizedElevatedButton extends StatelessWidget {
             ),
           ),
           shadowColor: MaterialStateProperty.all(Colors.transparent)),
-      onPressed: onPressed,
+      onPressed: () {
+        onPressed?.call();
+      }
     );
   }
 

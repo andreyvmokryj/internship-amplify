@@ -12,7 +12,7 @@ class TransactionsSliderInitialize extends TransactionsSliderEvent {
 class TransactionsSliderModeChanged extends TransactionsSliderEvent {
   final int index;
 
-  TransactionsSliderModeChanged({@required this.index});
+  TransactionsSliderModeChanged({required this.index});
 
   @override
   List<Object> get props => [index];

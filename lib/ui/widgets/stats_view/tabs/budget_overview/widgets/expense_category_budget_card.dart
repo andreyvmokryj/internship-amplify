@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
-import 'package:radency_internship_project_2/models/budget/monthly_category_expense.dart';
+import 'package:radency_internship_project_2/local_models/budget/monthly_category_expense.dart';
 import 'package:radency_internship_project_2/utils/strings.dart';
 import 'package:radency_internship_project_2/utils/text_styles.dart';
 
@@ -13,7 +13,7 @@ class ExpenseCategoryBudgetItem extends StatelessWidget {
   final double verticalPadding = 4;
   final double horizontalPadding = 16;
 
-  ExpenseCategoryBudgetItem({@required this.monthlyCategoryExpense});
+  ExpenseCategoryBudgetItem({required this.monthlyCategoryExpense});
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,7 @@ class ExpenseCategoryBudgetItem extends StatelessWidget {
               children: [
                 Text(
                   getCurrencySymbol(context.read<SettingsBloc>().state.currency),
-                  style: textStyleTransactionListCurrency(color: Theme.of(context).textTheme.bodyText1.color, size: 20),
+                  style: textStyleTransactionListCurrency(color: Theme.of(context).textTheme.bodyText1?.color, size: 20),
                 ),
                 Text(
                   '${monthlyCategoryExpense.budgetTotal.toStringAsFixed(2)}',

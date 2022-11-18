@@ -11,7 +11,7 @@ const String incomeList = "incomeList";
 const String expensesList = "expensesList";
 
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
-  SharedPreferences prefs;
+  SharedPreferences? prefs;
 
   CategoryBloc() : super(CategoryState(
     incomeCategories: List.empty(),
@@ -68,10 +68,10 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
 
   CategoryState loadFromPreferences() {
     //TODO Impl SharedPrefs!
-    var incomeListRaw = prefs.getString(incomeList);
-    var expensesListRaw = prefs.getString(expensesList);
-    var incomeId = prefs.getInt(expensesList);
-    var expensesId = prefs.getInt(expensesList);
+    var incomeListRaw = prefs!.getString(incomeList);
+    var expensesListRaw = prefs!.getString(expensesList);
+    var incomeId = prefs!.getInt(expensesList);
+    var expensesId = prefs!.getInt(expensesList);
 
     var incomeLabels = TempTransactionsValues().incomeCategories;
     var incomeItems = [];
@@ -100,11 +100,11 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   @override
   Stream<CategoryState> mapEventToState(CategoryEvent event) async* {
     if (event is ChangeCategory) {
-      yield changeCategory(event.settingName, event.listSettingValue.cast<CategoryItemData>());
+      yield changeCategory(event.settingName!, event.listSettingValue!.cast<CategoryItemData>());
     }
 
     if (event is ChangeCategoryCounter) {
-      yield changeCategoryCounter(event.settingName, event.settingValue);
+      yield changeCategoryCounter(event.settingName!, event.settingValue!);
     }
 
     if (event is LoadCategoriesFromSharedPreferences) {

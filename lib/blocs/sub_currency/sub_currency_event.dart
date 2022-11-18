@@ -10,12 +10,12 @@ class SubCurrencyInitialize extends SubCurrencyEvent{}
 class SubCurrencyFetchAvailableCurrencies extends SubCurrencyEvent{}
 
 class SubCurrencySelectCurrency extends SubCurrencyEvent{
-  final Currency currency;
+  final Currency? currency;
 
   SubCurrencySelectCurrency(this.currency);
 
   @override
-  List<Object> get props => [currency];
+  List<Object> get props => [currency ?? ""];
 }
 
 class SubCurrencyAddCurrency extends SubCurrencyEvent{

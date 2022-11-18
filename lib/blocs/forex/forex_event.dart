@@ -7,10 +7,10 @@ abstract class ForexEvent extends Equatable{
 
 class ForexFetchData extends ForexEvent{
   final String mainCurrencyCode;
-  final DateTime dateTime;
+  final DateTime? dateTime;
 
   ForexFetchData(this.mainCurrencyCode, [this.dateTime]);
 
   @override
-  List<Object> get props => [mainCurrencyCode, dateTime];
+  List<Object> get props => [mainCurrencyCode, dateTime ?? ""];
 }

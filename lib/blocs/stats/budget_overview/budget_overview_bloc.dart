@@ -1,20 +1,15 @@
 import 'dart:async';
 
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:meta/meta.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
 import 'package:radency_internship_project_2/blocs/transactions/add_transaction/temp_values.dart';
 import 'package:radency_internship_project_2/generated/l10n.dart';
-import 'package:radency_internship_project_2/models/budget/category_budget.dart';
-import 'package:radency_internship_project_2/models/budget/monthly_category_expense.dart';
-import 'package:radency_internship_project_2/models/transactions/expense_transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/transaction.dart';
-import 'package:radency_internship_project_2/models/transactions/transactions_helper.dart';
-import 'package:radency_internship_project_2/models/user.dart';
-import 'package:radency_internship_project_2/providers/firebase_auth_service.dart';
-import 'package:radency_internship_project_2/providers/firebase_realtime_database_provider.dart';
+import 'package:radency_internship_project_2/local_models/budget/category_budget.dart';
+import 'package:radency_internship_project_2/local_models/budget/monthly_category_expense.dart';
+import 'package:radency_internship_project_2/models/AppTransaction.dart';
+import 'package:radency_internship_project_2/models/ModelProvider.dart';
 import 'package:radency_internship_project_2/repositories/budgets_repository.dart';
 import 'package:radency_internship_project_2/repositories/transactions_repository.dart';
 import 'package:radency_internship_project_2/utils/date_helper.dart';
@@ -24,47 +19,36 @@ part 'budget_overview_event.dart';
 part 'budget_overview_state.dart';
 
 class BudgetOverviewBloc extends Bloc<BudgetOverviewEvent, BudgetOverviewState> {
-  BudgetOverviewBloc(
-      {@required this.settingsBloc,
-      @required this.budgetsRepository,
-      @required this.transactionsRepository,
-      @required this.firebaseAuthenticationService,
-      @required this.firebaseRealtimeDatabaseProvider})
-      : super(BudgetOverviewInitial());
+  BudgetOverviewBloc({required this.settingsBloc,
+    required this.budgetsRepository,
+    required this.transactionsRepository,
+  }) : super(BudgetOverviewInitial());
 
   final TransactionsRepository transactionsRepository;
-  final FirebaseAuthenticationService firebaseAuthenticationService;
-  final FirebaseRealtimeDatabaseProvider firebaseRealtimeDatabaseProvider;
 
   SettingsBloc settingsBloc;
-  StreamSubscription settingsSubscription;
+  StreamSubscription? settingsSubscription;
   String locale = '';
 
   BudgetsRepository budgetsRepository;
 
-  DateTime _observedDate;
+  DateTime? _observedDate;
   String _sliderCurrentTimeIntervalString = '';
 
   List<AppTransaction> transactions = [];
   List<MonthlyCategoryExpense> monthlyCategoryExpenses = [];
   List<CategoryBudget> budgets = [];
 
-  MonthlyCategoryExpense summary;
+  MonthlyCategoryExpense? summary;
 
-  StreamSubscription budgetOverviewSubscription;
-  StreamSubscription<UserEntity> _onUserChangedSubscription;
-  StreamSubscription<DatabaseEvent> _onTransactionAddedSubscription;
-  StreamSubscription<DatabaseEvent> _onTransactionChangedSubscription;
-  StreamSubscription<DatabaseEvent> _onTransactionDeletedSubscription;
+  StreamSubscription? budgetOverviewSubscription;
+  StreamSubscription<AuthHubEvent>? _onUserChangedSubscription;
 
   @override
   Future<void> close() {
     budgetOverviewSubscription?.cancel();
     _onUserChangedSubscription?.cancel();
     settingsSubscription?.cancel();
-    _onTransactionChangedSubscription?.cancel();
-    _onTransactionAddedSubscription?.cancel();
-    _onTransactionDeletedSubscription?.cancel();
 
     return super.close();
   }
@@ -106,36 +90,32 @@ class BudgetOverviewBloc extends Bloc<BudgetOverviewEvent, BudgetOverviewState> 
       }
     });
 
-    _onUserChangedSubscription = firebaseAuthenticationService.userFromAuthState.listen((user) {
-      _onTransactionChangedSubscription?.cancel();
-      _onTransactionAddedSubscription?.cancel();
-      _onTransactionDeletedSubscription?.cancel();
-
-      if (user == UserEntity.empty) {
-        transactions?.clear();
-        monthlyCategoryExpenses?.clear();
-        budgets?.clear();
+    _onUserChangedSubscription = Amplify.Hub.listen(HubChannel.Auth, (hubEvent) {
+      if (hubEvent.payload == null) {
+        transactions.clear();
+        monthlyCategoryExpenses.clear();
+        budgets.clear();
 
         monthlyCategoryExpenses = _getMonthlyCategoriesExpenses(transactions);
 
         add(BudgetOverviewDisplayRequested());
       } else {
         _observedDate = DateTime.now();
-        add(BudgetOverviewUserChanged(userId: user.id));
+        add(BudgetOverviewUserChanged(userId: hubEvent.payload!.userId));
       }
     });
 
-    add(BudgetOverviewFetchRequested(dateForFetch: _observedDate));
+    add(BudgetOverviewFetchRequested(dateForFetch: _observedDate!));
   }
 
   Stream<BudgetOverviewState> _mapBudgetOverviewLocaleChangedToState() async* {
-    _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate, locale: locale);
+    _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate!, locale: locale);
 
     if (state is BudgetOverviewLoaded) {
       yield BudgetOverviewLoaded(
           sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString,
           monthlyCategoryExpenses: monthlyCategoryExpenses,
-          summary: summary);
+          summary: summary!);
     } else if (state is BudgetOverviewLoading) {
       yield BudgetOverviewLoading(sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString);
     }
@@ -144,29 +124,21 @@ class BudgetOverviewBloc extends Bloc<BudgetOverviewEvent, BudgetOverviewState> 
   Stream<BudgetOverviewState> _mapBudgetOverviewUserChangedToState(String id) async* {
     yield BudgetOverviewLoading(sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString);
 
-    FirebaseStreamsGroup streams = await firebaseRealtimeDatabaseProvider.transactionStreams(id);
-    _onTransactionAddedSubscription = streams.onChildAdded.listen(_onTransactionAdded);
-    _onTransactionChangedSubscription = streams.onChildChanged.listen(_onTransactionChanged);
-    _onTransactionDeletedSubscription = streams.onChildDeleted.listen(_onTransactionDeleted);
-
     _observedDate = DateTime.now();
-
-    add(BudgetOverviewFetchRequested(dateForFetch: _observedDate));
+    add(BudgetOverviewFetchRequested(dateForFetch: _observedDate!));
   }
 
-  Stream<BudgetOverviewState> _mapBudgetOverviewFetchRequestedToState({@required DateTime dateForFetch}) async* {
+  Stream<BudgetOverviewState> _mapBudgetOverviewFetchRequestedToState({required DateTime dateForFetch}) async* {
     budgetOverviewSubscription?.cancel();
 
-    _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate);
+    _sliderCurrentTimeIntervalString = DateHelper().monthNameAndYearFromDateTimeString(_observedDate!);
     yield BudgetOverviewLoading(sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString);
-    budgetOverviewSubscription = transactionsRepository
+    budgetOverviewSubscription = (await transactionsRepository
         .getTransactionsByTimePeriod(
-            start: DateHelper().getFirstDayOfMonth(_observedDate), end: DateHelper().getLastDayOfMonth(_observedDate))
-        .asStream()
+            start: DateHelper().getFirstDayOfMonth(_observedDate!), end: DateHelper().getLastDayOfMonth(_observedDate!)))
         .listen((event) {
       monthlyCategoryExpenses.clear();
-      transactions = event;
-
+      transactions = event.items;
       add(BudgetOverviewDisplayRequested());
     });
   }
@@ -180,17 +152,17 @@ class BudgetOverviewBloc extends Bloc<BudgetOverviewEvent, BudgetOverviewState> 
     yield BudgetOverviewLoaded(
         sliderCurrentTimeIntervalString: _sliderCurrentTimeIntervalString,
         monthlyCategoryExpenses: monthlyCategoryExpenses,
-        summary: summary);
+        summary: summary!);
   }
 
   Stream<BudgetOverviewState> _mapBudgetOverviewGetPreviousMonthPressedToState() async* {
-    _observedDate = DateTime(_observedDate.year, _observedDate.month - 1);
-    add(BudgetOverviewFetchRequested(dateForFetch: _observedDate));
+    _observedDate = DateTime(_observedDate!.year, _observedDate!.month - 1);
+    add(BudgetOverviewFetchRequested(dateForFetch: _observedDate!));
   }
 
   Stream<BudgetOverviewState> _mapBudgetOverviewGetNextMonthPressedToState() async* {
-    _observedDate = DateTime(_observedDate.year, _observedDate.month + 1);
-    add(BudgetOverviewFetchRequested(dateForFetch: _observedDate));
+    _observedDate = DateTime(_observedDate!.year, _observedDate!.month + 1);
+    add(BudgetOverviewFetchRequested(dateForFetch: _observedDate!));
   }
 
   Stream<BudgetOverviewState> _mapBudgetOverviewCategoryBudgetSavedToState(CategoryBudget categoryBudget) async* {
@@ -261,7 +233,7 @@ class BudgetOverviewBloc extends Bloc<BudgetOverviewEvent, BudgetOverviewState> 
     });
 
     transactions.forEach((transaction) {
-      if (transaction is ExpenseTransaction) {
+      if (transaction.transactionType == TransactionType.Expense) {
         int categoryIndex = list.indexWhere((categoryExpenses) => categoryExpenses.category == transaction.category);
 
         // TODO: check for category id instead of name when (if) implemented
@@ -281,37 +253,5 @@ class BudgetOverviewBloc extends Bloc<BudgetOverviewEvent, BudgetOverviewState> 
     });
 
     return list;
-  }
-
-  _onTransactionAdded(DatabaseEvent event) async {
-    AppTransaction transaction = TransactionsHelper()
-        .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value), key: event.snapshot.key);
-
-    // TODO: refactor
-    if ((transaction.date.isAfter(DateHelper().getFirstDayOfMonth(_observedDate)) ||
-            transaction.date == DateHelper().getFirstDayOfMonth(_observedDate)) &&
-        transaction.date.isBefore(DateHelper().getLastDayOfMonth(_observedDate))) {
-      transactions.add(transaction);
-      add(BudgetOverviewDisplayRequested());
-    }
-  }
-
-  _onTransactionChanged(DatabaseEvent event) async {
-    int oldTransactionIndex = transactions.indexWhere((transaction) => transaction.id == event.snapshot.key);
-    AppTransaction changedTransaction = TransactionsHelper()
-        .convertJsonToTransaction(json: Map<String, dynamic>.from(event.snapshot.value), key: event.snapshot.key);
-    if (oldTransactionIndex != -1) {
-      transactions[oldTransactionIndex] = changedTransaction;
-    }
-    add(BudgetOverviewDisplayRequested());
-  }
-
-  _onTransactionDeleted(DatabaseEvent event) async {
-    int index = transactions.indexWhere((transaction) => transaction.id == event.snapshot.key);
-    if (index != -1) {
-      transactions.removeAt(index);
-    }
-
-    add(BudgetOverviewDisplayRequested());
   }
 }

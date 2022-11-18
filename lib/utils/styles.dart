@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 
 TextStyle tabTitleStyle(BuildContext context) {
   return TextStyle(
-    color: Theme.of(context).primaryTextTheme.headline6.color
+    color: Theme.of(context).primaryTextTheme.headline6?.color
   );
 }
 
 TextStyle expensesTabStyle(BuildContext context) {
-  return TextStyle(fontSize: Theme.of(context).textTheme.bodyText1.fontSize + 2, fontWeight: FontWeight.w600);
+  return TextStyle(fontSize: Theme.of(context).textTheme.bodyText1?.fontSize ?? 0 + 2, fontWeight: FontWeight.w600);
 }
 
 const regularTextStyle = TextStyle(
@@ -20,15 +20,30 @@ const addTransactionAvatarTextStyle = TextStyle(
   fontSize: 28,
 );
 
+TextStyle medium({Color? color, double size = 14}) {
+  return TextStyle(
+      color: color ?? Colors.black,
+      fontSize: size,
+      fontWeight: FontWeight.w500);
+}
+
+TextStyle regular({Color? color, double? size, TextDecoration? decoration}) {
+  return TextStyle(
+      color: color ?? Colors.black,
+      fontSize: size ?? 14,
+      fontWeight: FontWeight.w400,
+      decoration: decoration);
+}
+
 var primaryColorsArray = [
   //"#FFFFFF", "#E25F4E", "#EB839A", "#5ABC7B", "#4896F4", "#4A4A4A", "#947EB0"
   "#947EB0", "#5ABC7B", "#4896F4", "#E25F4E",
 ];
 
 abstract class CustomTheme {
-  String accentColor;
-  String primaryColorDark;
-  String primaryColorLight;
+  late String accentColor;
+  late String primaryColorDark;
+  late String primaryColorLight;
   String secondaryHeaderColor = '#202020';
 }
 
@@ -123,16 +138,16 @@ TextStyle addTransactionFormTitleTextStyle(BuildContext context) {
 
 TextStyle addTransactionBottomModalSheetButtonsTextStyle(BuildContext context) {
   return TextStyle(
-    color: Theme.of(context).textTheme.bodyText1.color,
+    color: Theme.of(context).textTheme.bodyText1?.color,
     fontSize: 18,
   );
 }
 
-TextStyle addTransactionElevatedButtonTitleStyle(BuildContext context, [Color titleColor]) {
+TextStyle addTransactionElevatedButtonTitleStyle(BuildContext context, [Color? titleColor]) {
   return TextStyle(color: titleColor, fontSize: 16, fontWeight: FontWeight.w600);
 }
 
-InputDecoration addTransactionFormFieldDecoration(context, {String hintText, Widget prefixIcon, double prefixWidth, bool focused = false}) {
+InputDecoration addTransactionFormFieldDecoration(context, {String? hintText, Widget? prefixIcon, double? prefixWidth, bool focused = false}) {
   return InputDecoration(
     helperText: '',
     prefixIcon: prefixIcon,
@@ -140,19 +155,19 @@ InputDecoration addTransactionFormFieldDecoration(context, {String hintText, Wid
     hintText: hintText,
     border: UnderlineInputBorder(
       borderSide: BorderSide(
-        color: Theme.of(context).accentColor,
+        color: Theme.of(context).colorScheme.secondary,
         width: 1
       )
     ),
     focusedBorder: UnderlineInputBorder(
       borderSide: BorderSide(
-        color: Theme.of(context).accentColor,
+        color: Theme.of(context).colorScheme.secondary,
         width: 2
       )
     ),
     enabledBorder: UnderlineInputBorder(
       borderSide: BorderSide(
-        color: Theme.of(context).accentColor,
+        color: Theme.of(context).colorScheme.secondary,
         width: focused ? 2 : 1
       )
     ),
@@ -190,7 +205,7 @@ TextStyle searchModalTitleStyle(BuildContext context) {
   );
 }
 
-TextStyle buttonTitleStyle(BuildContext context, [Color titleColor]) {
+TextStyle buttonTitleStyle(BuildContext context, [Color? titleColor]) {
   return TextStyle(color: titleColor ?? Colors.black, fontSize: 18);
 }
 

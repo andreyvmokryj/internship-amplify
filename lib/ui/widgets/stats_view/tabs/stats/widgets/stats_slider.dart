@@ -25,10 +25,8 @@ class _StatsSliderState extends State<StatsSlider> {
       switch (state.statsPageMode) {
         case StatsPageMode.chart:
           return _chartSlider(context);
-          break;
         case StatsPageMode.map:
           return _expensesMapSlider(context);
-          break;
         case StatsPageMode.budget:
           return _budgetSlider(context);
         default:
@@ -66,11 +64,11 @@ Widget _budgetSlider(BuildContext context) {
 }
 
 Widget _chartSlider(BuildContext context) {
-  Function onMapSliderBackPressed = () {
+  void Function() onMapSliderBackPressed = () {
     return context.read<ExpensesChartBloc>().add(ExpensesChartGetPreviousMonthPressed());
   };
 
-  Function onMapSliderForwardPressed = () {
+  void Function() onMapSliderForwardPressed = () {
     return context.read<ExpensesChartBloc>().add(ExpensesChartGetNextMonthPressed());
   };
 
@@ -94,11 +92,11 @@ Widget _chartSlider(BuildContext context) {
 }
 
 Widget _expensesMapSlider(BuildContext context) {
-  Function onMapSliderBackPressed = () {
+  void Function() onMapSliderBackPressed = () {
     return context.read<ExpensesMapBloc>().add(ExpensesMapSliderBackPressed());
   };
 
-  Function onMapSliderForwardPressed = () {
+  void Function() onMapSliderForwardPressed = () {
     return context.read<ExpensesMapBloc>().add(ExpensesMapSliderForwardPressed());
   };
 

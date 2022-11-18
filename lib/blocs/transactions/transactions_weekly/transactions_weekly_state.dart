@@ -12,7 +12,7 @@ class TransactionsWeeklyInitial extends TransactionsWeeklyState {}
 class TransactionsWeeklyLoading extends TransactionsWeeklyState {
   final String sliderCurrentTimeIntervalString;
 
-  TransactionsWeeklyLoading({@required this.sliderCurrentTimeIntervalString});
+  TransactionsWeeklyLoading({required this.sliderCurrentTimeIntervalString});
 
   @override
   List<Object> get props => [sliderCurrentTimeIntervalString];
@@ -22,7 +22,7 @@ class TransactionsWeeklyLoaded extends TransactionsWeeklyState {
   final String sliderCurrentTimeIntervalString;
   final List<WeekDetails> summaryList;
 
-  TransactionsWeeklyLoaded({this.summaryList, @required this.sliderCurrentTimeIntervalString});
+  TransactionsWeeklyLoaded({this.summaryList = const [], required this.sliderCurrentTimeIntervalString});
 
   @override
   List<Object> get props => [sliderCurrentTimeIntervalString, summaryList];

@@ -2,13 +2,13 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:radency_internship_project_2/blocs/settings/settings_bloc.dart';
-import 'package:radency_internship_project_2/models/calendar_day.dart';
+import 'package:radency_internship_project_2/local_models/calendar_day.dart';
 import 'package:radency_internship_project_2/ui/widgets/transactions_view/tabs/calendar/widgets/calendar_day_dialog.dart';
 import 'package:radency_internship_project_2/utils/strings.dart';
 import 'package:radency_internship_project_2/utils/text_styles.dart';
 
 class DayCell extends StatelessWidget {
-  const DayCell({Key key, @required this.day, @required this.maxHeight, @required this.maxWidth}) : super(key: key);
+  const DayCell({Key? key, required this.day, required this.maxHeight, required this.maxWidth}) : super(key: key);
 
   final CalendarDay day;
   final double maxHeight;
@@ -76,7 +76,7 @@ class DayCell extends StatelessWidget {
                       value(
                         context: context,
                         value: day.transferAmount,
-                        color: Theme.of(context).textTheme.bodyText1.color,
+                        color: Theme.of(context).textTheme.bodyText1?.color,
                         height: constraints.maxHeight / 3,
                         maxWidth: constraints.maxWidth,
                       ),
@@ -92,11 +92,11 @@ class DayCell extends StatelessWidget {
   }
 
   Widget value({
-    @required BuildContext context,
-    double value,
-    @required Color color,
-    @required double height,
-    @required double maxWidth,
+    required BuildContext context,
+    required double value,
+    Color? color,
+    required double height,
+    required double maxWidth,
   }) {
     if (value == 0.0) {
       return SizedBox();
@@ -109,7 +109,7 @@ class DayCell extends StatelessWidget {
           Container(
             constraints: BoxConstraints(maxHeight: height, maxWidth: maxWidth),
             child: AutoSizeText(
-              value?.toStringAsFixed(2) ?? '',
+              value.toStringAsFixed(2) ?? '',
               presetFontSizes: [24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7],
               style: TextStyle(color: color),
               overflowReplacement: Text('...', style: TextStyle(color: color)),
