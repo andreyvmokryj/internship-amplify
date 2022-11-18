@@ -75,7 +75,7 @@ class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, Transaction
 
   Stream<TransactionsSummaryState> _mapTransactionsSummaryInitializeToState() async* {
     _observedDate = DateTime.now();
-    add(TransactionsSummaryFetchRequested(dateForFetch: _observedDate!));
+    // add(TransactionsSummaryFetchRequested(dateForFetch: _observedDate!));
 
     if (settingsBloc.state is LoadedSettingsState) locale = settingsBloc.state.language;
     settingsBloc.stream.listen((newSettingsState) {
@@ -98,6 +98,8 @@ class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, Transaction
         add(TransactionsSummaryFetchRequested(dateForFetch: _observedDate!));
       }
     });
+
+    add(TransactionsSummaryFetchRequested(dateForFetch: _observedDate!));
   }
 
   Stream<TransactionsSummaryState> _mapTransactionsSummaryLocaleChangedToState() async* {
@@ -162,7 +164,7 @@ class TransactionsSummaryBloc extends Bloc<TransactionsSummaryEvent, Transaction
         }
 
         summaryDetails.accountsExpensesDetails[transaction.category!] =
-            summaryDetails.accountsExpensesDetails[transaction.category] ?? 0 + transaction.amount;
+            (summaryDetails.accountsExpensesDetails[transaction.category] ?? 0) + transaction.amount;
 
         summaryDetails.expenses += transaction.amount;
       }
