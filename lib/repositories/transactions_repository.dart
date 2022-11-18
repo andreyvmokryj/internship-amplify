@@ -36,7 +36,7 @@ class TransactionsRepository extends IRepository<AppTransaction> {
     // });
 
     final snapshot = await find(transactionID: transactionID);
-    if (snapshot != null) {
+    if (snapshot != null && snapshot.userID == uid) {
       await Amplify.DataStore.delete(snapshot);
     }
   }
@@ -57,6 +57,7 @@ class TransactionsRepository extends IRepository<AppTransaction> {
     final snapshot = await Amplify.DataStore.query(
       AppTransaction.classType,
       where: AppTransaction.ID.eq(transactionID)
+          .and(AppTransaction.USERID.eq(uid))
     );
 
     return snapshot.firstOrNull;
