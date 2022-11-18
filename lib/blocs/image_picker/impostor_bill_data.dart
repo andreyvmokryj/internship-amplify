@@ -1,10 +1,12 @@
+import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:radency_internship_project_2/blocs/transactions/add_transaction/temp_values.dart';
-import 'package:radency_internship_project_2/local_models/transactions/expense_transaction.dart';
-import 'package:radency_internship_project_2/local_models/transactions/transaction.dart';
+import 'package:radency_internship_project_2/models/ExpenseCreationType.dart';
+import 'package:radency_internship_project_2/models/ModelProvider.dart';
 
 List<AppTransaction> impostorTransactions = [
-  ExpenseTransaction(
-      date: DateTime.now(),
+  AppTransaction(
+      transactionType: TransactionType.Expense,
+      date: TemporalDateTime(DateTime.now()),
       accountOrigin: TempTransactionsValues().accounts[0],
       category: TempTransactionsValues().expenseCategories[0],
       amount: 35.40,
@@ -13,8 +15,9 @@ List<AppTransaction> impostorTransactions = [
       locationLatitude: null,
       locationLongitude: null,
       creationType: ExpenseCreationType.AI),
-  ExpenseTransaction(
-      date: DateTime.now(),
+  AppTransaction(
+      transactionType: TransactionType.Expense,
+      date: TemporalDateTime(DateTime.now()),
       accountOrigin: TempTransactionsValues().accounts[0],
       category: TempTransactionsValues().expenseCategories[0],
       amount: 33.80,
@@ -23,8 +26,9 @@ List<AppTransaction> impostorTransactions = [
       locationLatitude: null,
       locationLongitude: null,
       creationType: ExpenseCreationType.AI),
-  ExpenseTransaction(
-      date: DateTime.now(),
+  AppTransaction(
+      transactionType: TransactionType.Expense,
+      date: TemporalDateTime(DateTime.now()),
       accountOrigin: TempTransactionsValues().accounts[0],
       category: TempTransactionsValues().expenseCategories[0],
       amount: 75.00,
