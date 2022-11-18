@@ -26,8 +26,8 @@ type AppTransaction @model @auth(rules: [{allow: public}]) {
 }
 
 enum TransactionType {
-  Expense
   Income
+  Expense
   Transfer
 }
 
